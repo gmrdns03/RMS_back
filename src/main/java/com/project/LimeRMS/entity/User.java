@@ -24,7 +24,7 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @Column(nullable = false)
     @JsonIgnore
-    private Long authentication;
+    private Authentication authentication;
     // 수정 필요
 
     @Column(nullable = false)
