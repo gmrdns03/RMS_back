@@ -20,7 +20,7 @@ import org.springframework.data.annotation.LastModifiedDate;
 public class User {
     @Id
     @Column(nullable = false)
-    private String id;
+    private String userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "authId", nullable = false)

@@ -20,10 +20,6 @@ public class Content {
 
     //수정 필요
     @Column(nullable = false)
-    private Long cateId;
-
-    //수정 필요
-    @Column(nullable = false)
     private Long boardId;
 
     @Column

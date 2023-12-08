@@ -1,8 +1,12 @@
 package com.project.LimeRMS.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,13 +22,15 @@ public class Rental {
     @Column(nullable = false)
     private Long rentalId;
 
-    //수정 필요
-    @Column(nullable = false)
-    private String rentalUserId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "rentalUserId", nullable = false)
+    @JsonIgnore
+    private User user;
 
-    //수정 필요
-    @Column(nullable = false)
-    private Long contentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contentId", nullable = false)
+    @JsonIgnore
+    private Content content;
 
     @Column
     private LocalDateTime rentalDt;

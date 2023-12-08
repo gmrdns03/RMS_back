@@ -22,13 +22,15 @@ public class Comment {
     @Column(nullable = false)
     private Long commendId;
 
-    //수정 필요
-    @Column(nullable = false)
-    private String userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId", nullable = false)
+    @JsonIgnore
+    private User user;
 
-    //수정 필요
-    @Column(nullable = false)
-    private Long contentId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contentId", nullable = false)
+    @JsonIgnore
+    private Content content;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "commendId", nullable = false)
