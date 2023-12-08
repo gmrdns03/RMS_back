@@ -13,30 +13,27 @@ import org.springframework.data.annotation.LastModifiedDate;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Rental {
+public class Reservation {
     @Id
     @Column(nullable = false)
-    private Long rentalId;
+    private Long reserveId;
 
     //수정 필요
     @Column(nullable = false)
-    private String rentalUserId;
+    private String reserveUserId;
 
     //수정 필요
     @Column(nullable = false)
     private Long contentId;
 
     @Column
-    private LocalDateTime rentalDt;
+    private LocalDateTime reserveDt;
 
     @Column
-    private LocalDateTime returnDt;
+    private LocalDateTime endDt;
 
-    @Column(columnDefinition = "TINYINT default 0")
-    private Long extensionCnt;
-
-    @Column
-    private String rentalStat;
+    @Column(columnDefinition = "VARCHAR(1) default 'N'")
+    private String delYn;
 
     @CreatedDate
     @Column
@@ -48,7 +45,4 @@ public class Rental {
 
     @Column
     private String modfUserId;
-
-    @Column(nullable = false)
-    private String regUserId;
 }
