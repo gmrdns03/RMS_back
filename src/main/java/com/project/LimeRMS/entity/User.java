@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
@@ -22,10 +23,9 @@ public class User {
     private String id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @Column(nullable = false)
+    @JoinColumn(name = "authId", nullable = false)
     @JsonIgnore
     private Authentication authentication;
-    // 수정 필요
 
     @Column(nullable = false)
     private String userEmail;

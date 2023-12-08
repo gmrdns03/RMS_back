@@ -11,29 +11,40 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-public class Authentication {
+public class Rental {
     @Id
     @Column(nullable = false)
-    private Long authId;
+    private Long rentalId;
+
+    //수정 필요
+    @Column(nullable = false)
+    private String rentalUserId;
+
+    //수정 필요
+    @Column(nullable = false)
+    private Long contentId;
 
     @Column
-    private String authNm;
+    private LocalDateTime rentalDate;
 
     @Column
-    private String authDesc;
+    private LocalDateTime returnDate;
 
-    @Column(columnDefinition = "TINYINT default 9")
-    private Long priority;
+    @Column(columnDefinition = "TINYINT default 0")
+    private Long extensionCnt;
+
+    @Column
+    private String rentalStat;
 
     @Column
     private LocalDateTime regDt;
-
-    @Column
-    private String regUserId;
 
     @Column
     private LocalDateTime modfDt;
 
     @Column
     private String modfUserId;
+
+    @Column(nullable = false)
+    private String reguserId;
 }
