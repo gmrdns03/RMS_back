@@ -1,7 +1,6 @@
 package com.project.LimeRMS.entity;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -22,9 +21,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity
 @Table(name = "Board")
 public class Board {
-
-//    @EmbeddedId
-//    private BoardPk boardPk;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

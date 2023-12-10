@@ -2,6 +2,8 @@ package com.project.LimeRMS.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
@@ -18,6 +20,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 public class BoardType {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Integer boardTypeId;
 
