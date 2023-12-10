@@ -31,7 +31,7 @@ public class User {
     @JoinColumn(name = "authId", nullable = false)
     private Authentication authentication;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique=true)
     private String userEmail;
 
     @Column
