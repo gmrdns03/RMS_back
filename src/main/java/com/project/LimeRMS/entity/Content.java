@@ -1,26 +1,36 @@
 package com.project.LimeRMS.entity;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "Content")
 public class Content {
+
+//    @EmbeddedId
+//    private ContentPk contentPk;
+
     @Id
     @Column(nullable = false)
-    private Long contentId;
+    private Integer contentId;
 
-    //수정 필요
-    @Column(nullable = false)
-    private Long boardId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cateId", nullable = false)
+    private ContentCategory contentCategory;
 
     @Column
     private String contentNm;
@@ -34,13 +44,13 @@ public class Content {
     @Column
     private String contentHtml;
 
-    @Column(columnDefinition = "VARCHAR(1) default 'N'")
+    @Column(columnDefinition = "VARCHAR(1) default 'N'", nullable = false)
     private String delYn;
 
-    @Column(columnDefinition = "VARCHAR(1) default 'N'")
+    @Column(columnDefinition = "VARCHAR(1) default 'N'", nullable = false)
     private String noticeYn;
 
-    @Column(columnDefinition = "VARCHAR(1) default 'N'")
+    @Column(columnDefinition = "VARCHAR(1) default 'N'", nullable = false)
     private String secretYn;
 
     @Column
@@ -49,15 +59,15 @@ public class Content {
     @Column
     private String rentalMessage;
 
-    @CreatedDate
     @Column
+    @CreationTimestamp
     private LocalDateTime regDt;
 
     @Column
     private String regUserId;
 
-    @LastModifiedDate
     @Column
+    @UpdateTimestamp
     private LocalDateTime modfDt;
 
     @Column

@@ -1,22 +1,25 @@
-package com.project.LimeRMS.entitiy;
+package com.project.LimeRMS.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "BoardType")
 public class BoardType {
 
     @Id
-    private Long boardTypeId;
+    @Column(nullable = false)
+    private Integer boardTypeId;
 
     @Column
     private String boardTypeNm;
@@ -24,15 +27,15 @@ public class BoardType {
     @Column
     private String boardTypeDesc;
 
-    @CreatedDate
-    @Column
+    @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime regDt;
 
     @Column
     private String regUserId;
 
-    @LastModifiedDate
-    @Column
+    @Column(nullable = false)
+    @UpdateTimestamp
     private LocalDateTime modfDt;
 
     @Column

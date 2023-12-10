@@ -1,26 +1,27 @@
-package com.project.LimeRMS.entitiy;
+package com.project.LimeRMS.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "CommCd")
 public class CommCd {
 
     @Id
+    @Column(nullable = false)
     private String commCd;
 
-    @Column( nullable = false)
+    @Column(nullable = false)
     private String hiCommCd;
 
     @Column
@@ -29,12 +30,12 @@ public class CommCd {
     @Column
     private String cdDesc;
 
-    @CreatedDate
-    @Column
+    @Column(nullable = false)
+    @CreationTimestamp
     private LocalDateTime regDt;
 
-    @LastModifiedDate
-    @Column
+    @Column(nullable = false)
+    @UpdateTimestamp
     private LocalDateTime modfDt;
 
     @Column

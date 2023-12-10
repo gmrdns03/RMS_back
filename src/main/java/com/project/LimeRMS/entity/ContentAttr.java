@@ -1,33 +1,36 @@
-package com.project.LimeRMS.entitiy;
+package com.project.LimeRMS.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "ContentAttr")
 public class ContentAttr {
-    @Column(nullable = false)
+
+//    @EmbeddedId
+//    private ContentAttrPk contentAttrPk;
+
     @Id
-    private Long contentAttrId;
+    @Column(nullable = false)
+    private Integer contentAttrId;
 
     @JoinColumn(name = "boardId", nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonIgnore
-    private ContentAttr ContentAttr;
+    private Board board;
 
     @Column
     private String logicalAttr;
@@ -35,24 +38,24 @@ public class ContentAttr {
     @Column
     private String physicalAttr;
 
-    @Column(columnDefinition = "VARCHAR(1) default 'N'")
+    @Column(columnDefinition = "VARCHAR(1) default 'N'", nullable = false)
     private String mustYn;
 
     @Column
-    private Long attrOrder;
+    private Integer attrOrder;
 
     @Column
     private String attrType;
 
-    @CreatedDate
     @Column
+    @CreationTimestamp
     private LocalDateTime regDt;
 
     @Column
     private String regUserId;
 
-    @LastModifiedDate
     @Column
+    @UpdateTimestamp
     private String modfDt;
 
     @Column

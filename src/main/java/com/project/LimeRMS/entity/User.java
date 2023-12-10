@@ -1,30 +1,34 @@
 package com.project.LimeRMS.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "User")
 public class User {
+
+//    @EmbeddedId
+//    private UserPk userPk;
     @Id
     @Column(nullable = false)
     private String userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "authId", nullable = false)
-    @JsonIgnore
     private Authentication authentication;
 
     @Column(nullable = false)
@@ -39,24 +43,24 @@ public class User {
     @Column
     private String password;
 
-    @Column(columnDefinition = "VARCHAR(1) default 'N'")
+    @Column(columnDefinition = "VARCHAR(1) default 'N'", nullable = false)
     private String isSuperUser;
 
     @Column
     private String phoneNumber;
 
-    @Column(columnDefinition = "VARCHAR(1) default 'N'")
+    @Column(columnDefinition = "VARCHAR(1) default 'N'", nullable = false)
     private String delYn;
 
-    @CreatedDate
     @Column
+    @CreationTimestamp
     private LocalDateTime joinDt;
 
     @Column
     private String regUserId;
 
-    @LastModifiedDate
     @Column
+    @UpdateTimestamp
     private LocalDateTime modfDt;
 
     @Column

@@ -1,35 +1,39 @@
 package com.project.LimeRMS.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Column;
+import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Table(name = "Rental")
 public class Rental {
+
+//    @EmbeddedId
+//    private RentalPk rentalPk;
+
     @Id
     @Column(nullable = false)
-    private Long rentalId;
+    private Integer rentalId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "rentalUserId", nullable = false)
-    @JsonIgnore
+    @JoinColumn(name = "rentalUserId", referencedColumnName = "userId", nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "contentId", nullable = false)
-    @JsonIgnore
     private Content content;
 
     @Column
@@ -38,18 +42,18 @@ public class Rental {
     @Column
     private LocalDateTime returnDt;
 
-    @Column(columnDefinition = "TINYINT default 0")
-    private Long extensionCnt;
+    @Column(name = "extensionCnt", nullable = false, columnDefinition = "int default 0")
+    private Integer extensionCnt;
 
     @Column
     private String rentalStat;
 
-    @CreatedDate
     @Column
+    @CreationTimestamp
     private LocalDateTime regDt;
 
-    @LastModifiedDate
     @Column
+    @UpdateTimestamp
     private LocalDateTime modfDt;
 
     @Column
