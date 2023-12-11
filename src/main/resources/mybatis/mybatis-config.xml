@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+  <mappers>
+    <mapper resource="mapper/AuthenticationMapper.xml"/>
+<!--    여러개일 때 어떻게 추가하는가? -->
+  </mappers>
+</configuration>
