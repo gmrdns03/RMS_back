@@ -1,22 +1,18 @@
 package com.project.LimeRMS.service;
 
-import com.project.LimeRMS.dto.AuthenticationDto;
+import com.project.LimeRMS.entity.Authentication;
 import com.project.LimeRMS.mapper.AuthenticationMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    @Autowired
-    private AuthenticationMapper authenticationMapper;
+    private final AuthenticationMapper authenticationMapper;
 
-    @Autowired
-    public boolean insertDto(AuthenticationDto authenticationDto) throws Exception{
-        authenticationMapper.insertAuthenticationDto(authenticationDto);
-        return true;
+    public void insertAuthentication(Authentication authentication) throws Exception{
+        authenticationMapper.insertAuthenticationTest(authentication);
     }
 
 }
