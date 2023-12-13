@@ -4,6 +4,12 @@ mybatis:
     map-underscore-to-camel-case: true
 
 spring:
+  security:
+    jwt:
+      header: Authorization
+      secret: ${JWT_SECRET}
+      token-validity-in-seconds: 10800 #3시간
+
   datasource:
     url: jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}?serverTimezone=Asia/Seoul&characterEncoding=UTF-8&dialect=org.hibernate.dialect.MariaDBDialect
     username: ${DB_USER}
@@ -28,3 +34,6 @@ springdoc:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui.html
+  server:
+    forward-headers-strategy: framework
+
