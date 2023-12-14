@@ -27,21 +27,21 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
-            .cors(AbstractHttpConfigurer::disable) //cors disable
-            .headers((headerConfig) -> headerConfig
-                .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+//            .cors(AbstractHttpConfigurer::disable) //cors disable
+//            .headers((headerConfig) -> headerConfig
+//                .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
             .csrf(AbstractHttpConfigurer::disable) //csrf protection disable
             .authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/v3/**", "/swagger-ui/**", "/api-docs/**").permitAll()
-                .anyRequest().denyAll())  // 로그린 외 모든 경로는 인증 필수
-            .sessionManagement((session) -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .formLogin(formLogin -> formLogin
-                    .loginPage("/login").permitAll()
-                    .defaultSuccessUrl("/main"))
-            .logout((logoutConfig) -> logoutConfig
-                    .logoutUrl("/logout") //default값이 logout
-                    .logoutSuccessUrl("/")); //JWT와 같이 세션을 사용하지 않는 경우 사용
+                .requestMatchers("/v3/**", "/swagger-ui/**", "/swagger-resources/**", "/api-docs/**").permitAll()
+                .anyRequest().permitAll());  // swagger jwt 추가 후 denyAll로 변경 필요
+//            .sessionManagement((session) -> session
+//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+//            .formLogin(formLogin -> formLogin
+//                    .loginPage("/login").permitAll()
+//                    .defaultSuccessUrl("/main"))
+//            .logout((logoutConfig) -> logoutConfig
+//                    .logoutUrl("/logout") //default값이 logout
+//                    .logoutSuccessUrl("/")); //JWT와 같이 세션을 사용하지 않는 경우 사용
             //exceptionHandling을 추가해도 좋을 것 같다
         return httpSecurity.build();
     }

@@ -30,10 +30,9 @@ spring:
 #        show_sql: true #show sql
 
 springdoc:
+  packages-to-scan: com.project.LimeRMS.controller
   api-docs:
     path: /api-docs
   swagger-ui:
     path: /swagger-ui.html
-  server:
-    forward-headers-strategy: framework
 
