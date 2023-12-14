@@ -25,6 +25,8 @@ public class UserService {
         String orgPassword = user.getPassword();
 
         if (!passwordEncoder.matches(password, orgPassword)) {
+            System.out.println("Input Password: " + password);
+            System.out.println("Stored Password: " + orgPassword);
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
         }
 
@@ -33,6 +35,14 @@ public class UserService {
         return JwtResponseDto.builder()
                 .accessToken(accessToken)
                 .build();
+    }
+
+    //Test 코드(나중에 연관 코드 삭제 필요)
+    public void updatePassword(String userEmail){
+        User user = userMapper.findByUserEmail(userEmail)
+                .orElseThrow(() -> new UsernameNotFoundException("가입되지 않은 Email 입니다."));
+        String hashedPassword = passwordEncoder.encode(user.getPassword());
+        userMapper.updatePasswordByUserEmail(userEmail, hashedPassword);
     }
 
 }

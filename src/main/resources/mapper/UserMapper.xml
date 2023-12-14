@@ -6,4 +6,9 @@
     <select id="findByUserEmail" parameterType="java.lang.String" resultType="com.project.LimeRMS.entity.User">
         SELECT * FROM User WHERE userEmail = #{userEmail}
     </select>
+    <update id="updatePasswordByUserEmail">
+        UPDATE User
+        SET password = #{password}
+        WHERE userEmail = #{userEmail}
+    </update>
 </mapper>

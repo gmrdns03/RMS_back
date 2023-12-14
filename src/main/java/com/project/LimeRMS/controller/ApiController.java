@@ -25,15 +25,15 @@ public class ApiController {
         return "예시 API";
     }
 
-//    @GetMapping("/example2")
-//    public String example2() {
-//        return "예시 API";
-//    }
-//
-//    @GetMapping("/example3")
-//    public String example3() {
-//        return "예시 API3";
-//    }
+    @GetMapping("/example2")
+    public String example2() {
+        return "예시 API";
+    }
+
+    @GetMapping("/example3")
+    public String example3() {
+        return "예시 API3";
+    }
 
     @Hidden
     @GetMapping("/ignore")

@@ -27,15 +27,15 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
         httpSecurity
-//            .cors(AbstractHttpConfigurer::disable) //cors disable
-//            .headers((headerConfig) -> headerConfig
-//                .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
+            .cors(AbstractHttpConfigurer::disable) //cors disable
+            .headers((headerConfig) -> headerConfig
+                .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
             .csrf(AbstractHttpConfigurer::disable) //csrf protection disable
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/v3/**", "/swagger-ui/**", "/swagger-resources/**", "/api-docs/**").permitAll()
-                .anyRequest().permitAll());  // swagger jwt 추가 후 denyAll로 변경 필요
-//            .sessionManagement((session) -> session
-//                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .anyRequest().permitAll())  // swagger jwt 추가 후 denyAll로 변경 필요
+            .sessionManagement((session) -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 //            .formLogin(formLogin -> formLogin
 //                    .loginPage("/login").permitAll()
 //                    .defaultSuccessUrl("/main"))
