@@ -1,5 +1,6 @@
 package com.project.LimeRMS.mapper;
 
+import com.project.LimeRMS.dto.UserSignupDto;
 import com.project.LimeRMS.entity.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -10,4 +11,6 @@ import java.util.Optional;
 public interface UserMapper {
     Optional<User> findByUserEmail(String userEmail);
     void updatePasswordByUserEmail(@Param("userEmail") String userEmail, @Param("password") String password);
+
+    void signup(UserSignupDto userSignupDto);
 }

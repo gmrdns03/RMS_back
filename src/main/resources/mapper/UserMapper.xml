@@ -11,4 +11,18 @@
         SET password = #{password}
         WHERE userEmail = #{userEmail}
     </update>
+    <insert id="signup">
+        INSERT INTO User
+        (
+            userEmail,
+            userNm,
+            password,
+            phoneNumber
+        ) VALUES (
+            #{userEmail},
+            #{userNm},
+            #{password},
+            #{phoneNumber}
+        )
+    </insert>
 </mapper>
