@@ -1,5 +1,8 @@
 package com.project.LimeRMS.security;
 
+import com.project.LimeRMS.mapper.UserMapper;
+import jakarta.activation.DataSource;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -12,11 +15,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final JwtProvider jwtProvider;
+    private final UserMapper userMapper;
     private final String[] allowedUrls = {
             "/",
             "/v3/**",
@@ -37,13 +44,14 @@ public class SecurityConfig {
                 .requestMatchers(allowedUrls).permitAll()
                 .anyRequest().denyAll())
             .sessionManagement((session) -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))//JWT와 같이 세션을 사용하지 않는 경우 사용
+                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
 //            .formLogin(formLogin -> formLogin
 //                    .loginPage("/login").permitAll()
 //                    .defaultSuccessUrl("/main"))
 //            .logout((logoutConfig) -> logoutConfig
 //                    .logoutUrl("/logout") //default값이 logout
-//                    .logoutSuccessUrl("/")); //JWT와 같이 세션을 사용하지 않는 경우 사용
+//                    .logoutSuccessUrl("/"));
             //exceptionHandling을 추가해도 좋을 것 같다
         return httpSecurity.build();
     }
@@ -56,6 +64,11 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public UserDetailService userDetailService(){
+        return new UserDetailService(userMapper);
     }
 
 }
