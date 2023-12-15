@@ -21,7 +21,9 @@ public class SecurityConfig {
             "/",
             "/v3/**",
             "/swagger-ui/**",
+            "/swagger-resources/**",
             "/api-docs/**",
+            "/login"
     }; //권한 없이 모두 접근 가능한 url
 
     @Bean
@@ -32,8 +34,8 @@ public class SecurityConfig {
                 .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
             .csrf(AbstractHttpConfigurer::disable) //csrf protection disable
             .authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/v3/**", "/swagger-ui/**", "/swagger-resources/**", "/api-docs/**").permitAll()
-                .anyRequest().permitAll())  // swagger jwt 추가 후 denyAll로 변경 필요
+                .requestMatchers(allowedUrls).permitAll()
+                .anyRequest().denyAll())
             .sessionManagement((session) -> session
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 //            .formLogin(formLogin -> formLogin
