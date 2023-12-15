@@ -8,13 +8,14 @@ import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Base64;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class JwtProvider {
 
     @Value("${spring.security.jwt.token-validity-in-seconds}")
     private Long expireIn;
-
     @Value("${spring.security.jwt.secret}")
     private String secretKey;
 
@@ -26,10 +27,12 @@ public class JwtProvider {
     // JWT 토큰 생성
     public String createJwt(String userEmail){
         Date now = new Date();
+        Map<String, Object> claims = new HashMap<>(); //추가로 전달하고 싶은 정보는 claims에 담기
+        claims.put("userEmail", userEmail);
 
         String accessToken = Jwts.builder()
                 .setHeaderParam("type","jwt")
-                .claim("userEmail",userEmail)
+                .claims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(System.currentTimeMillis()+expireIn)) //3시간
                 .signWith(SignatureAlgorithm.HS256, secretKey)
