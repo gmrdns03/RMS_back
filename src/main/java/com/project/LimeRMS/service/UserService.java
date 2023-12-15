@@ -5,6 +5,8 @@ import com.project.LimeRMS.dto.UserSignupDto;
 import com.project.LimeRMS.entity.User;
 import com.project.LimeRMS.mapper.UserMapper;
 import com.project.LimeRMS.security.JwtProvider;
+
+import java.util.Map;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -22,8 +24,10 @@ public class UserService {
     private final JwtResponseDto jwtResponseDto;
     private final JwtProvider jwtProvider;
 
-    public JwtResponseDto login(String userEmail, String password) {
-        User user = userMapper.findByUserEmail(userEmail)
+    public JwtResponseDto login(Map<String, String> member) {
+        String email = member.get("userEmail");
+        String password = member.get("password");
+        User user = userMapper.findByUserEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("가입되지 않은 Email 입니다."));
         String orgPassword = user.getPassword();
 
@@ -33,7 +37,7 @@ public class UserService {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
         }
 
-        String accessToken = jwtProvider.createJwt(userEmail);
+        String accessToken = jwtProvider.createJwt(email);
 
         return JwtResponseDto.builder()
                 .accessToken(accessToken)
