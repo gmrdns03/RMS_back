@@ -44,8 +44,8 @@ public class SecurityConfig {
                 .requestMatchers(allowedUrls).permitAll()
                 .anyRequest().denyAll())
             .sessionManagement((session) -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))//JWT와 같이 세션을 사용하지 않는 경우 사용
-                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));//JWT와 같이 세션을 사용하지 않는 경우 사용
+//                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
 //            .formLogin(formLogin -> formLogin
 //                    .loginPage("/login").permitAll()
 //                    .defaultSuccessUrl("/main"))
@@ -66,9 +66,9 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
-    @Bean
-    public UserDetailService userDetailService(){
-        return new UserDetailService(userMapper);
-    }
+//    @Bean
+//    public UserDetailService userDetailService(){
+//        return new UserDetailService(userMapper);
+//    }
 
 }

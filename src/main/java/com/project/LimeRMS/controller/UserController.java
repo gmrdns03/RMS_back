@@ -43,17 +43,7 @@ public class UserController {
 
     @PostMapping("/signup")
     @Operation(summary = "사용자 등록")
-//    public Integer signup(
-//        @Parameter(name = "userEmail", description = "사용자 이메일", in = ParameterIn.QUERY, required = true)
-//        @RequestParam(name = "userEmail") String userEmail,
-//        @Parameter(name = "userNm", description = "사용자 이메일", in = ParameterIn.QUERY, required = true)
-//        @RequestParam(name = "userNm") String userNm,
-//        @Parameter(name = "phoneNumber", description = "사용자 전화번호", in = ParameterIn.QUERY)
-//        @RequestParam(name = "phoneNumber") String phoneNumber
-//    ) {
-    public Integer signup(
-        UserSignupDto userSignupDto
-    ) {
+    public Integer signup(UserSignupDto userSignupDto) {
         return userService.signup(userSignupDto);
     }
 
