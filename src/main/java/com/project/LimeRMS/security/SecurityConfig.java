@@ -1,7 +1,6 @@
 package com.project.LimeRMS.security;
 
 import com.project.LimeRMS.mapper.UserMapper;
-import jakarta.activation.DataSource;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +9,6 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -22,37 +20,40 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
+    private final UserDetailService userDetailService;
     private final JwtProvider jwtProvider;
+    private final CustomEntryPoint customEntryPoint;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
     private final UserMapper userMapper;
     private final String[] allowedUrls = {
-            "/",
-            "/v3/**",
-            "/swagger-ui/**",
-            "/swagger-resources/**",
-            "/api-docs/**",
-            "/login"
+        "/",
+        "/v3/**",
+        "/swagger-ui/**",
+        "/swagger-resources/**",
+        "/api-docs/**",
+        "/login"
     }; //권한 없이 모두 접근 가능한 url
 
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception{
+    SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
-            .cors(AbstractHttpConfigurer::disable) //cors disable
-            .headers((headerConfig) -> headerConfig
-                .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
             .csrf(AbstractHttpConfigurer::disable) //csrf protection disable
+            .sessionManagement((session) -> session
+                .sessionCreationPolicy(SessionCreationPolicy.STATELESS))//JWT와 같이 세션을 사용하지 않는 경우 사용
+            .formLogin(formLogin -> formLogin.disable())
+            .httpBasic(basic -> basic.disable())
+//            .cors(AbstractHttpConfigurer::disable) //cors disable
+//            .headers((headerConfig) -> headerConfig
+//                .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(allowedUrls).permitAll()
                 .anyRequest().denyAll())
-            .sessionManagement((session) -> session
-                .sessionCreationPolicy(SessionCreationPolicy.STATELESS));//JWT와 같이 세션을 사용하지 않는 경우 사용
-//                .addFilterBefore(new JwtAuthenticationFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
-//            .formLogin(formLogin -> formLogin
-//                    .loginPage("/login").permitAll()
-//                    .defaultSuccessUrl("/main"))
-//            .logout((logoutConfig) -> logoutConfig
-//                    .logoutUrl("/logout") //default값이 logout
-//                    .logoutSuccessUrl("/"));
             //exceptionHandling을 추가해도 좋을 것 같다
+            .exceptionHandling(exception -> exception
+                .authenticationEntryPoint(customEntryPoint)
+                .accessDeniedHandler(customAccessDeniedHandler))
+            .addFilterBefore(new JwtAuthenticationFilter(jwtProvider),
+                UsernamePasswordAuthenticationFilter.class);
         return httpSecurity.build();
     }
 
@@ -62,13 +63,15 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(
+        AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
+}
+//
 //    @Bean
 //    public UserDetailService userDetailService(){
 //        return new UserDetailService(userMapper);
 //    }
 
-}
+//}
