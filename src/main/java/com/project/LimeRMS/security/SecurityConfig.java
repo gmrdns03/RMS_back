@@ -42,13 +42,9 @@ public class SecurityConfig {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS))//JWT와 같이 세션을 사용하지 않는 경우 사용
             .formLogin(formLogin -> formLogin.disable())
             .httpBasic(basic -> basic.disable())
-//            .cors(AbstractHttpConfigurer::disable) //cors disable
-//            .headers((headerConfig) -> headerConfig
-//                .frameOptions(HeadersConfigurer.FrameOptionsConfig::disable))
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers(allowedUrls).permitAll()
-                .anyRequest().denyAll())
-            //exceptionHandling을 추가해도 좋을 것 같다
+                .anyRequest().permitAll()) //수정 필요
             .exceptionHandling(exception -> exception
                 .authenticationEntryPoint(customEntryPoint)
                 .accessDeniedHandler(customAccessDeniedHandler))
@@ -68,10 +64,3 @@ public class SecurityConfig {
         return authenticationConfiguration.getAuthenticationManager();
     }
 }
-//
-//    @Bean
-//    public UserDetailService userDetailService(){
-//        return new UserDetailService(userMapper);
-//    }
-
-//}
