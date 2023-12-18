@@ -37,7 +37,7 @@ public class UserService {
             throw new BadCredentialsException("비밀번호가 일치하지 않습니다.");
         }
 
-        String accessToken = jwtProvider.createJwt(email);
+        String accessToken = jwtProvider.generateAccessToken(email);
 
         return JwtResponseDto.builder()
                 .accessToken(accessToken)

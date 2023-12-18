@@ -1,12 +1,14 @@
 package com.project.LimeRMS.security;
 
 import com.project.LimeRMS.mapper.UserMapper;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
+import java.util.logging.Logger;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -25,7 +27,8 @@ public class JwtProvider {
     private Long expireIn;
     @Value("${spring.security.jwt.secret}")
     private String secretKey;
-//    private final UserDetailsService userDetailsService;
+    private static final Logger log = Logger.getLogger(JwtProvider.class.getName());
+    private final UserDetailsService userDetailsService;
     private final UserMapper userMapper;
 
     @PostConstruct
@@ -34,13 +37,13 @@ public class JwtProvider {
     }
 
     // JWT 토큰 생성
-    public String createJwt(String userEmail){
+    public String generateAccessToken(String userEmail){
         Date now = new Date();
         Map<String, Object> claims = new HashMap<>(); //추가로 전달하고 싶은 정보는 claims에 담기
         claims.put("userEmail", userEmail);
 
         String accessToken = Jwts.builder()
-                .setHeaderParam("type","jwt")
+                .setHeaderParam("type","AccessToken")
                 .claims(claims)
                 .setIssuedAt(now)
                 .setExpiration(new Date(System.currentTimeMillis()+expireIn)) //3시간
@@ -49,45 +52,43 @@ public class JwtProvider {
         return accessToken;
     }
 
-//    // JWT 토큰에서 인증 정보 조회
-//    public Authentication getAuthentication(String token) {
-//        UserDetails userDetails = userDetailsService.loadUserByUsername(Long.toString(this.getUserEmail(token)));
-//        return new UsernamePasswordAuthenticationToken(userDetails, "",
-//                userDetails.getAuthorities());
-//    }
-//
-//    // 토큰에서 회원 정보 추출
-//    public String getUserPk(String token) {
-//        return Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("userEmail").toString();
-//    }
-//
-//    public Long getUserEmail(String token) {
-//        return Long.parseLong(getUserPk(token));
-//    }
-//
-//    // Request의 Header의 token 값 "X-AUTH-TOKEN" : "tokenValue"
-//    public String resolveToken(HttpServletRequest request) {
-//        return request.getHeader("X-AUTH-TOKEN");
-//    }
-//
-//    // 토큰의 유효성&만료일자 확인
-//    public boolean validateToken(String token) {
-//        try {
-//            Jws<Claims> claims = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token);
-//            return !claims.getBody().getExpiration().before(new Date());
-//        } catch (Exception e) {
-//            return false;
-//        }
-//    }
-//
-//    public Long getExpiration(String jwtToken) {
-//        // accessToken 남은 유효시간
-//        Date expiration = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(jwtToken).getBody().getExpiration();
-//        // 현재 시간
-//        Long now = new Date().getTime();
-//        return (expiration.getTime() - now);
-//    }
+    // JWT 토큰에서 인증 정보 조회
+    public Authentication getAuthentication(String token) {
+        UserDetails userDetails = userDetailsService.loadUserByUsername(this.getUserEmail(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "",
+            userDetails.getAuthorities());
+    }
 
+    // 토큰에서 회원 정보 추출
+    public String getUserPk(String token) {
+        return Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("userEmail").toString();
+    }
 
+    public String getUserEmail(String token) {
+        return getUserPk(token);
+    }
 
+    // Request의 Header의 token 값 "AccessToken" : "tokenValue"
+    public String resolveToken(HttpServletRequest request) {
+        return request.getHeader("AccessToken");
+    }
+
+    // 토큰의 유효성 확인
+    public boolean validateToken(String token){
+        try {
+            Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token);
+            return true;
+        } catch (MalformedJwtException ex) {
+            log.info("Invalid JWT token");
+        } catch (ExpiredJwtException ex) {
+            log.info("Expired JWT token");
+        } catch (UnsupportedJwtException ex) {
+            log.info("Unsupported JWT token");
+        } catch (IllegalArgumentException ex) {
+            log.info("JWT claims string is empty.");
+        } catch (NullPointerException ex){
+            log.info("JWT RefreshToken is empty");
+        }
+        return false;
+    }
 }
