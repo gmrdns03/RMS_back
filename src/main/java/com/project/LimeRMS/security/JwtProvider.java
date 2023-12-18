@@ -39,6 +39,7 @@ public class JwtProvider {
     // JWT 토큰 생성
     public String generateAccessToken(String userNm, String userEmail, Integer priority, String authNm, Integer userId){
         Date now = new Date();
+        Date expiration = new Date(now.getTime() + expireIn);
         Map<String, Object> claims = new HashMap<>(); //추가로 전달하고 싶은 정보는 claims에 담기
         claims.put("userEmail", userEmail);
         claims.put("userNm", userNm);
@@ -51,7 +52,7 @@ public class JwtProvider {
                 .setHeaderParam("type","AccessToken")
                 .claims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(System.currentTimeMillis()+expireIn)) //3시간
+                .setExpiration(expiration) //3시간
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
         return accessToken;
