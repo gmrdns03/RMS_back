@@ -37,10 +37,13 @@ public class JwtProvider {
     }
 
     // JWT 토큰 생성
-    public String generateAccessToken(String userEmail){
+    public String generateAccessToken(String userNm, String userEmail, Integer priority, String authNm){
         Date now = new Date();
         Map<String, Object> claims = new HashMap<>(); //추가로 전달하고 싶은 정보는 claims에 담기
         claims.put("userEmail", userEmail);
+        claims.put("userNm", userNm);
+        claims.put("priority", priority);
+        claims.put("authNm", authNm);
 
         String accessToken = Jwts.builder()
                 .setHeaderParam("type","AccessToken")
