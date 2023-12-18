@@ -40,8 +40,9 @@ public class UserService {
         Integer priority = user.getAuthentication().getPriority();
         String authNm = user.getAuthentication().getAuthNm();
         String userNm = user.getUserNm();
+        Integer userId = user.getUserId();
 
-        String accessToken = jwtProvider.generateAccessToken(userNm, email, priority, authNm);
+        String accessToken = jwtProvider.generateAccessToken(userNm, email, priority, authNm, userId);
 
         return JwtResponseDto.builder()
                 .accessToken(accessToken)
