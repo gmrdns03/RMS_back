@@ -23,7 +23,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class JwtProvider {
 
-    @Value("${spring.security.jwt.token-validity-in-seconds}")
+    @Value("${spring.security.jwt.token-validity-in-milliseconds}")
     private Long expireIn;
     @Value("${spring.security.jwt.secret}")
     private String secretKey;
