@@ -24,12 +24,12 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
         response.setCharacterEncoding("utf-8");
-        log.warn("CustomAccessDeniedHandler : User가 허용되지 않은 권한에 접근 시도");
+        log.info("AccessDenied error: {}", accessDeniedException.getMessage());
 
-        response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        response.setStatus(HttpServletResponse.SC_OK);
 
         Map<String, String> body = new HashMap<>();
-        body.put("status", String.valueOf(HttpServletResponse.SC_FORBIDDEN));
+        body.put("status", String.valueOf(HttpServletResponse.SC_OK));
         body.put("error", "Forbidden");
         body.put("message", accessDeniedException.getMessage());
         body.put("path", request.getServletPath());
