@@ -9,5 +9,4 @@ public class LimeRmsApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(LimeRmsApplication.class, args);
 	}
-
 }
