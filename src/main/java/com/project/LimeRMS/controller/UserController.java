@@ -26,7 +26,7 @@ public class UserController {
             description = "사용자의 이메일과 비밀번호를 사용하여 로그인하고 토큰을 발급해준다.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
-                            examples = @ExampleObject(value = "{\"userEmail\":\"value1\",\"password\":\"value2\"}")
+                            examples = @ExampleObject(value = "{\"userEmail\":\"test1@euclidsoft.co.kr\",\"password\":\"1234\"}")
                     )
             )
     )

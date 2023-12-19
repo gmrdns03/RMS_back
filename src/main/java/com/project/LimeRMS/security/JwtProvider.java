@@ -76,6 +76,7 @@ public class JwtProvider {
 
     // Request의 Header의 token 값 "AccessToken" : "tokenValue"
     public String resolveToken(HttpServletRequest request) {
+//        System.out.println("request: " + request);
         return request.getHeader("AccessToken");
     }
 
