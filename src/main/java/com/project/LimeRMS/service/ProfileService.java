@@ -20,12 +20,9 @@ public class ProfileService {
             String fileNm = uuid + "_" + multipartFile.getOriginalFilename();
             File file = new File(projectPath, fileNm);
             multipartFile.transferTo(file);
-            System.out.println("===========================");
-            System.out.println(projectPath + fileNm);
-            System.out.println("===========================");
             return projectPath + "\\" + fileNm;
         } else {
-            return "empty";
+            return "";
         }
 
     }

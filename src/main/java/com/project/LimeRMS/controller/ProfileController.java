@@ -35,9 +35,13 @@ public class ProfileController {
     @PostMapping(value = "/profile/user/save-img", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "사용자 프로필 등록")
     public ResponseEntity<?> saveProfileImg(
-        @RequestPart (value = "file") MultipartFile multipartFile
+        @RequestPart (value = "file") MultipartFile multipartFile,
+        @RequestPart (value = "userId") String userId
     ) throws IOException {
         try {
+            System.out.println("===========================");
+            System.out.println(userId);
+            System.out.println("===========================");
             String filePath = profileService.saveProfileImg(multipartFile);
             System.out.println("===========================");
             System.out.println("filePath : " + filePath);
