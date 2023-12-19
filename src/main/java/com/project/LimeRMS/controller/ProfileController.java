@@ -17,6 +17,7 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
@@ -58,5 +59,21 @@ public class ProfileController {
             return ResponseEntity.ok()
                 .body(e);
         }
+    }
+
+    @GetMapping(value = "/profile/user/test-img")
+    @Operation(summary = "이미지 테스트용")
+    public ResponseEntity<?> testGetImg() {
+        try {
+            String filePath = "C:\\Dev\\RMS_back\\src\\main\\resources\\static\\files\\8031eb38-af49-4a60-8f5f-94fe16663a93_thousand_of_brain.jpg";
+            Resource resource = new FileSystemResource(filePath);
+            return ResponseEntity
+                .ok()
+                .body(resource);
+        } catch (Exception e) {
+            return ResponseEntity.ok()
+                .body(e);
+        }
+
     }
 }
