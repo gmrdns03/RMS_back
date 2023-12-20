@@ -1,0 +1,27 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.LimeRMS.mapper.BoardMapper">
+  <select id="findAllBoardInfo" parameterType="java.lang.String" resultMap="boardResultMap">
+    SELECT
+      b.*,
+      bt.*
+    FROM Board b
+    LEFT JOIN
+      BoardType bt ON b.boardTypeId = bt.boardTypeId
+  </select>
+  <resultMap id="boardResultMap" type="com.project.LimeRMS.entity.Board">
+    <id property="boardId" column="boardId" />
+    <result property="boardNm" column="boardNm" />
+    <result property="boardDesc" column="boardDesc" />
+    <result property="boardStat" column="boardStat" />
+    <result property="boardSn" column="boardSn" />
+    <result property="viewAuth" column="viewAuth" />
+    <result property="writeAuth" column="writeAuth" />
+    <result property="commentAuth" column="commentAuth" />
+    <result property="modifyAuth" column="modifyAuth" />
+    <association property="boardType" javaType="com.project.LimeRMS.entity.BoardType">
+      <id property="boardTypeId" column="boardTypeid" />
+      <result property="boardTypeNm" column="boardTypeNm" />
+    </association>
+  </resultMap>
+</mapper>

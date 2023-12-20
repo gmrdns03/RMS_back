@@ -32,7 +32,8 @@ public class SecurityConfig {
         "/swagger-resources/**",
         "/api-docs/**",
         "/login",
-        "/profile/**"
+        "/profile/**",
+        "/board/**"
     }; //권한 없이 모두 접근 가능한 url
 
     @Bean
