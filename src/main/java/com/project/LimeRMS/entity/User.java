@@ -41,7 +41,7 @@ public class User {
     @Column(columnDefinition = "VARCHAR(1) default 'N'", nullable = false)
     private String isSuperUser;
 
-    @Column
+    @Column(unique=true)
     private String phoneNumber;
 
     @Column(columnDefinition = "VARCHAR(1) default 'N'", nullable = false)

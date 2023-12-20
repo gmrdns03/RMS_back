@@ -1,19 +1,17 @@
 package com.project.LimeRMS.service;
 
 import com.project.LimeRMS.dto.JwtResponseDto;
-import com.project.LimeRMS.dto.UserSignupDto;
 import com.project.LimeRMS.entity.User;
 import com.project.LimeRMS.mapper.UserMapper;
 import com.project.LimeRMS.security.JwtProvider;
 
 import java.util.Map;
-import java.util.Optional;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,27 +55,4 @@ public class UserService {
         userMapper.updatePasswordByUserEmail(userEmail, hashedPassword);
     }
 
-    // 사용자 등록
-    @Transactional
-    public int signup(UserSignupDto userSignupDto) {
-        if (userMapper.findByUserEmail(userSignupDto.getUserEmail()).orElse(null) != null) {
-            throw new RuntimeException("이미 가입된 유저 입니다.");
-        }
-
-        // 초기 비밀번호 셋팅
-        String password = passwordEncoder.encode("dbzmfflem1!");
-        userSignupDto.setPassword(password);
-
-        // 저장
-        userMapper.signup(userSignupDto);
-
-        // 검증
-        Optional<User> user = userMapper.findByUserEmail(userSignupDto.getUserEmail());
-
-        if (user.isPresent()) {
-            return user.get().getUserId();
-        } else {
-            throw new RuntimeException("회원 등록에 실패했습니다.");
-        }
-    }
 }

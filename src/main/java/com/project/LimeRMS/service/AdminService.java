@@ -1,37 +1,41 @@
 package com.project.LimeRMS.service;
 
 import com.project.LimeRMS.dto.UserInfoDto;
-import com.project.LimeRMS.entity.Authentication;
 import com.project.LimeRMS.entity.User;
 import com.project.LimeRMS.mapper.AdminMapper;
 import com.project.LimeRMS.mapper.AuthenticationMapper;
+import com.project.LimeRMS.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class AdminService {
 
-    private final AdminMapper adminMapper;
+    private final UserMapper userMapper;
 
     private final AuthenticationMapper authenticationMapper;
+
+    private final PasswordEncoder passwordEncoder;
 
     public List<UserInfoDto> getUserInformation() {
 
         List<UserInfoDto> userInfoDtoList = new ArrayList<>();
-        List<User> users = adminMapper.findAllUser();
+        List<User> users = userMapper.findAllUser();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
         for (User user : users) {
-            Authentication authentication = user.getAuthentication();
             String userNm = user.getUserNm();
             String userEmail = user.getUserEmail();
             String joinDt = formatter.format(user.getJoinDt());
-            Integer authId = adminMapper.findAuthIdByUserId(user.getUserId());
+            Integer authId = userMapper.findAuthIdByUserId(user.getUserId());
             String authNm = authenticationMapper.findAuthNmByAuthId(authId);
             String userStat = user.getUserStat();
             UserInfoDto userInfoDto = new UserInfoDto(userNm, userEmail, joinDt, authNm, userStat);
@@ -39,5 +43,23 @@ public class AdminService {
             userInfoDtoList.add(userInfoDto);
         }
         return userInfoDtoList;
+    }
+
+    public String addUser(Map<String, String> signupInfo) {
+        try {
+            if (userMapper.findByUserEmail(signupInfo.get("userEmail")).orElse(null) != null) {
+                throw new RuntimeException("이미 가입된 Email 입니다.");
+            }
+            String userEmail = signupInfo.get("userEmail");
+            String userNm = signupInfo.get("userNm");
+            String phoneNumber = signupInfo.get("phoneNumber");
+            String defaultPassword = System.getenv("DEFAULT_PW"); //초기 비밀번호 환경변수에 저장 됨
+            String password = passwordEncoder.encode(defaultPassword);
+
+            userMapper.addUser(userEmail, userNm, password, phoneNumber);
+            return userEmail + "이 성공적으로 가입되었습니다.";
+        } catch (Exception e) {
+            return e.toString();
+        }
     }
 }
