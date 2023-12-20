@@ -31,7 +31,7 @@ public class AdminController {
             description = "관리자는 회원을 추가할 수 있다(초기 비밀번호는 통일)",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
-                            examples = @ExampleObject(value = "{\"userEmail\":\"test1@euclidsoft.co.kr\",\"userNm\":\"김00\",\"phoneNumber\":\"01022223333\"}")
+                            examples = @ExampleObject(value = "{\"userEmail\":\"test1@euclidsoft.co.kr\",\"userNm\":\"김00\",\"phoneNumber\":\"01022223333\",\"authId\":\"9\"}")
                     )
             )
     )

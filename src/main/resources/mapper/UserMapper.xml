@@ -42,12 +42,14 @@
         (   userEmail,
             userNm,
             password,
-            phoneNumber
+            phoneNumber,
+            authId
         ) VALUES (
             #{userEmail},
             #{userNm},
             #{password},
-            #{phoneNumber})
+            #{phoneNumber},
+            #{authId})
     </insert>
 
     <select id="findByUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.entity.User">

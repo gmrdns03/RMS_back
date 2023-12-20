@@ -58,8 +58,9 @@ public class AdminService {
             String phoneNumber = signupInfo.get("phoneNumber");
             String defaultPassword = System.getenv("DEFAULT_PW"); //초기 비밀번호 환경변수에 저장 됨
             String password = passwordEncoder.encode(defaultPassword);
+            Integer authId = Integer.valueOf(signupInfo.get("authId"));
 
-            userMapper.addUser(userEmail, userNm, password, phoneNumber);
+            userMapper.addUser(userEmail, userNm, password, phoneNumber, authId);
             return userEmail + "이 성공적으로 가입되었습니다.";
         } catch (Exception e) {
             return e.toString();

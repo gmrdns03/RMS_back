@@ -20,6 +20,6 @@ public interface UserMapper {
 
     Integer findAuthIdByUserId(Integer userId);
 
-    void addUser(@Param("userEmail")String userEmail, @Param("userNm")String userNm, @Param("password")String password, @Param("phoneNumber")String phoneNumber);
+    void addUser(@Param("userEmail")String userEmail, @Param("userNm")String userNm, @Param("password")String password, @Param("phoneNumber")String phoneNumber, @Param("authId") Integer authId);
 
 }
