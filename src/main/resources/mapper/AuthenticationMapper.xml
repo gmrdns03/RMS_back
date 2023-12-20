@@ -3,6 +3,9 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.LimeRMS.mapper.AuthenticationMapper">
+  <select id="findAllAuth" resultType="com.project.LimeRMS.dto.AuthListDto">
+    SELECT authId, authNm FROM Authentication
+  </select>
   <insert id="insertAuthenticationTest" parameterType="com.project.LimeRMS.entity.Authentication">
     INSERT INTO Authentication (authNm, authDesc, priority, regUserId, modfUserId)
     VALUES (#{authNm}, #{authDesc}, #{priority}, #{regUserId}, #{modfUserId})

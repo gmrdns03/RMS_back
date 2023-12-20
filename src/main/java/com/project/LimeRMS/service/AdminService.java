@@ -1,24 +1,26 @@
 package com.project.LimeRMS.service;
 
+import com.project.LimeRMS.dto.AuthListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.entity.User;
-import com.project.LimeRMS.mapper.AdminMapper;
 import com.project.LimeRMS.mapper.AuthenticationMapper;
 import com.project.LimeRMS.mapper.CommCdMapper;
 import com.project.LimeRMS.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class AdminService {
+
+    private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AdminService.class.getName());
 
     private final UserMapper userMapper;
 
@@ -64,6 +66,16 @@ public class AdminService {
             return userEmail + "이 성공적으로 가입되었습니다.";
         } catch (Exception e) {
             return e.toString();
+        }
+    }
+
+    //권한 종류 불러오기
+    public List<AuthListDto> getAuthenticationList(){
+        try {
+            return authenticationMapper.findAllAuth();
+        } catch (Exception e) {
+            log.info("Error while getting authentication list", e);
+            return Collections.emptyList();
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.project.LimeRMS.controller;
 
+import com.project.LimeRMS.dto.AuthListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -37,6 +38,11 @@ public class AdminController {
     )
     public String addUser(@RequestBody Map<String, String> signupInfo) {
         return adminService.addUser(signupInfo);
+    }
+
+    @GetMapping("/auth-list")
+    public List<AuthListDto> getAuthenticationList(){
+        return adminService.getAuthenticationList();
     }
 
 }
