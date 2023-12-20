@@ -67,11 +67,11 @@ public class JwtProvider {
 
     // 토큰에서 회원 정보 추출
     public String getUserPk(String token) {
-        return Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("userEmail").toString();
+        return Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("userId").toString();
     }
 
     public String getUserEmail(String token) {
-        return getUserPk(token);
+        return Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token).getBody().get("userEmail").toString();
     }
 
     // Request의 Header의 token 값 "AccessToken" : "tokenValue"
