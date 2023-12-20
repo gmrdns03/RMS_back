@@ -69,6 +69,11 @@ public class AdminService {
         }
     }
 
+    //유저 개인정보 수정
+    public String updateUserInfo(Map<String, String> updateInfo){
+
+    }
+
     //권한 종류 불러오기
     public List<AuthListDto> getAuthenticationList(){
         try {
