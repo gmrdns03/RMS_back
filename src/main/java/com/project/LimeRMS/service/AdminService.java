@@ -4,6 +4,7 @@ import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.entity.User;
 import com.project.LimeRMS.mapper.AdminMapper;
 import com.project.LimeRMS.mapper.AuthenticationMapper;
+import com.project.LimeRMS.mapper.CommCdMapper;
 import com.project.LimeRMS.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,6 +26,8 @@ public class AdminService {
 
     private final PasswordEncoder passwordEncoder;
 
+    private final CommCdMapper commCdMapper;
+
     public List<UserInfoDto> getUserInformation() {
 
         List<UserInfoDto> userInfoDtoList = new ArrayList<>();
@@ -37,7 +40,7 @@ public class AdminService {
             String joinDt = formatter.format(user.getJoinDt());
             Integer authId = userMapper.findAuthIdByUserId(user.getUserId());
             String authNm = authenticationMapper.findAuthNmByAuthId(authId);
-            String userStat = user.getUserStat();
+            String userStat = commCdMapper.findCdNmByUserStat(user.getUserStat());
             UserInfoDto userInfoDto = new UserInfoDto(userNm, userEmail, joinDt, authNm, userStat);
 
             userInfoDtoList.add(userInfoDto);
