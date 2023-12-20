@@ -7,7 +7,5 @@ import java.util.List;
 
 @Mapper
 public interface AdminMapper {
-    List<User> findAllUser();
 
-    Integer findAuthIdByUserId(Integer userId);
 }

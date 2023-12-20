@@ -37,10 +37,9 @@
         WHERE userEmail = #{userEmail}
     </update>
 
-    <insert id="signup">
+    <insert id="addUser">
         INSERT INTO User
-        (
-            userEmail,
+        (   userEmail,
             userNm,
             password,
             phoneNumber
@@ -48,8 +47,7 @@
             #{userEmail},
             #{userNm},
             #{password},
-            #{phoneNumber}
-        )
+            #{phoneNumber})
     </insert>
 
     <select id="findByUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.entity.User">
@@ -61,4 +59,12 @@
         SET profileImg = #{profileImg}
         WHERE userId = #{userId}
     </update>
+
+    <select id="findAllUser" resultType="com.project.LimeRMS.entity.User">
+        SELECT * FROM User
+    </select>
+    <select id="findAuthIdByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT authId FROM User WHERE userId = #{userId}
+    </select>
+
 </mapper>
