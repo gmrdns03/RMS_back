@@ -61,6 +61,9 @@ public class User {
     @Column
     private String modfUserId;
 
+    @Column
+    private String userStat;
+
     public void encodePassword(PasswordEncoder passwordEncoder) {
         this.password = passwordEncoder.encode(password);
     }

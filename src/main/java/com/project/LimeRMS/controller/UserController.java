@@ -1,7 +1,6 @@
 package com.project.LimeRMS.controller;
 
 import com.project.LimeRMS.dto.JwtResponseDto;
-import com.project.LimeRMS.dto.UserSignupDto;
 import com.project.LimeRMS.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -26,7 +25,7 @@ public class UserController {
             description = "사용자의 이메일과 비밀번호를 사용하여 로그인하고 토큰을 발급해준다.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
-                            examples = @ExampleObject(value = "{\"userEmail\":\"value1\",\"password\":\"value2\"}")
+                            examples = @ExampleObject(value = "{\"userEmail\":\"test1@euclidsoft.co.kr\",\"password\":\"1234\"}")
                     )
             )
     )
@@ -39,12 +38,6 @@ public class UserController {
     public void updatePassword(@Parameter(name = "userEmail", description = "사용자 이메일", in = ParameterIn.QUERY, required = true)
                                    @RequestParam(name="userEmail") String userEmail) {
         userService.updatePassword(userEmail);
-    }
-
-    @PostMapping("/signup")
-    @Operation(summary = "사용자 등록")
-    public Integer signup(UserSignupDto userSignupDto) {
-        return userService.signup(userSignupDto);
     }
 
 }

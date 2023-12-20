@@ -10,4 +10,7 @@
   <select id="findByRegUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.entity.Authentication">
     SELECT * FROM Authentication WHERE regUserId = #{regUserId}
   </select>
+  <select id="findAuthNmByAuthId" parameterType="java.lang.Integer" resultType="java.lang.String">
+    SELECT authNm FROM Authentication WHERE authId = #{authId}
+  </select>
 </mapper>

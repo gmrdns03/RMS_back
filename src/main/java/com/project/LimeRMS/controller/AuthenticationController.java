@@ -28,7 +28,7 @@ public class AuthenticationController {
     }
 
     @GetMapping("/testTest")
-    public String example2() {
+    public String example2(@RequestHeader(value="AccessToken") String token) {
         return "API";
     }
 

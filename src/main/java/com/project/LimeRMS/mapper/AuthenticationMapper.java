@@ -9,4 +9,6 @@ public interface AuthenticationMapper {
     void insertAuthenticationTest(Authentication authentication);
 
     Authentication findByRegUserId(String regUserId);
+
+    String findAuthNmByAuthId(Integer authId);
 }

@@ -23,7 +23,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class JwtProvider {
 
-    @Value("${spring.security.jwt.token-validity-in-seconds}")
+    @Value("${spring.security.jwt.token-validity-in-milliseconds}")
     private Long expireIn;
     @Value("${spring.security.jwt.secret}")
     private String secretKey;
@@ -39,6 +39,7 @@ public class JwtProvider {
     // JWT 토큰 생성
     public String generateAccessToken(String userNm, String userEmail, Integer priority, String authNm, Integer userId){
         Date now = new Date();
+        Date expiration = new Date(now.getTime() + expireIn);
         Map<String, Object> claims = new HashMap<>(); //추가로 전달하고 싶은 정보는 claims에 담기
         claims.put("userEmail", userEmail);
         claims.put("userNm", userNm);
@@ -51,7 +52,7 @@ public class JwtProvider {
                 .setHeaderParam("type","AccessToken")
                 .claims(claims)
                 .setIssuedAt(now)
-                .setExpiration(new Date(System.currentTimeMillis()+expireIn)) //3시간
+                .setExpiration(expiration) //3시간
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
         return accessToken;
@@ -75,6 +76,7 @@ public class JwtProvider {
 
     // Request의 Header의 token 값 "AccessToken" : "tokenValue"
     public String resolveToken(HttpServletRequest request) {
+//        System.out.println("request: " + request);
         return request.getHeader("AccessToken");
     }
 

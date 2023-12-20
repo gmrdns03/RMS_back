@@ -4,6 +4,7 @@ import com.project.LimeRMS.entity.User;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
+import java.util.ArrayList;
 
 public class UserDetail implements UserDetails {
     private final User user;
@@ -19,8 +20,13 @@ public class UserDetail implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return authorities;
-        return authorities;
+        String role = user.getAuthentication().getAuthNm();
+        Collection<GrantedAuthority> collect = new ArrayList<>();
+        collect.add((GrantedAuthority) () -> {
+            System.out.print("Role: " + role);
+            return role;
+        });
+        return collect;
     }
 
     @Override
