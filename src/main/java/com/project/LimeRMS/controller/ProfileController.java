@@ -30,6 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -37,12 +38,13 @@ import org.springframework.web.multipart.MultipartFile;
 @Tag(name = "ProfileController", description = "ProfileController API")
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/profile")
 public class ProfileController {
     private final ProfileService profileService;
     private final JwtProvider jwtProvider;
-    private final UserMapper userMapper;
 
-    @PostMapping(value = "/profile/user/save-img", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+
+    @PostMapping(value = "/user/save-img", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "사용자 프로필 등록")
     public ResponseEntity<?> saveProfileImg(
         @RequestPart (value = "file") MultipartFile multipartFile,
@@ -53,21 +55,8 @@ public class ProfileController {
             // 토큰에서 userId 추출
             String userId = jwtProvider.getUserPk(token);
 
-            // 기존 userImg가 있는지 확인
-            // 유저가 이미 프로필 이미지가 있는경우 해당 파일 삭제
-            User user = userMapper.findByUserId(userId);
-            String profileImgPath = user.getProfileImg();
-            if ((profileImgPath != null) || !profileImgPath.isEmpty()) {
-                profileService.deleteProfileImg(profileImgPath);
-            }
-
             // 이미지 저장
-            String filePath = profileService.saveProfileImg(multipartFile);
-            System.out.println("이미지 저장 완료");
-
-            // userId로 테이블에 프로필이미지 경로 저장
-            userMapper.updateProfileImgByUserId(userId, filePath);
-            System.out.println("테이블에 프로필 이미지 경로 저장 완료");
+            profileService.saveProfileImg(userId, multipartFile);
 
             resMap.put("res", "Registered a new profile image successfully");
             return ResponseEntity.accepted().body(resMap);
@@ -77,8 +66,8 @@ public class ProfileController {
         }
     }
 
-    @GetMapping(value = "/profile/user/img")
-    @Operation(summary = "이미지 테스트용")
+    @GetMapping(value = "/user/img")
+    @Operation(summary = "사용자 프로필 가져오기")
     public ResponseEntity<?> testGetImg(
         @RequestHeader("AccessToken") String token
     ) {
@@ -86,19 +75,11 @@ public class ProfileController {
             // 토큰에서 userId 추출
             String userId = jwtProvider.getUserPk(token);
 
-            // 기존 userImg가 있는지 확인
-            User user = userMapper.findByUserId(userId);
-            String profileImgPath = user.getProfileImg();
+            // 파일 가져오기
+            File destFile = profileService.getProfileImg(userId);
 
-            // 없는 경우 null 반환
-            if (profileImgPath.isEmpty()) {
-                return ResponseEntity.ok(null);
-            }
-
-            // 파일 불러오기
-            File destFile = new File(profileImgPath);
+            // header 생성
             String mimeType = Files.probeContentType(Paths.get(destFile.getAbsolutePath()));
-
             if (mimeType == null) {
                 mimeType = "octet-steam";
             }
