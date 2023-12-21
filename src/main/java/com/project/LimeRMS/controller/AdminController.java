@@ -7,8 +7,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -35,8 +37,14 @@ public class AdminController {
                     )
             )
     )
-    public String addUser(@RequestBody Map<String, String> signupInfo) {
-        return adminService.addUser(signupInfo);
+    public ResponseEntity<?> addUser(@RequestBody Map<String, String> signupInfo) {
+        Map<String, Object> resMap = new HashMap<>();
+        String message = adminService.addUser(signupInfo);
+        resMap.put("res", message);
+
+        return ResponseEntity
+                .ok()
+                .body(resMap);
     }
 
     @PostMapping("/users/modify")
@@ -49,9 +57,6 @@ public class AdminController {
                     )
             )
     )
-    public String updateUserInfo(@RequestBody Map<String, String> updateInfo){
-        return adminService.updateUserInfo(updateInfo);
-    }
 
     @GetMapping("/auth-list")
     public List<AuthListDto> getAuthenticationList(){

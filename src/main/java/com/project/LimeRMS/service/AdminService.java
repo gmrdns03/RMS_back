@@ -53,25 +53,21 @@ public class AdminService {
     public String addUser(Map<String, String> signupInfo) {
         try {
             if (userMapper.findByUserEmail(signupInfo.get("userEmail")).orElse(null) != null) {
-                throw new RuntimeException("이미 가입된 Email 입니다.");
-            }
-            String userEmail = signupInfo.get("userEmail");
-            String userNm = signupInfo.get("userNm");
-            String phoneNumber = signupInfo.get("phoneNumber");
-            String defaultPassword = System.getenv("DEFAULT_PW"); //초기 비밀번호 환경변수에 저장 됨
-            String password = passwordEncoder.encode(defaultPassword);
-            Integer authId = Integer.valueOf(signupInfo.get("authId"));
+                return "이미 가입된 Email 입니다.";
+            } else {
+                String userEmail = signupInfo.get("userEmail");
+                String userNm = signupInfo.get("userNm");
+                String phoneNumber = signupInfo.get("phoneNumber");
+                String defaultPassword = System.getenv("DEFAULT_PW"); //초기 비밀번호 환경변수에 저장 됨
+                String password = passwordEncoder.encode(defaultPassword);
+                Integer authId = Integer.valueOf(signupInfo.get("authId"));
 
-            userMapper.addUser(userEmail, userNm, password, phoneNumber, authId);
-            return userEmail + "이 성공적으로 가입되었습니다.";
+                userMapper.addUser(userEmail, userNm, password, phoneNumber, authId);
+                return userEmail + "이 성공적으로 가입되었습니다.";
+            }
         } catch (Exception e) {
             return e.toString();
         }
-    }
-
-    //유저 개인정보 수정
-    public String updateUserInfo(Map<String, String> updateInfo){
-
     }
 
     //권한 종류 불러오기
