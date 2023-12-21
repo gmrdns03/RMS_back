@@ -14,10 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +27,22 @@ public class AdminService {
     private final AuthenticationMapper authenticationMapper;
     private final PasswordEncoder passwordEncoder;
     private final CommCdMapper commCdMapper;
+
+    public String resetUserPw(Map<String, String> member){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            User user = userMapper.findByUserId(member.get("userId"));
+            if (.orElse(null) != null) {
+                return "이미 가입된 Email 입니다.";
+            } else {
+
+                return userEmail + "의 비밀번호가 성공적으로 초기화 되었습니다.";
+            }
+        } catch (Exception e) {
+            return e.toString();
+        }
+        return resMap;
+    }
 
     //모든 보드 종류 불러오기
     public List<BoardInfoDto> getBoardList(){
@@ -72,10 +85,12 @@ public class AdminService {
     }
 
     //관리자의 회원 추가 기능
-    public String addUser(Map<String, String> signupInfo) {
+    public Map<String, Object> addUser(Map<String, String> signupInfo) {
+        Map<String, Object> resMap = new HashMap<>();
         try {
             if (userMapper.findByUserEmail(signupInfo.get("userEmail")).orElse(null) != null) {
-                return "이미 가입된 Email 입니다.";
+                resMap.put("res", false);
+                resMap.put("msg", "이미 가입된 Email 입니다.");
             } else {
                 String userEmail = signupInfo.get("userEmail");
                 String userNm = signupInfo.get("userNm");
@@ -85,11 +100,14 @@ public class AdminService {
                 Integer authId = Integer.valueOf(signupInfo.get("authId"));
 
                 userMapper.addUser(userEmail, userNm, password, phoneNumber, authId);
-                return userEmail + "이 성공적으로 가입되었습니다.";
+                resMap.put("res", true);
+                resMap.put("msg", userEmail + "이 성공적으로 가입되었습니다.");
             }
         } catch (Exception e) {
-            return e.toString();
+            resMap.put("res", false);
+            resMap.put("msg", e.toString());
         }
+        return resMap;
     }
 
     //권한 종류 불러오기
