@@ -12,6 +12,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserInfoDto {
+    private Integer userId;
 
     private String userNm;
 
@@ -22,4 +23,6 @@ public class UserInfoDto {
     private String authNm;
 
     private String userStat;
+
+    private String phoneNumber;
 }

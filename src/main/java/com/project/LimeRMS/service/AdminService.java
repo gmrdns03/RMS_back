@@ -37,13 +37,14 @@ public class AdminService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
         for (User user : users) {
+            Integer userId = user.getUserId();
             String userNm = user.getUserNm();
             String userEmail = user.getUserEmail();
             String joinDt = formatter.format(user.getJoinDt());
-            Integer authId = userMapper.findAuthIdByUserId(user.getUserId());
-            String authNm = authenticationMapper.findAuthNmByAuthId(authId);
+            String authNm = user.getAuthentication().getAuthNm();
             String userStat = commCdMapper.findCdNmByUserStat(user.getUserStat());
-            UserInfoDto userInfoDto = new UserInfoDto(userNm, userEmail, joinDt, authNm, userStat);
+            String phoneNumber = user.getPhoneNumber();
+            UserInfoDto userInfoDto = new UserInfoDto(userId, userNm, userEmail, joinDt, authNm, userStat, phoneNumber);
 
             userInfoDtoList.add(userInfoDto);
         }
@@ -53,17 +54,18 @@ public class AdminService {
     public String addUser(Map<String, String> signupInfo) {
         try {
             if (userMapper.findByUserEmail(signupInfo.get("userEmail")).orElse(null) != null) {
-                throw new RuntimeException("이미 가입된 Email 입니다.");
-            }
-            String userEmail = signupInfo.get("userEmail");
-            String userNm = signupInfo.get("userNm");
-            String phoneNumber = signupInfo.get("phoneNumber");
-            String defaultPassword = System.getenv("DEFAULT_PW"); //초기 비밀번호 환경변수에 저장 됨
-            String password = passwordEncoder.encode(defaultPassword);
-            Integer authId = Integer.valueOf(signupInfo.get("authId"));
+                return "이미 가입된 Email 입니다.";
+            } else {
+                String userEmail = signupInfo.get("userEmail");
+                String userNm = signupInfo.get("userNm");
+                String phoneNumber = signupInfo.get("phoneNumber");
+                String defaultPassword = System.getenv("DEFAULT_PW"); //초기 비밀번호 환경변수에 저장 됨
+                String password = passwordEncoder.encode(defaultPassword);
+                Integer authId = Integer.valueOf(signupInfo.get("authId"));
 
-            userMapper.addUser(userEmail, userNm, password, phoneNumber, authId);
-            return userEmail + "이 성공적으로 가입되었습니다.";
+                userMapper.addUser(userEmail, userNm, password, phoneNumber, authId);
+                return userEmail + "이 성공적으로 가입되었습니다.";
+            }
         } catch (Exception e) {
             return e.toString();
         }

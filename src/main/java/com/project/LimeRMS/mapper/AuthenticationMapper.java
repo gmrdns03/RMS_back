@@ -13,7 +13,5 @@ public interface AuthenticationMapper {
 
     Authentication findByRegUserId(String regUserId);
 
-    String findAuthNmByAuthId(Integer authId);
-
     List<AuthListDto> findAllAuth();
 }
