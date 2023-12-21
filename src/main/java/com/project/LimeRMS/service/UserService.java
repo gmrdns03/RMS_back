@@ -63,12 +63,4 @@ public class UserService {
                 .build();
     }
 
-    //Test 코드(나중에 연관 코드 삭제 필요)
-    public void updatePassword(String userEmail){
-        User user = userMapper.findByUserEmail(userEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("가입되지 않은 Email 입니다."));
-        String hashedPassword = passwordEncoder.encode(user.getPassword());
-        userMapper.updatePasswordByUserEmail(userEmail, hashedPassword);
-    }
-
 }

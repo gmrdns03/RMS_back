@@ -12,7 +12,6 @@ public interface UserMapper {
     Optional<User> findByUserEmail(String userEmail);
 
     User findByUserId(@Param("userId") String userId);
-    void updatePasswordByUserEmail(@Param("userEmail") String userEmail, @Param("password") String password);
 
     void updateProfileImgByUserId(@Param("userId") String userId, @Param("profileImg") String profileImg);
 

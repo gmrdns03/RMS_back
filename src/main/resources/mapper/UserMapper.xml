@@ -35,12 +35,6 @@
         </association>
     </resultMap>
 
-    <update id="updatePasswordByUserEmail">
-        UPDATE User
-        SET password = #{password}
-        WHERE userEmail = #{userEmail}
-    </update>
-
     <insert id="addUser">
         INSERT INTO User
         (   userEmail,

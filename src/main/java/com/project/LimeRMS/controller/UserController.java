@@ -18,8 +18,8 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class UserController {
+
     private final UserService userService;
-    private final JwtResponseDto jwtResponseDto;
 
     @PostMapping("/login")
     @Operation(
@@ -33,13 +33,6 @@ public class UserController {
     )
     public JwtResponseDto login(@RequestBody Map<String, String> member) {
         return userService.login(member);
-    }
-
-    //Test 코드(나중에 연관 코드 삭제 필요) - db에 저장된 비밀번호 BCryptPasswordEncoder로 변경해줌
-    @PostMapping("/updatePassword")
-    public void updatePassword(@Parameter(name = "userEmail", description = "사용자 이메일", in = ParameterIn.QUERY, required = true)
-                                   @RequestParam(name="userEmail") String userEmail) {
-        userService.updatePassword(userEmail);
     }
 
     @PostMapping("/cd-list")

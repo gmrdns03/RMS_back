@@ -9,9 +9,5 @@ import java.util.List;
 @Mapper
 public interface AuthenticationMapper {
 
-    void insertAuthenticationTest(Authentication authentication);
-
-    Authentication findByRegUserId(String regUserId);
-
     List<AuthListDto> findAllAuth();
 }
