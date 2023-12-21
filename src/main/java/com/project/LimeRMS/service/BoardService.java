@@ -39,7 +39,15 @@ public class BoardService {
     }
 
     public File getBoardImg(String boardId) {
-        // Board에서
+        // Board에서 boardId에 해당하는 boardImg 조회
+        Board board = boardMapper.findByBoardId(boardId);
+        String boardImgPath = board.getBoardImg();
+
+        // 없는 경우 null 반환
+        if (boardImgPath.isEmpty()) { return null; }
+
+        // 경로가 있는 경우 파일 불러오기
+        return new File(boardImgPath);
     }
 
 }

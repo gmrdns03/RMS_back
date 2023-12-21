@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URLEncoder;
@@ -92,8 +93,8 @@ public class ProfileController {
                 .contentType(MediaType.parseMediaType(mimeType))
                 .body(rs);
         } catch (Exception e) {
-            return ResponseEntity.ok()
-                .body(e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
         }
 
     }
