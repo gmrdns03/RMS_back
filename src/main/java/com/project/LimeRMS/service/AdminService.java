@@ -37,14 +37,14 @@ public class AdminService {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 
         for (User user : users) {
+            Integer userId = user.getUserId();
             String userNm = user.getUserNm();
             String userEmail = user.getUserEmail();
             String joinDt = formatter.format(user.getJoinDt());
-            Integer authId = userMapper.findAuthIdByUserId(user.getUserId());
-            String authNm = authenticationMapper.findAuthNmByAuthId(authId);
+            String authNm = user.getAuthentication().getAuthNm();
             String userStat = commCdMapper.findCdNmByUserStat(user.getUserStat());
             String phoneNumber = user.getPhoneNumber();
-            UserInfoDto userInfoDto = new UserInfoDto(userNm, userEmail, joinDt, authNm, userStat, phoneNumber);
+            UserInfoDto userInfoDto = new UserInfoDto(userId, userNm, userEmail, joinDt, authNm, userStat, phoneNumber);
 
             userInfoDtoList.add(userInfoDto);
         }
