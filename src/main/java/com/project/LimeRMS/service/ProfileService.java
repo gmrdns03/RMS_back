@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,12 +20,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class ProfileService {
     private final UserMapper userMapper;
+    @Value("${filesPath.profile}")
+    private String DtlProfilePath;
 
     public boolean saveProfileImg(String userId, MultipartFile multipartFile) throws Exception {
         // multipartFile이 비어 있지 않으면 진행
         if(multipartFile != null && !multipartFile.isEmpty()) {
             // profile 폴더가 없는경우 폴더 생성
-            String profileFolderPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files\\profile";
+            String profileFolderPath = System.getProperty("user.dir") + DtlProfilePath;
             Path folderPath = Paths.get(profileFolderPath);
             if (!Files.exists(folderPath)) {
                 Files.createDirectories(folderPath);
