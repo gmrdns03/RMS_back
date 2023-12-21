@@ -43,7 +43,8 @@ public class AdminService {
             Integer authId = userMapper.findAuthIdByUserId(user.getUserId());
             String authNm = authenticationMapper.findAuthNmByAuthId(authId);
             String userStat = commCdMapper.findCdNmByUserStat(user.getUserStat());
-            UserInfoDto userInfoDto = new UserInfoDto(userNm, userEmail, joinDt, authNm, userStat);
+            String phoneNumber = user.getPhoneNumber();
+            UserInfoDto userInfoDto = new UserInfoDto(userNm, userEmail, joinDt, authNm, userStat, phoneNumber);
 
             userInfoDtoList.add(userInfoDto);
         }

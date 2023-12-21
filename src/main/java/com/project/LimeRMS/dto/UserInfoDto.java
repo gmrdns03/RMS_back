@@ -22,4 +22,6 @@ public class UserInfoDto {
     private String authNm;
 
     private String userStat;
+
+    private String phoneNumber;
 }

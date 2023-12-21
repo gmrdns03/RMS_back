@@ -23,6 +23,9 @@ public class AdminController {
     private final AdminService adminService;
 
     @GetMapping("/users")
+    @Operation(
+            summary = "모든 회원 조회",
+            description = "관리자는 모든 회원의 정보를 조회할 수 있다.")
     public List<UserInfoDto> getUserInformation(){
         return adminService.getUserInformation();
     }
