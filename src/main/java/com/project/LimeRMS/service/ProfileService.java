@@ -48,7 +48,7 @@ public class ProfileService {
             }
 
             // userImg 테이블에 업데이트
-            String newProfilePath = profileFolderPath + "\\" + fileNm;
+            String newProfilePath = profileFolderPath + "/" + fileNm;
             userMapper.updateProfileImgByUserId(userId, newProfilePath);
             return true;
         } else {
