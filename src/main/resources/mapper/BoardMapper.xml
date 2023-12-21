@@ -4,9 +4,10 @@
 
 <mapper namespace="com.project.LimeRMS.mapper.BoardMapper">
     <select id="findAllBoard" resultType="com.project.LimeRMS.dto.BoardInfoDto">
-        SELECT b.boardId, b.boardNm, b.regDt, b.boardStat, COUNT(c.cateId) AS contentNum FROM Board b
+        SELECT b.boardId, b.boardNm, b.regDt, b.boardStat, b.boardSn, COUNT(c.cateId) AS contentNum FROM Board b
         LEFT JOIN ContentCategory cc ON b.boardId = cc.boardId
         LEFT JOIN Content c ON cc.cateId = c.cateId
         GROUP BY b.boardId
+        ORDER BY b.boardSn ASC
     </select>
 </mapper>
