@@ -1,10 +1,14 @@
 package com.project.LimeRMS.service;
 
+import com.project.LimeRMS.dto.CommCdDto;
 import com.project.LimeRMS.dto.JwtResponseDto;
 import com.project.LimeRMS.entity.User;
+import com.project.LimeRMS.mapper.CommCdMapper;
 import com.project.LimeRMS.mapper.UserMapper;
 import com.project.LimeRMS.security.JwtProvider;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
@@ -18,9 +22,21 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserMapper userMapper;
+    private final CommCdMapper commCdMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtResponseDto jwtResponseDto;
     private final JwtProvider jwtProvider;
+
+    public List<CommCdDto> getCommCdList(Map<String, String> input) {
+        try {
+            List<CommCdDto> commCdDtoList = commCdMapper.findCommCdByHiCommCd(input.get("hiCommCd"));
+            return commCdDtoList;
+        } catch (Exception e) {
+            List<CommCdDto> errorList = new ArrayList<>();
+            errorList.add(new CommCdDto("error", "에러 발생: " + e.getMessage()));
+            return errorList;
+        }
+    }
 
     public JwtResponseDto login(Map<String, String> member) {
         String email = member.get("userEmail");

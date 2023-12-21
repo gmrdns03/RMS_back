@@ -33,7 +33,6 @@
             <result property="authDesc" column="authDesc" />
             <result property="priority" column="priority" />
         </association>
-
     </resultMap>
 
     <update id="updatePasswordByUserEmail">
