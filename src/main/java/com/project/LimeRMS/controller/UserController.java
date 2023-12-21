@@ -1,5 +1,6 @@
 package com.project.LimeRMS.controller;
 
+import com.project.LimeRMS.dto.CommCdDto;
 import com.project.LimeRMS.dto.JwtResponseDto;
 import com.project.LimeRMS.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -10,6 +11,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @Tag(name = "UserController", description = "UserController API")
@@ -40,4 +42,14 @@ public class UserController {
         userService.updatePassword(userEmail);
     }
 
+    @PostMapping("/cd-list")
+    @Operation(
+            summary = "코드 체계별 종류 조회",
+            description = "각 코드 체계별로 갖고 있는 종류를 리스트로 반환해준다.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            examples = @ExampleObject(value = "{\"hiCommCd\":\"CD006000\"}"))))
+    public List<CommCdDto> getCommCdList(@RequestBody Map<String, String> input){
+        return userService.getCommCdList(input);
+    }
 }

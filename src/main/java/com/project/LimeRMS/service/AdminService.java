@@ -42,7 +42,7 @@ public class AdminService {
             String userEmail = user.getUserEmail();
             String joinDt = formatter.format(user.getJoinDt());
             String authNm = user.getAuthentication().getAuthNm();
-            String userStat = commCdMapper.findCdNmByUserStat(user.getUserStat());
+            String userStat = commCdMapper.findCdNmByCd(user.getUserStat());
             String phoneNumber = user.getPhoneNumber();
             UserInfoDto userInfoDto = new UserInfoDto(userId, userNm, userEmail, joinDt, authNm, userStat, phoneNumber);
 
