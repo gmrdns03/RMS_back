@@ -24,9 +24,9 @@ public class UserService {
     private final UserMapper userMapper;
     private final CommCdMapper commCdMapper;
     private final PasswordEncoder passwordEncoder;
-    private final JwtResponseDto jwtResponseDto;
     private final JwtProvider jwtProvider;
 
+    //상태값 종류 리스트로 확인 가능
     public List<CommCdDto> getCommCdList(Map<String, String> input) {
         try {
             List<CommCdDto> commCdDtoList = commCdMapper.findCommCdByHiCommCd(input.get("hiCommCd"));
@@ -38,6 +38,7 @@ public class UserService {
         }
     }
 
+    //유저 로그인시 토큰 발급
     public JwtResponseDto login(Map<String, String> member) {
         String email = member.get("userEmail");
         String password = member.get("password");

@@ -1,15 +1,18 @@
 package com.project.LimeRMS.service;
 
 import com.project.LimeRMS.dto.AuthListDto;
+import com.project.LimeRMS.dto.BoardInfoDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.entity.User;
 import com.project.LimeRMS.mapper.AuthenticationMapper;
+import com.project.LimeRMS.mapper.BoardMapper;
 import com.project.LimeRMS.mapper.CommCdMapper;
 import com.project.LimeRMS.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,13 +26,30 @@ public class AdminService {
     private static final org.slf4j.Logger log = org.slf4j.LoggerFactory.getLogger(AdminService.class.getName());
 
     private final UserMapper userMapper;
-
+    private final BoardMapper boardMapper;
     private final AuthenticationMapper authenticationMapper;
-
     private final PasswordEncoder passwordEncoder;
-
     private final CommCdMapper commCdMapper;
 
+    //모든 보드 종류 불러오기
+    public List<BoardInfoDto> getBoardList(){
+        List<BoardInfoDto> boardInfoDtoList = boardMapper.findAllBoard();
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+
+        for (BoardInfoDto board : boardInfoDtoList){
+            //regDt 포맷 변경
+            LocalDateTime regDt = LocalDateTime.parse(board.getRegDt(), inputFormatter);
+            String formattedRegDt = regDt.format(outputFormatter);
+            board.setRegDt(formattedRegDt);
+            //Cd를 Nm으로 변경
+            String boardStat = commCdMapper.findCdNmByCd(board.getBoardStat());
+            board.setBoardStat(boardStat);
+        }
+        return boardInfoDtoList;
+    }
+
+    //모든 회원의 정보 불러오기
     public List<UserInfoDto> getUserInformation() {
 
         List<UserInfoDto> userInfoDtoList = new ArrayList<>();
@@ -51,6 +71,7 @@ public class AdminService {
         return userInfoDtoList;
     }
 
+    //관리자의 회원 추가 기능
     public String addUser(Map<String, String> signupInfo) {
         try {
             if (userMapper.findByUserEmail(signupInfo.get("userEmail")).orElse(null) != null) {
