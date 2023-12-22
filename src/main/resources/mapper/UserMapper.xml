@@ -12,7 +12,10 @@
             Authentication a ON u.authId = a.authId
         WHERE userEmail = #{userEmail}
     </select>
-
+    <select id="findAllUser" resultMap="userResultMap">
+        SELECT u.*, a.* FROM User u
+        LEFT JOIN Authentication a ON u.authId = a.authId
+    </select>
     <resultMap id="userResultMap" type="com.project.LimeRMS.entity.User">
         <id property="userId" column="userId" />
         <result property="userEmail" column="userEmail" />
@@ -22,32 +25,29 @@
         <result property="isSuperUser" column="isSuperUser" />
         <result property="phoneNumber" column="phoneNumber" />
         <result property="delYn" column="delYn" />
+        <result property="joinDt" column="joinDt" />
+        <result property="userStat" column="userStat" />
         <association property="authentication" javaType="com.project.LimeRMS.entity.Authentication">
             <id property="authId" column="authId" />
             <result property="authNm" column="authNm" />
             <result property="authDesc" column="authDesc" />
             <result property="priority" column="priority" />
         </association>
-
     </resultMap>
-
-    <update id="updatePasswordByUserEmail">
-        UPDATE User
-        SET password = #{password}
-        WHERE userEmail = #{userEmail}
-    </update>
 
     <insert id="addUser">
         INSERT INTO User
         (   userEmail,
             userNm,
             password,
-            phoneNumber
+            phoneNumber,
+            authId
         ) VALUES (
             #{userEmail},
             #{userNm},
             #{password},
-            #{phoneNumber})
+            #{phoneNumber},
+            #{authId})
     </insert>
 
     <select id="findByUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.entity.User">
@@ -60,11 +60,14 @@
         WHERE userId = #{userId}
     </update>
 
-    <select id="findAllUser" resultType="com.project.LimeRMS.entity.User">
-        SELECT * FROM User
-    </select>
     <select id="findAuthIdByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
         SELECT authId FROM User WHERE userId = #{userId}
     </select>
+
+    <update id="updatePwByUserId">
+        UPDATE User
+        SET password = #{password}
+        WHERE userId = #{userId}
+    </update>
 
 </mapper>

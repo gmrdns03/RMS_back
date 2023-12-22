@@ -11,18 +11,9 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserInfoDto {
-    private Integer userId;
+public class AuthListDto {
 
-    private String userNm;
-
-    private String userEmail;
-
-    private String joinDt;
+    private Integer authId;
 
     private String authNm;
-
-    private String userStat;
-
-    private String phoneNumber;
 }

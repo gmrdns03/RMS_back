@@ -34,7 +34,6 @@ public class ProfileController {
     private final ProfileService profileService;
     private final JwtProvider jwtProvider;
 
-
     @PostMapping(value = "/user/save-img", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "사용자 프로필 등록")
     public ResponseEntity<?> saveProfileImg(

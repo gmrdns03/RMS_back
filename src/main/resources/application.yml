@@ -39,3 +39,5 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
 
+filesPath:
+  profile: \src\main\resources\static\files\profile
