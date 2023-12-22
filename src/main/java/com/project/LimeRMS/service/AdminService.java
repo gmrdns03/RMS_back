@@ -119,4 +119,24 @@ public class AdminService {
             return Collections.emptyList();
         }
     }
+
+    public Map<String, Object> updateUserProfile(String managerId, Map<String, String> member) {
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            Integer userId = Integer.valueOf(member.get("userId"));
+            String userNm = member.get("userNm");
+            Integer authId = Integer.valueOf(member.get("authId"));
+            String userStat = member.get("userStat");
+            String phoneNumber = member.get("phoneNumber");
+            Integer modfUserId = Integer.valueOf(managerId);
+
+            userMapper.updateUserByUserId(userId, userNm, authId, userStat, phoneNumber, modfUserId);
+            resMap.put("res", true);
+            resMap.put("msg", userNm + "님의 프로필 정보가 변경되었습니다.");
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.toString());
+        }
+        return resMap;
+    }
 }

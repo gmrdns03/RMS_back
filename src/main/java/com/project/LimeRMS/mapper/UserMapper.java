@@ -20,4 +20,6 @@ public interface UserMapper {
     void addUser(@Param("userEmail")String userEmail, @Param("userNm")String userNm, @Param("password")String password, @Param("phoneNumber")String phoneNumber, @Param("authId") Integer authId);
 
     void updatePwByUserId(@Param("userId")Integer userId, @Param("password")String password);
+
+    void updateUserByUserId(@Param("userId")Integer userId, @Param("userNm")String userNm, @Param("authId")Integer authId, @Param("userStat")String userStat, @Param("phoneNumber")String phoneNumber, @Param("modfUserId")Integer modfUserId);
 }

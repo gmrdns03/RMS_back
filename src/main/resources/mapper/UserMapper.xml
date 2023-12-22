@@ -70,4 +70,10 @@
         WHERE userId = #{userId}
     </update>
 
+    <update id="updateUserByUserId">
+        UPDATE User
+        SET userNm = #{userNm}, authId = #{authId}, userStat = #{userStat}, phoneNumber = #{phoneNumber}, modfUserId = #{modfUserId}
+        WHERE userId = #{userId}
+    </update>
+
 </mapper>
