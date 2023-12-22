@@ -64,4 +64,10 @@
         SELECT authId FROM User WHERE userId = #{userId}
     </select>
 
+    <update id="updatePwByUserId">
+        UPDATE User
+        SET password = #{password}
+        WHERE userId = #{userId}
+    </update>
+
 </mapper>

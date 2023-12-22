@@ -28,18 +28,18 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
     private final CommCdMapper commCdMapper;
 
-    public String resetUserPw(Map<String, String> member){
+    public Map<String, Object> resetUserPw(Map<String, Integer> member){
         Map<String, Object> resMap = new HashMap<>();
         try {
-            User user = userMapper.findByUserId(member.get("userId"));
-            if (.orElse(null) != null) {
-                return "이미 가입된 Email 입니다.";
-            } else {
-
-                return userEmail + "의 비밀번호가 성공적으로 초기화 되었습니다.";
-            }
+            Integer userId = member.get("userId");
+            String defaultPassword = System.getenv("DEFAULT_PW");
+            String password = passwordEncoder.encode(defaultPassword);
+            userMapper.updatePwByUserId(userId, password);
+            resMap.put("res", true);
+            resMap.put("msg", "비밀번호가 초기화 되었습니다.");
         } catch (Exception e) {
-            return e.toString();
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
         }
         return resMap;
     }

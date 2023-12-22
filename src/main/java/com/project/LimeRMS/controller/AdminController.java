@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,11 +59,9 @@ public class AdminController {
             description = "관리자는 회원의 비밀번호를 초기화할 수 있다.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
-                            examples = @ExampleObject(value = "{\"userId\":\"10\"}"))))
-    public ResponseEntity<?> resetUserPw(@RequestBody Map<String, String> member){
-        Map<String, Object> resMap = new HashMap<>();
-        String message = adminService.resetUserPw(member);
-        resMap.put("res", message);
+                            examples = @ExampleObject(value = "{\"userId\":10}"))))
+    public ResponseEntity<?> resetUserPw(@RequestBody Map<String, Integer> member){
+        Map<String, Object> resMap = adminService.resetUserPw(member);
 
         return ResponseEntity
                 .ok()
