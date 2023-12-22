@@ -9,7 +9,9 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -38,8 +40,13 @@ public class BoardController {
     // board에 해당하는 컨텐츠 리스트 반환
     @GetMapping("/{boardId}")
     @Operation(summary = "보드의 컨텐츠 리스트 반환")
-    public List<ContentInfoDto> getContentInfoList(@PathVariable("boardId") String boardId) {
-        return contentService.getContentsByBoardId(boardId);
+    public ResponseEntity<Map<String, Object>> getContentInfoList(@PathVariable("boardId") String boardId) {
+        Map<String, Object> resMap = new HashMap<>();
+        BoardListDto boardInfo = boardService.getBoardInfo(boardId);
+        List<ContentInfoDto> contentInfoList = contentService.getContentsByBoardId(boardId);
+        resMap.put("boardInfo", boardInfo);
+        resMap.put("contentInfoList", contentInfoList);
+        return ResponseEntity.ok(resMap);
     }
 
     // board 대표 이미지 반환
