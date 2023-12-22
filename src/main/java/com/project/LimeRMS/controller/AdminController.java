@@ -2,6 +2,7 @@ package com.project.LimeRMS.controller;
 
 import com.project.LimeRMS.dto.AuthListDto;
 import com.project.LimeRMS.dto.BoardInfoDto;
+import com.project.LimeRMS.dto.OverdueContentListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.AdminService;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -93,5 +95,23 @@ public class AdminController {
             description = "관리자는 모든 보드의 정보를 조회할 수 있다.")
     public List<BoardInfoDto> getBoardList(){
         return adminService.getBoardList();
+    }
+
+    @PostMapping("/boards/overdues")
+    @Operation(
+            summary = "컨텐츠 연체자 정보 조회",
+            description = "관리자는 연체된 컨텐츠의 정보를 확인할 수 있다")
+    public ResponseEntity<?> getOverdueContentList(){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            List<OverdueContentListDto> overdueContentList = adminService.getOverdueContentList();
+            resMap.put("res", true);
+            resMap.put("msg", overdueContentList);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 }

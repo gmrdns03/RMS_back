@@ -2,12 +2,10 @@ package com.project.LimeRMS.service;
 
 import com.project.LimeRMS.dto.AuthListDto;
 import com.project.LimeRMS.dto.BoardInfoDto;
+import com.project.LimeRMS.dto.OverdueContentListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.entity.User;
-import com.project.LimeRMS.mapper.AuthenticationMapper;
-import com.project.LimeRMS.mapper.BoardMapper;
-import com.project.LimeRMS.mapper.CommCdMapper;
-import com.project.LimeRMS.mapper.UserMapper;
+import com.project.LimeRMS.mapper.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,6 +22,7 @@ public class AdminService {
 
     private final UserMapper userMapper;
     private final BoardMapper boardMapper;
+    private final RentalMapper rentalMapper;
     private final AuthenticationMapper authenticationMapper;
     private final PasswordEncoder passwordEncoder;
     private final CommCdMapper commCdMapper;
@@ -141,5 +140,10 @@ public class AdminService {
             resMap.put("msg", e.toString());
         }
         return resMap;
+    }
+
+    public List<OverdueContentListDto> getOverdueContentList() {
+        List<OverdueContentListDto> overdueContentListDtos = rentalMapper.findRentalByRentalStat("CD001003"); //상태: 연체
+        return overdueContentListDtos;
     }
 }
