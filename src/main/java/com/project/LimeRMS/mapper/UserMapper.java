@@ -17,9 +17,9 @@ public interface UserMapper {
 
     List<User> findAllUser();
 
-    void addUser(@Param("userEmail")String userEmail, @Param("userNm")String userNm, @Param("password")String password, @Param("phoneNumber")String phoneNumber, @Param("authId") Integer authId);
+    void addUser(@Param("userEmail")String userEmail, @Param("userNm")String userNm, @Param("password")String password, @Param("phoneNumber")String phoneNumber, @Param("authId") Integer authId, @Param("regUserId") Integer regUserId);
 
-    void updatePwByUserId(@Param("userId")Integer userId, @Param("password")String password);
+    void updatePwByUserId(@Param("userId")Integer userId, @Param("password")String password, @Param("modfUserId")Integer modfUserId);
 
     void updateUserByUserId(@Param("userId")Integer userId, @Param("userNm")String userNm, @Param("authId")Integer authId, @Param("userStat")String userStat, @Param("phoneNumber")String phoneNumber, @Param("modfUserId")Integer modfUserId);
 }

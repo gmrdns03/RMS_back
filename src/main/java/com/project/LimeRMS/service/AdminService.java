@@ -28,13 +28,15 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
     private final CommCdMapper commCdMapper;
 
-    public Map<String, Object> resetUserPw(Map<String, Integer> member){
+    public Map<String, Object> resetUserPw(String managerId, Map<String, Integer> member){
         Map<String, Object> resMap = new HashMap<>();
         try {
             Integer userId = member.get("userId");
             String defaultPassword = System.getenv("DEFAULT_PW");
             String password = passwordEncoder.encode(defaultPassword);
-            userMapper.updatePwByUserId(userId, password);
+            Integer modfUserId = Integer.valueOf(managerId);
+
+            userMapper.updatePwByUserId(userId, password, modfUserId);
             resMap.put("res", true);
             resMap.put("msg", "비밀번호가 초기화 되었습니다.");
         } catch (Exception e) {
@@ -85,7 +87,7 @@ public class AdminService {
     }
 
     //관리자의 회원 추가 기능
-    public Map<String, Object> addUser(Map<String, String> signupInfo) {
+    public Map<String, Object> addUser(String managerId, Map<String, String> signupInfo) {
         Map<String, Object> resMap = new HashMap<>();
         try {
             if (userMapper.findByUserEmail(signupInfo.get("userEmail")).orElse(null) != null) {
@@ -98,8 +100,9 @@ public class AdminService {
                 String defaultPassword = System.getenv("DEFAULT_PW"); //초기 비밀번호 환경변수에 저장 됨
                 String password = passwordEncoder.encode(defaultPassword);
                 Integer authId = Integer.valueOf(signupInfo.get("authId"));
+                Integer regUserId = Integer.valueOf(managerId);
 
-                userMapper.addUser(userEmail, userNm, password, phoneNumber, authId);
+                userMapper.addUser(userEmail, userNm, password, phoneNumber, authId, regUserId);
                 resMap.put("res", true);
                 resMap.put("msg", userEmail + "이 성공적으로 가입되었습니다.");
             }

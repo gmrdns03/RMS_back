@@ -39,8 +39,9 @@ public class AdminController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
                             examples = @ExampleObject(value = "{\"userEmail\":\"test1@euclidsoft.co.kr\",\"userNm\":\"김00\",\"phoneNumber\":\"01022223333\",\"authId\":\"9\"}"))))
-    public ResponseEntity<?> addUser(@RequestBody Map<String, String> signupInfo) {
-        Map<String, Object> resMap = adminService.addUser(signupInfo);
+    public ResponseEntity<?> addUser(@RequestHeader("AccessToken") String token, @RequestBody Map<String, String> signupInfo) {
+        String managerId = jwtProvider.getUserPk(token);
+        Map<String, Object> resMap = adminService.addUser(managerId, signupInfo);
         return ResponseEntity
                 .ok()
                 .body(resMap);
@@ -69,8 +70,9 @@ public class AdminController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
                             examples = @ExampleObject(value = "{\"userId\":10}"))))
-    public ResponseEntity<?> resetUserPw(@RequestBody Map<String, Integer> member){
-        Map<String, Object> resMap = adminService.resetUserPw(member);
+    public ResponseEntity<?> resetUserPw(@RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
+        String managerId = jwtProvider.getUserPk(token);
+        Map<String, Object> resMap = adminService.resetUserPw(managerId, member);
 
         return ResponseEntity
                 .ok()
