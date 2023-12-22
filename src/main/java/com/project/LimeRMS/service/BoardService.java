@@ -14,25 +14,36 @@ import org.springframework.stereotype.Service;
 public class BoardService {
     private final BoardMapper boardMapper;
 
+    public BoardListDto getBoardListDto(Board board) {
+        String boardStat = board.getBoardStat();
+        Integer boardId = board.getBoardId();
+        String boardTypeNm = board.getBoardType().getBoardTypeNm();
+        String boardNm = board.getBoardNm();
+        String boardDesc = board.getBoardDesc();
+        Integer boardSn = board.getBoardSn();
+        Integer viewAuth = board.getViewAuth();
+        Integer writeAuth = board.getWriteAuth();
+        Integer commentAuth = board.getCommentAuth();
+        Integer modifyAuth = board.getModifyAuth();
+        return new BoardListDto(boardId, boardTypeNm, boardNm, boardStat,
+            boardDesc, boardSn, viewAuth, writeAuth, commentAuth, modifyAuth);
+    }
+
+    public BoardListDto getBoardInfo(String boardId) {
+        Board board = boardMapper.findOneByBoardId(boardId);
+        return getBoardListDto(board);
+    }
+
     public List<BoardListDto> findAllBoardList() {
         List<Board> boardList = boardMapper.findAllBoardList();
         List<BoardListDto> boardListDtoList = new ArrayList<>();
 
         for (Board board : boardList) {
-            String boardStat = board.getBoardStat();
+            BoardListDto boardListDto = getBoardListDto(board);
+            String boardStat =  boardListDto.getBoardStat();
             if (boardStat.equals("CD003002")) {
                 continue;
             }
-            Integer boardId = board.getBoardId();
-            String boardTypeNm = board.getBoardType().getBoardTypeNm();
-            String boardNm = board.getBoardNm();
-            String boardDesc = board.getBoardDesc();
-            Integer boardSn = board.getBoardSn();
-            Integer viewAuth = board.getViewAuth();
-            Integer writeAuth = board.getWriteAuth();
-            Integer commentAuth = board.getCommentAuth();
-            Integer modifyAuth = board.getModifyAuth();
-            BoardListDto boardListDto = new BoardListDto(boardId, boardTypeNm, boardNm, boardStat, boardDesc, boardSn, viewAuth, writeAuth, commentAuth, modifyAuth);
             boardListDtoList.add(boardListDto);
         }
         return boardListDtoList;
@@ -40,7 +51,7 @@ public class BoardService {
 
     public File getBoardImg(String boardId) {
         // Board에서 boardId에 해당하는 boardImg 조회
-        Board board = boardMapper.findByBoardId(boardId);
+        Board board = boardMapper.findOneByBoardId(boardId);
         String boardImgPath = board.getBoardImg();
 
         // 없는 경우 null 반환
