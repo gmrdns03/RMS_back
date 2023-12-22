@@ -2,13 +2,11 @@ package com.project.LimeRMS.controller;
 
 import com.project.LimeRMS.dto.BoardInfoDto;
 import com.project.LimeRMS.dto.ContentInfoDto;
-import com.project.LimeRMS.mapper.BoardMapper;
 import com.project.LimeRMS.service.BoardService;
 import com.project.LimeRMS.service.ContentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;

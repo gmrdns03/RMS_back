@@ -1,5 +1,6 @@
 package com.project.LimeRMS.dto;
 
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,4 +21,8 @@ public class ContentInfoDto {
     private String noticeYn;
     private String secretYn;
     private String location;
+    private String regDt;
+    private String regUserId;
+    private String modfDt;
+    private String modfUserId;
 }

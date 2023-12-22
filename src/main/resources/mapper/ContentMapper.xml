@@ -2,7 +2,7 @@
 <mapper namespace="com.project.LimeRMS.mapper.ContentMapper">
   <select id="findContentsByBoardId" parameterType="java.lang.String" resultMap="ContentList">
     SELECT
-      ct.contentId, cc.cateId, cc.cateNm, ct.contentNm, ct.contentDesc, ct.noticeYn, ct.secretYn, ct.location
+      ct.contentId, cc.cateId, cc.cateNm, ct.contentNm, ct.contentDesc, ct.noticeYn, ct.secretYn, ct.location, ct.regDt, ct.regUserId, ct.modfDt, ct.modfUserId
     FROM Content ct
     LEFT JOIN ContentCategory cc ON ct.cateId = cc.cateId
     WHERE ct.boardId = #{boardId}
@@ -16,6 +16,10 @@
     <result property="noticeYn" column="noticeYn" />
     <result property="secretYn" column="secretYn" />
     <result property="location" column="location" />
+    <result property="regDt" column="regDt" />
+    <result property="regUserId" column="regUserId" />
+    <result property="modfDt" column="modfDt" />
+    <result property="modfUserId" column="modfUserId" />
     <association property="contentCategory" javaType="com.project.LimeRMS.entity.ContentCategory">
       <id property="cateId" column="cateId" />
       <result property="cateNm" column="cateNm" />

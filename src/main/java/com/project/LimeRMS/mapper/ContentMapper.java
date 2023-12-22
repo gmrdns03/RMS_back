@@ -1,11 +1,11 @@
 package com.project.LimeRMS.mapper;
 
-import com.project.LimeRMS.dto.ContentInfoDto;
+import com.project.LimeRMS.entity.Content;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface ContentMapper {
-    List<ContentInfoDto> findContentsByBoardId(@Param("boardId") String boardId);
+    List<Content> findContentsByBoardId(@Param("boardId") String boardId);
 }
