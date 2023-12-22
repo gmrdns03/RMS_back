@@ -55,7 +55,7 @@ public class BoardService {
         String boardImgPath = board.getBoardImg();
 
         // 없는 경우 null 반환
-        if (boardImgPath.isEmpty()) { return null; }
+        if (boardImgPath == null || boardImgPath.isEmpty()) { return null; }
 
         // 경로가 있는 경우 파일 불러오기
         return new File(boardImgPath);

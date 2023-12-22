@@ -46,7 +46,7 @@ public class AdminService {
 
     //모든 보드 종류 불러오기
     public List<BoardInfoDto> getBoardList(){
-        List<BoardInfoDto> boardInfoDtoList = boardMapper.findAllBoard();
+        List<BoardInfoDto> boardInfoDtoList = boardMapper.findAllBoardInfoList();
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
 

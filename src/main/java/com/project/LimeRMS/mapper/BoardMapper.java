@@ -9,6 +9,7 @@ import com.project.LimeRMS.dto.BoardInfoDto;
 
 @Mapper
 public interface BoardMapper {
+    List<BoardInfoDto> findAllBoardInfoList();
     List<Board> findAllBoardList();
     Board findOneByBoardId(@Param("boardId") String boardId);
 
