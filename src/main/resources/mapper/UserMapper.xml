@@ -4,18 +4,23 @@
 
 <mapper namespace="com.project.LimeRMS.mapper.UserMapper">
     <select id="findByUserEmail" parameterType="java.lang.String" resultMap="userResultMap">
-        SELECT
-            u.*,
-            a.*
+        SELECT u.*, a.*
         FROM User u
-        LEFT JOIN
-            Authentication a ON u.authId = a.authId
+        LEFT JOIN Authentication a ON u.authId = a.authId
         WHERE userEmail = #{userEmail}
     </select>
+
     <select id="findAllUser" resultMap="userResultMap">
         SELECT u.*, a.* FROM User u
         LEFT JOIN Authentication a ON u.authId = a.authId
     </select>
+
+    <select id="findByUserId" parameterType="java.lang.String" resultMap="userResultMap">
+        SELECT * FROM User u
+        LEFT JOIN Authentication a ON u.authId = a.authId
+        WHERE userId = #{userId}
+    </select>
+
     <resultMap id="userResultMap" type="com.project.LimeRMS.entity.User">
         <id property="userId" column="userId" />
         <result property="userEmail" column="userEmail" />
@@ -49,10 +54,6 @@
             #{phoneNumber},
             #{authId})
     </insert>
-
-    <select id="findByUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.entity.User">
-        SELECT * FROM User WHERE userId = #{userId}
-    </select>
 
     <update id="updateProfileImgByUserId">
         UPDATE User

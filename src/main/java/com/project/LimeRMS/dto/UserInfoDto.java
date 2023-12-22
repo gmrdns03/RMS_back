@@ -24,5 +24,7 @@ public class UserInfoDto {
 
     private String userStat;
 
+    private String userStatNm;
+
     private String phoneNumber;
 }
