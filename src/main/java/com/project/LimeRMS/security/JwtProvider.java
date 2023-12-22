@@ -1,6 +1,5 @@
 package com.project.LimeRMS.security;
 
-import com.project.LimeRMS.mapper.UserMapper;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -29,7 +28,6 @@ public class JwtProvider {
     private String secretKey;
     private static final Logger log = Logger.getLogger(JwtProvider.class.getName());
     private final UserDetailsService userDetailsService;
-    private final UserMapper userMapper;
 
     @PostConstruct
     protected void afterPropertiesSet() {

@@ -1,6 +1,5 @@
 package com.project.LimeRMS.security;
 
-import com.project.LimeRMS.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +23,6 @@ public class SecurityConfig {
     private final JwtProvider jwtProvider;
     private final CustomEntryPoint customEntryPoint;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
-    private final UserMapper userMapper;
     private final String[] allowedUrls = {
         "/",
         "/v3/**",

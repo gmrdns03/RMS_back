@@ -1,10 +1,14 @@
 package com.project.LimeRMS.service;
 
+import com.project.LimeRMS.dto.CommCdDto;
 import com.project.LimeRMS.dto.JwtResponseDto;
 import com.project.LimeRMS.entity.User;
+import com.project.LimeRMS.mapper.CommCdMapper;
 import com.project.LimeRMS.mapper.UserMapper;
 import com.project.LimeRMS.security.JwtProvider;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import lombok.RequiredArgsConstructor;
@@ -18,10 +22,23 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
     private final UserMapper userMapper;
+    private final CommCdMapper commCdMapper;
     private final PasswordEncoder passwordEncoder;
-    private final JwtResponseDto jwtResponseDto;
     private final JwtProvider jwtProvider;
 
+    //상태값 종류 리스트로 확인 가능
+    public List<CommCdDto> getCommCdList(Map<String, String> input) {
+        try {
+            List<CommCdDto> commCdDtoList = commCdMapper.findCommCdByHiCommCd(input.get("hiCommCd"));
+            return commCdDtoList;
+        } catch (Exception e) {
+            List<CommCdDto> errorList = new ArrayList<>();
+            errorList.add(new CommCdDto("error", "에러 발생: " + e.getMessage()));
+            return errorList;
+        }
+    }
+
+    //유저 로그인시 토큰 발급
     public JwtResponseDto login(Map<String, String> member) {
         String email = member.get("userEmail");
         String password = member.get("password");
@@ -45,14 +62,6 @@ public class UserService {
         return JwtResponseDto.builder()
                 .accessToken(accessToken)
                 .build();
-    }
-
-    //Test 코드(나중에 연관 코드 삭제 필요)
-    public void updatePassword(String userEmail){
-        User user = userMapper.findByUserEmail(userEmail)
-                .orElseThrow(() -> new UsernameNotFoundException("가입되지 않은 Email 입니다."));
-        String hashedPassword = passwordEncoder.encode(user.getPassword());
-        userMapper.updatePasswordByUserEmail(userEmail, hashedPassword);
     }
 
 }

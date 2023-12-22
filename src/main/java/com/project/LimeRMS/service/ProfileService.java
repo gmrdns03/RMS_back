@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,12 +18,14 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class ProfileService {
     private final UserMapper userMapper;
+    @Value("${filesPath.profile}")
+    private String DtlProfilePath;
 
     public boolean saveProfileImg(String userId, MultipartFile multipartFile) throws Exception {
         // multipartFile이 비어 있지 않으면 진행
         if(multipartFile != null && !multipartFile.isEmpty()) {
             // profile 폴더가 없는경우 폴더 생성
-            String profileFolderPath = System.getProperty("user.dir") + "\\src\\main\\resources\\static\\files\\profile";
+            String profileFolderPath = System.getProperty("user.dir") + DtlProfilePath;
             Path folderPath = Paths.get(profileFolderPath);
             if (!Files.exists(folderPath)) {
                 Files.createDirectories(folderPath);
@@ -38,12 +41,12 @@ public class ProfileService {
             // 유저가 이미 프로필 이미지가 있는경우 해당 파일 삭제
             User user = userMapper.findByUserId(userId);
             String profileImgPath = user.getProfileImg();
-            if ((profileImgPath != null) || !profileImgPath.isEmpty()) {
+            if ((profileImgPath != null) && !profileImgPath.isEmpty()) {
                 deleteProfileImg(profileImgPath);
             }
 
             // userImg 테이블에 업데이트
-            String newProfilePath = profileFolderPath + "\\" + fileNm;
+            String newProfilePath = profileFolderPath + "/" + fileNm;
             userMapper.updateProfileImgByUserId(userId, newProfilePath);
             return true;
         } else {
