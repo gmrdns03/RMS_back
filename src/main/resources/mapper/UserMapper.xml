@@ -36,18 +36,8 @@
     </resultMap>
 
     <insert id="addUser">
-        INSERT INTO User
-        (   userEmail,
-            userNm,
-            password,
-            phoneNumber,
-            authId
-        ) VALUES (
-            #{userEmail},
-            #{userNm},
-            #{password},
-            #{phoneNumber},
-            #{authId})
+        INSERT INTO User (userEmail, userNm, password, phoneNumber, authId, regUserId)
+        VALUES (#{userEmail}, #{userNm}, #{password}, #{phoneNumber}, #{authId}, #{regUserId})
     </insert>
 
     <select id="findByUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.entity.User">
@@ -60,13 +50,15 @@
         WHERE userId = #{userId}
     </update>
 
-    <select id="findAuthIdByUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
-        SELECT authId FROM User WHERE userId = #{userId}
-    </select>
-
     <update id="updatePwByUserId">
         UPDATE User
-        SET password = #{password}
+        SET password = #{password}, modfUserId = #{modfUserId}
+        WHERE userId = #{userId}
+    </update>
+
+    <update id="updateUserByUserId">
+        UPDATE User
+        SET userNm = #{userNm}, authId = #{authId}, userStat = #{userStat}, phoneNumber = #{phoneNumber}, modfUserId = #{modfUserId}
         WHERE userId = #{userId}
     </update>
 
