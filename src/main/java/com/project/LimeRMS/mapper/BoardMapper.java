@@ -7,6 +7,6 @@ import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface BoardMapper {
-    List<Board> findAllBoardInfo();
+    List<Board> findAllBoardList();
     Board findByBoardId(@Param("boardId") String boardId);
 }

@@ -1,6 +1,6 @@
 package com.project.LimeRMS.service;
 
-import com.project.LimeRMS.dto.BoardInfoDto;
+import com.project.LimeRMS.dto.BoardListDto;
 import com.project.LimeRMS.entity.Board;
 import com.project.LimeRMS.mapper.BoardMapper;
 import java.io.File;
@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 public class BoardService {
     private final BoardMapper boardMapper;
 
-    public List<BoardInfoDto> findAllBoardInfo() {
-        List<Board> boardList = boardMapper.findAllBoardInfo();
-        List<BoardInfoDto> boardInfoDtoList = new ArrayList<>();
+    public List<BoardListDto> findAllBoardList() {
+        List<Board> boardList = boardMapper.findAllBoardList();
+        List<BoardListDto> boardListDtoList = new ArrayList<>();
 
         for (Board board : boardList) {
             String boardStat = board.getBoardStat();
@@ -32,10 +32,10 @@ public class BoardService {
             Integer writeAuth = board.getWriteAuth();
             Integer commentAuth = board.getCommentAuth();
             Integer modifyAuth = board.getModifyAuth();
-            BoardInfoDto boardInfoDto = new BoardInfoDto(boardId, boardTypeNm, boardNm, boardStat, boardDesc, boardSn, viewAuth, writeAuth, commentAuth, modifyAuth);
-            boardInfoDtoList.add(boardInfoDto);
+            BoardListDto boardListDto = new BoardListDto(boardId, boardTypeNm, boardNm, boardStat, boardDesc, boardSn, viewAuth, writeAuth, commentAuth, modifyAuth);
+            boardListDtoList.add(boardListDto);
         }
-        return boardInfoDtoList;
+        return boardListDtoList;
     }
 
     public File getBoardImg(String boardId) {

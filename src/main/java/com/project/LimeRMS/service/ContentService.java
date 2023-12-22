@@ -28,10 +28,10 @@ public class ContentService {
             String secretYn = content.getSecretYn();
             String location = content.getLocation();
             LocalDateTime regDt = content.getRegDt();
-            String formatedRegDt =  regDt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String formatedRegDt =  regDt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
             String regUserId = content.getRegUserId();
             LocalDateTime modfDt = content.getModfDt();
-            String foramtedModfDt = modfDt.format(DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+            String foramtedModfDt = modfDt.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
             String modfUserId = content.getModfUserId();
             ContentInfoDto contentInfoDto = new ContentInfoDto(contentId, cateId, cateNm,
                 contentNm, contentDesc, noticeYn, secretYn, location, formatedRegDt, regUserId, foramtedModfDt, modfUserId);

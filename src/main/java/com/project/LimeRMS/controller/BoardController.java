@@ -1,6 +1,6 @@
 package com.project.LimeRMS.controller;
 
-import com.project.LimeRMS.dto.BoardInfoDto;
+import com.project.LimeRMS.dto.BoardListDto;
 import com.project.LimeRMS.dto.ContentInfoDto;
 import com.project.LimeRMS.service.BoardService;
 import com.project.LimeRMS.service.ContentService;
@@ -33,7 +33,7 @@ public class BoardController {
     // board 리스트 반환
     @GetMapping("/list")
     @Operation(summary = "보드 목록 반환")
-    public List<BoardInfoDto> getBoardInfoList() { return boardService.findAllBoardInfo(); }
+    public List<BoardListDto> getBoardInfoList() { return boardService.findAllBoardList(); }
 
     // board에 해당하는 컨텐츠 리스트 반환
     @GetMapping("/{boardId}")
