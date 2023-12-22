@@ -1,0 +1,28 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.LimeRMS.mapper.ContentMapper">
+  <select id="findContentsByBoardId" parameterType="java.lang.String" resultMap="ContentList">
+    SELECT
+      ct.contentId, cc.cateId, cc.cateNm, ct.contentNm, ct.contentDesc, ct.noticeYn, ct.secretYn, ct.location, ct.regDt, ct.regUserId, ct.modfDt, ct.modfUserId
+    FROM Content ct
+    LEFT JOIN ContentCategory cc ON ct.cateId = cc.cateId
+    WHERE ct.boardId = #{boardId}
+  </select>
+  
+  <resultMap id="ContentList" type="com.project.LimeRMS.entity.Content">
+    <id property="contentId" column="contentId" />
+    <result property="cateId" column="contentCategory" />
+    <result property="contentNm" column="contentNm" />
+    <result property="contentDesc" column="contentDesc" />
+    <result property="noticeYn" column="noticeYn" />
+    <result property="secretYn" column="secretYn" />
+    <result property="location" column="location" />
+    <result property="regDt" column="regDt" />
+    <result property="regUserId" column="regUserId" />
+    <result property="modfDt" column="modfDt" />
+    <result property="modfUserId" column="modfUserId" />
+    <association property="contentCategory" javaType="com.project.LimeRMS.entity.ContentCategory">
+      <id property="cateId" column="cateId" />
+      <result property="cateNm" column="cateNm" />
+    </association>
+  </resultMap>
+</mapper>

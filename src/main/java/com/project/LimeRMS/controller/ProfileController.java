@@ -58,7 +58,7 @@ public class ProfileController {
 
     @GetMapping(value = "/user/img")
     @Operation(summary = "사용자 프로필 가져오기")
-    public ResponseEntity<?> testGetImg(
+    public ResponseEntity<?> getProfileImg(
         @RequestHeader("AccessToken") String token
     ) {
         try {
@@ -82,8 +82,8 @@ public class ProfileController {
                 .contentType(MediaType.parseMediaType(mimeType))
                 .body(rs);
         } catch (Exception e) {
-            return ResponseEntity.ok()
-                .body(e.getMessage());
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body(null);
         }
 
     }
