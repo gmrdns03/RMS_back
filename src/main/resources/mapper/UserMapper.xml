@@ -56,7 +56,7 @@
 
     <update id="updateProfileImgByUserId">
         UPDATE User
-        SET profileImg = #{profileImg}
+        SET profileImg = #{profileImg}, modfUserId = #{userId}
         WHERE userId = #{userId}
     </update>
 
@@ -66,7 +66,7 @@
 
     <update id="updatePwByUserId">
         UPDATE User
-        SET password = #{password}
+        SET password = #{password}, modfUserId = #{userId}
         WHERE userId = #{userId}
     </update>
 

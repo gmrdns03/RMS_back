@@ -35,7 +35,7 @@ public class ProfileController {
     private final JwtProvider jwtProvider;
 
     @PostMapping(value = "/user/save-img", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "사용자 프로필 등록")
+    @Operation(summary = "사용자 프로필 이미지 등록")
     public ResponseEntity<?> saveProfileImg(
         @RequestPart (value = "file") MultipartFile multipartFile,
         @RequestHeader("AccessToken") String token
@@ -57,7 +57,7 @@ public class ProfileController {
     }
 
     @GetMapping(value = "/user/img")
-    @Operation(summary = "사용자 프로필 가져오기")
+    @Operation(summary = "사용자 프로필 이미지 가져오기")
     public ResponseEntity<?> getProfileImg(
         @RequestHeader("AccessToken") String token
     ) {
