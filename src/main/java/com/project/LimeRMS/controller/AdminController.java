@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,13 +36,9 @@ public class AdminController {
             description = "관리자는 회원을 추가할 수 있다(초기 비밀번호는 통일)",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
-                            examples = @ExampleObject(value = "{\"userEmail\":\"test1@euclidsoft.co.kr\",\"userNm\":\"김00\",\"phoneNumber\":\"01022223333\",\"authId\":\"9\"}")))
-    )
+                            examples = @ExampleObject(value = "{\"userEmail\":\"test1@euclidsoft.co.kr\",\"userNm\":\"김00\",\"phoneNumber\":\"01022223333\",\"authId\":\"9\"}"))))
     public ResponseEntity<?> addUser(@RequestBody Map<String, String> signupInfo) {
-        Map<String, Object> resMap = new HashMap<>();
-        String message = adminService.addUser(signupInfo);
-        resMap.put("res", message);
-
+        Map<String, Object> resMap = adminService.addUser(signupInfo);
         return ResponseEntity
                 .ok()
                 .body(resMap);
@@ -58,6 +53,20 @@ public class AdminController {
 //                            examples = @ExampleObject(value = "{\"userNm\":\"김00\",\"authId\":\"4\",\"userStat\":\"CD006003\",\"phoneNumber\":\"01077778888\", \"password\":\"newPassword!\"}")))
 //    )
 
+    @DeleteMapping("/users/reset-pw")
+    @Operation(
+            summary = "회원 비밀번호 초기화",
+            description = "관리자는 회원의 비밀번호를 초기화할 수 있다.",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            examples = @ExampleObject(value = "{\"userId\":10}"))))
+    public ResponseEntity<?> resetUserPw(@RequestBody Map<String, Integer> member){
+        Map<String, Object> resMap = adminService.resetUserPw(member);
+
+        return ResponseEntity
+                .ok()
+                .body(resMap);
+    }
 
     @GetMapping("/auth-list")
     @Operation(

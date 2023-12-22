@@ -19,4 +19,5 @@ public interface UserMapper {
 
     void addUser(@Param("userEmail")String userEmail, @Param("userNm")String userNm, @Param("password")String password, @Param("phoneNumber")String phoneNumber, @Param("authId") Integer authId);
 
+    void updatePwByUserId(@Param("userId")Integer userId, @Param("password")String password);
 }
