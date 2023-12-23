@@ -2,6 +2,7 @@ package com.project.LimeRMS.service;
 
 import com.project.LimeRMS.dto.AuthListDto;
 import com.project.LimeRMS.dto.BoardInfoDto;
+import com.project.LimeRMS.dto.BoardPriorityDto;
 import com.project.LimeRMS.dto.OverdueContentListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.entity.User;
@@ -117,5 +118,14 @@ public class AdminService {
 
     public List<OverdueContentListDto> getOverdueContentList() {
         return rentalMapper.findRentalByRentalStat("CD001003"); //상태: 연체
+    }
+
+    public String changeBoardPriorities(String managerId, List<BoardPriorityDto> boardPriorityDtoList){
+        for (BoardPriorityDto boardPriorityDto : boardPriorityDtoList){
+            Integer boardSn = boardPriorityDto.getBoardSn();
+            Integer boardId = boardPriorityDto.getBoardId();
+            boardMapper.updateBoardSnByBoardId(boardSn, boardId, managerId);
+        }
+        return "보드의 우선순위가 변경되었습니다.";
     }
 }

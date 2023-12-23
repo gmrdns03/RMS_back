@@ -44,4 +44,9 @@
       GROUP BY b.boardId
       ORDER BY b.boardSn ASC
   </select>
+  <update id="updateBoardSnByBoardId">
+    UPDATE Board
+    SET boardSn = #{boardSn}, modfUserId = #{modfUserId}
+    WHERE boardId = #{boardId}
+  </update>
 </mapper>

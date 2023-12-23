@@ -2,6 +2,7 @@ package com.project.LimeRMS.controller;
 
 import com.project.LimeRMS.dto.AuthListDto;
 import com.project.LimeRMS.dto.BoardInfoDto;
+import com.project.LimeRMS.dto.BoardPriorityDto;
 import com.project.LimeRMS.dto.OverdueContentListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.security.JwtProvider;
@@ -163,4 +164,24 @@ public class AdminController {
             return ResponseEntity.ok().body(resMap);
         }
     }
+
+    @PostMapping("/boards/priorities")
+    @Operation(
+        summary = "보드 우선순위 변경",
+        description = "관리자는 보드의 우선순위를 변경할 수 있다")
+    public ResponseEntity<?> changeBoardPriorities(@RequestHeader("AccessToken") String token, @RequestBody List<BoardPriorityDto> boardPriorityDtoList){
+        String managerId = jwtProvider.getUserPk(token);
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String message = adminService.changeBoardPriorities(managerId, boardPriorityDtoList);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
+
 }
