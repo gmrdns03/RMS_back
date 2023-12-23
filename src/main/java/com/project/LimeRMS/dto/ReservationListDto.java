@@ -1,6 +1,5 @@
 package com.project.LimeRMS.dto;
 
-import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class LikeListDto {
-    private Integer likeId;
+public class ReservationListDto {
+    private Integer reserveId;
     private String boardNm;
     private Integer boardId;
     private String cateNm;

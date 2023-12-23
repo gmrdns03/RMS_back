@@ -22,6 +22,7 @@ public class LikeService {
         SimpleDateFormat dateParder = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         for (LikeListDto likeListDto : likeListDtos) {
+            Integer likeId = likeListDto.getLikeId();
             String boardNm = likeListDto.getBoardNm();
             Integer boardId = likeListDto.getBoardId();
             String cateNm = likeListDto.getCateNm();
@@ -37,7 +38,7 @@ public class LikeService {
                 rentalStat = "CD001002";
             }
             String rentalStatNm = commCdMapper.findCdNmByCd(rentalStat);
-            LikeListDto tempLikeListDto = new LikeListDto(boardNm, boardId, cateNm, contentId, contentNm,
+            LikeListDto tempLikeListDto = new LikeListDto(likeId, boardNm, boardId, cateNm, contentId, contentNm,
                 regDt, rentalStat, rentalStatNm);
 
             resLikeListDtos.add(tempLikeListDto);

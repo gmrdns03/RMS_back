@@ -9,4 +9,32 @@
         LEFT JOIN Content c ON r.contentId = c.contentId
         WHERE rentalStat = #{rentalStat}
     </select>
+
+    <select id="findRentalListByUserId" resultType="com.project.LimeRMS.dto.RentalListDto">
+        SELECT
+            rt.rentalId,
+            b.boardNm,
+            b.boardId,
+            cc.cateNm,
+            rt.contentId,
+            c.contentNm,
+            rt.rentalDt,
+            rt.predReturnDt,
+            rt.returnDt,
+            rt.rentalStat
+        FROM
+            (SELECT
+                r.rentalId,
+                r.contentId,
+                r.rentalDt,
+                r.returnDt,
+                r.predReturnDt,
+                r.rentalStat
+                FROM Rental r
+            WHERE r.rentalUserId = #{userId}) rt
+        LEFT JOIN Content c ON c.contentId = rt.contentId
+        LEFT JOIN Board b ON b.boardId = c.boardId
+        LEFT JOIN ContentCategory cc ON cc.cateId = c.cateId
+        LEFT JOIN Rental r ON r.contentId = c.contentId ;
+    </select>
 </mapper>

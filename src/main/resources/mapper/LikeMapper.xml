@@ -2,6 +2,7 @@
 <mapper namespace="com.project.LimeRMS.mapper.LikeMapper">
   <select id="findLikeListByUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.dto.LikeListDto">
     SELECT
+      lk.likeId as likeId,
       b.boardNm as boardNm,
       b.boardId as boardId,
       cc.cateNm as cateNm,
@@ -11,6 +12,7 @@
       r.rentalStat as rentalStat
     FROM (
         SELECT
+          l.likeId as likeId,
           l.contentId as contentId,
           l.regDt as regDt
         FROM `Like` l

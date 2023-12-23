@@ -1,11 +1,16 @@
 package com.project.LimeRMS.controller;
 
 import com.project.LimeRMS.dto.LikeListDto;
+import com.project.LimeRMS.dto.RentalListDto;
+import com.project.LimeRMS.dto.ReservationListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.LikeService;
 import com.project.LimeRMS.service.ProfileService;
+import com.project.LimeRMS.service.RentalService;
+import com.project.LimeRMS.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.io.File;
@@ -40,6 +45,8 @@ public class ProfileController {
     private final ProfileService profileService;
     private final JwtProvider jwtProvider;
     private final LikeService likeService;
+    private final ReservationService reservationService;
+    private final RentalService rentalService;
 
     @GetMapping(value = "/user")
     @Operation(summary = "사용자 회원정보 상세조회")
@@ -133,7 +140,14 @@ public class ProfileController {
     }
 
     @PostMapping("/likes")
-    @Operation(summary = "사용자의 관심 목록")
+    @Operation(
+        summary = "사용자의 관심 목록",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                examples = @ExampleObject(value = "{\"userId\":1}")
+            )
+        )
+    )
     public ResponseEntity<?> getUserLikesList(
         @RequestBody Map<String, String> body
     ) {
@@ -156,6 +170,57 @@ public class ProfileController {
     }
 
     @PostMapping("/reservations")
-    @Operation(summary = "사용자의 예약 목록")
-    public ResponseEntity<?> getUserReservatioinList() {}
+    @Operation(
+        summary = "사용자의 예약 목록",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                examples = @ExampleObject(value = "{\"userId\":1}")
+            )
+        )
+    )
+    public ResponseEntity<?> getUserReservatioinList(
+        @RequestBody Map<String, String> body
+    ) {
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            // body에서 userId 추출
+            String userId = body.get("userId");
+            // 사용자 예약 목록 받아오기
+            List<ReservationListDto> reservationInfoList = reservationService.getReservationList(userId);
+            resMap.put("reservationInfo", reservationInfoList);
+            resMap.put("res", true);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
+
+    @PostMapping("/rentals")
+    @Operation(
+        summary = "사용자의 대여 목록",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                examples = @ExampleObject(value = "{\"userId\":1}")
+            )
+        )
+    )
+    public ResponseEntity<?> getUserRentalList(
+        @RequestBody Map<String, String> body
+    ) {
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            // body에서 userId 추출
+            String userId = body.get("userId");
+            List<RentalListDto> rentalListDtoList =  rentalService.getRentalList(userId);
+            resMap.put("rentalInfo", rentalListDtoList);
+            resMap.put("res", true);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.badRequest().body(resMap);
+        }
+    }
 }
