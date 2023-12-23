@@ -1,7 +1,9 @@
 package com.project.LimeRMS.controller;
 
+import com.project.LimeRMS.dto.LikeListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.security.JwtProvider;
+import com.project.LimeRMS.service.LikeService;
 import com.project.LimeRMS.service.ProfileService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -11,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
@@ -36,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class ProfileController {
     private final ProfileService profileService;
     private final JwtProvider jwtProvider;
+    private final LikeService likeService;
 
     @GetMapping(value = "/user")
     @Operation(summary = "사용자 회원정보 상세조회")
@@ -81,10 +85,6 @@ public class ProfileController {
     ) throws IOException {
         Map<String, Object> resMap = new HashMap<String, Object>();
         try {
-            System.out.println("========================");
-            System.out.println("contentType + "+contentType);
-            System.out.println("========================");
-
             // 토큰에서 userId 추출
             String userId = jwtProvider.getUserPk(token);
 
@@ -130,6 +130,21 @@ public class ProfileController {
             resMap.put("msg", e.getMessage());
             return ResponseEntity.badRequest().body(resMap);
         }
+    }
 
+    @GetMapping("/likes")
+    @Operation(summary = "사용자의 관심 목록")
+    public ResponseEntity<?> getUserLikesList(@RequestHeader("AccessToken") String token) {
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            // 토큰에서 userId 추출
+            String userId = jwtProvider.getUserPk(token);
+
+            // 사용자의 관심 목록 받아오기
+            List<LikeListDto> likeListDtos = likeService.getUserLikesList(userId);
+            return ResponseEntity.ok().body(likeListDtos);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }
