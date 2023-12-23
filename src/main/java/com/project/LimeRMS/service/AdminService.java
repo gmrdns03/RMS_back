@@ -81,22 +81,14 @@ public class AdminService {
     }
 
     //유저 비밀번호를 지정된 값으로 초기화
-    public Map<String, Object> resetUserPw(String managerId, Map<String, Integer> member){
-        Map<String, Object> resMap = new HashMap<>();
-        try {
-            Integer userId = member.get("userId");
-            String defaultPassword = System.getenv("DEFAULT_PW");
-            String password = passwordEncoder.encode(defaultPassword);
-            Integer modfUserId = Integer.valueOf(managerId);
+    public String resetUserPw(String managerId, Map<String, Integer> member){
+        Integer userId = member.get("userId");
+        String defaultPassword = System.getenv("DEFAULT_PW");
+        String password = passwordEncoder.encode(defaultPassword);
+        Integer modfUserId = Integer.valueOf(managerId);
 
-            userMapper.updatePwByUserId(userId, password, modfUserId);
-            resMap.put("res", true);
-            resMap.put("msg", "비밀번호가 초기화 되었습니다.");
-        } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("msg", e.getMessage());
-        }
-        return resMap;
+        userMapper.updatePwByUserId(userId, password, modfUserId);
+        return "비밀번호가 초기화 되었습니다.";
     }
 
     //모든 보드 종류 불러오기

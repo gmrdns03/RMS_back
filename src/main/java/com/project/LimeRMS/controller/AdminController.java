@@ -88,7 +88,7 @@ public class AdminController {
         }
     }
 
-    @DeleteMapping("/users/reset-pw")
+    @PostMapping("/users/reset-pw")
     @Operation(
             summary = "회원 비밀번호 초기화",
             description = "관리자는 회원의 비밀번호를 초기화할 수 있다.",
@@ -97,11 +97,17 @@ public class AdminController {
                             examples = @ExampleObject(value = "{\"userId\":10}"))))
     public ResponseEntity<?> resetUserPw(@RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
         String managerId = jwtProvider.getUserPk(token);
-        Map<String, Object> resMap = adminService.resetUserPw(managerId, member);
-
-        return ResponseEntity
-                .ok()
-                .body(resMap);
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String message = adminService.resetUserPw(managerId, member);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
     @GetMapping("/auth-list")
