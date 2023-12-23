@@ -91,6 +91,11 @@ public class AdminService {
         return "비밀번호가 초기화 되었습니다.";
     }
 
+    //권한 종류 불러오기
+    public List<AuthListDto> getAuthenticationList(){
+        return authenticationMapper.findAllAuth();
+    }
+
     //모든 보드 종류 불러오기
     public List<BoardInfoDto> getBoardList(){
         List<BoardInfoDto> boardInfoDtoList = boardMapper.findAllBoardInfoList();
@@ -107,16 +112,6 @@ public class AdminService {
             board.setBoardStat(boardStat);
         }
         return boardInfoDtoList;
-    }
-
-    //권한 종류 불러오기
-    public List<AuthListDto> getAuthenticationList(){
-        try {
-            return authenticationMapper.findAllAuth();
-        } catch (Exception e) {
-            log.info("Error while getting authentication list", e);
-            return Collections.emptyList();
-        }
     }
 
     public List<OverdueContentListDto> getOverdueContentList() {

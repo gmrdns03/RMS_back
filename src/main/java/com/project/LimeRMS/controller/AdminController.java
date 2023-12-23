@@ -114,16 +114,36 @@ public class AdminController {
     @Operation(
             summary = "모든 권한 종류 조회",
             description = "관리자는 모든 종류의 권한 정보를 조회할 수 있다.")
-    public List<AuthListDto> getAuthenticationList(){
-        return adminService.getAuthenticationList();
+    public ResponseEntity<?> getAuthenticationList(){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            List<AuthListDto> authDtoList = adminService.getAuthenticationList();
+            resMap.put("res", true);
+            resMap.put("msg", authDtoList);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
     @GetMapping("/boards")
     @Operation(
             summary = "모든 보드 정보 불러오기",
             description = "관리자는 모든 보드의 정보를 조회할 수 있다.")
-    public List<BoardInfoDto> getBoardList(){
-        return adminService.getBoardList();
+    public ResponseEntity<?> getBoardList(){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            List<BoardInfoDto> boardInfoDtoList = adminService.getBoardList();
+            resMap.put("res", true);
+            resMap.put("msg", boardInfoDtoList);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
     @PostMapping("/boards/overdues")
