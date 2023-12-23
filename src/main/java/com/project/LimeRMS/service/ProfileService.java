@@ -52,7 +52,7 @@ public class ProfileService {
         if (res) {
             String encodedPwd = passwordEncoder.encode(password);
             Integer userId = Integer.valueOf(id);
-            userMapper.updatePwByUserId(userId, encodedPwd);
+            userMapper.updatePwByUserId(userId, encodedPwd, userId);
         } else {
             throw new Exception(String.valueOf(validateRes.get("msg")));
         }
