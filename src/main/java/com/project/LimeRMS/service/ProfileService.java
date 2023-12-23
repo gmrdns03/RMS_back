@@ -6,6 +6,7 @@ import com.project.LimeRMS.mapper.CommCdMapper;
 import com.project.LimeRMS.mapper.UserMapper;
 import java.io.File;
 
+import java.io.FileNotFoundException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -90,33 +91,30 @@ public class ProfileService {
         }
     }
 
-    public File getProfileImg(String userId) {
+    public File getProfileImg(String userId) throws FileNotFoundException {
         // userImg가 있는지 확인
         User user = userMapper.findByUserId(userId);
         String profileImgPath = user.getProfileImg();
 
         // 없는 경우 null 반환
         if (profileImgPath.isEmpty()) {
-            return null;
+            throw new FileNotFoundException("there is no profile image");
         }
 
         // 경로가 있는 경우 파일 불러오기
         File destFile = new File(profileImgPath);
-        return destFile;
+        if (destFile.exists()) {
+            return destFile;
+        } else {
+            throw new FileNotFoundException("cannot be resolved in the file system for checking its content length");
+        }
     }
 
     public boolean deleteProfileImg(String filePath) throws Exception {
         File file = new File(filePath);
         if (file.exists()) {
-            if (file.delete()) {
-                System.out.println("파일 삭제 성공");
-                return true;
-            } else {
-                System.out.println("파일 삭제 실패");
-                return false;
-            }
+            return file.delete();
         } else {
-            System.out.println("파일이 존재하지 않습니다.");
             return true;
         }
     }
