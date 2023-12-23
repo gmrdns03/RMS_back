@@ -2,12 +2,10 @@ package com.project.LimeRMS.service;
 
 import com.project.LimeRMS.dto.AuthListDto;
 import com.project.LimeRMS.dto.BoardInfoDto;
+import com.project.LimeRMS.dto.OverdueContentListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.entity.User;
-import com.project.LimeRMS.mapper.AuthenticationMapper;
-import com.project.LimeRMS.mapper.BoardMapper;
-import com.project.LimeRMS.mapper.CommCdMapper;
-import com.project.LimeRMS.mapper.UserMapper;
+import com.project.LimeRMS.mapper.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,17 +22,20 @@ public class AdminService {
 
     private final UserMapper userMapper;
     private final BoardMapper boardMapper;
+    private final RentalMapper rentalMapper;
     private final AuthenticationMapper authenticationMapper;
     private final PasswordEncoder passwordEncoder;
     private final CommCdMapper commCdMapper;
 
-    public Map<String, Object> resetUserPw(Map<String, Integer> member){
+    public Map<String, Object> resetUserPw(String managerId, Map<String, Integer> member){
         Map<String, Object> resMap = new HashMap<>();
         try {
             Integer userId = member.get("userId");
             String defaultPassword = System.getenv("DEFAULT_PW");
             String password = passwordEncoder.encode(defaultPassword);
-            userMapper.updatePwByUserId(userId, password);
+            Integer modfUserId = Integer.valueOf(managerId);
+
+            userMapper.updatePwByUserId(userId, password, modfUserId);
             resMap.put("res", true);
             resMap.put("msg", "비밀번호가 초기화 되었습니다.");
         } catch (Exception e) {
@@ -86,7 +87,7 @@ public class AdminService {
     }
 
     //관리자의 회원 추가 기능
-    public Map<String, Object> addUser(Map<String, String> signupInfo) {
+    public Map<String, Object> addUser(String managerId, Map<String, String> signupInfo) {
         Map<String, Object> resMap = new HashMap<>();
         try {
             if (userMapper.findByUserEmail(signupInfo.get("userEmail")).orElse(null) != null) {
@@ -99,8 +100,9 @@ public class AdminService {
                 String defaultPassword = System.getenv("DEFAULT_PW"); //초기 비밀번호 환경변수에 저장 됨
                 String password = passwordEncoder.encode(defaultPassword);
                 Integer authId = Integer.valueOf(signupInfo.get("authId"));
+                Integer regUserId = Integer.valueOf(managerId);
 
-                userMapper.addUser(userEmail, userNm, password, phoneNumber, authId);
+                userMapper.addUser(userEmail, userNm, password, phoneNumber, authId, regUserId);
                 resMap.put("res", true);
                 resMap.put("msg", userEmail + "이 성공적으로 가입되었습니다.");
             }
@@ -119,5 +121,30 @@ public class AdminService {
             log.info("Error while getting authentication list", e);
             return Collections.emptyList();
         }
+    }
+
+    public Map<String, Object> updateUserProfile(String managerId, Map<String, String> member) {
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            Integer userId = Integer.valueOf(member.get("userId"));
+            String userNm = member.get("userNm");
+            Integer authId = Integer.valueOf(member.get("authId"));
+            String userStat = member.get("userStat");
+            String phoneNumber = member.get("phoneNumber");
+            Integer modfUserId = Integer.valueOf(managerId);
+
+            userMapper.updateUserByUserId(userId, userNm, authId, userStat, phoneNumber, modfUserId);
+            resMap.put("res", true);
+            resMap.put("msg", userNm + "님의 프로필 정보가 변경되었습니다.");
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.toString());
+        }
+        return resMap;
+    }
+
+    public List<OverdueContentListDto> getOverdueContentList() {
+        List<OverdueContentListDto> overdueContentListDtos = rentalMapper.findRentalByRentalStat("CD001003"); //상태: 연체
+        return overdueContentListDtos;
     }
 }
