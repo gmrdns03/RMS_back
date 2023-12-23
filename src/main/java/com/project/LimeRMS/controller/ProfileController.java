@@ -76,21 +76,14 @@ public class ProfileController {
     @Operation(summary = "사용자 프로필 이미지 등록")
     public ResponseEntity<?> saveProfileImg(
         @RequestPart (value = "file") MultipartFile multipartFile,
-        @RequestHeader("AccessToken") String token,
-        @RequestHeader("Content-Type") String contentType
+        @RequestHeader("AccessToken") String token
     ) throws IOException {
         Map<String, Object> resMap = new HashMap<String, Object>();
         try {
-            System.out.println("========================");
-            System.out.println("contentType + "+contentType);
-            System.out.println("========================");
-
             // 토큰에서 userId 추출
             String userId = jwtProvider.getUserPk(token);
-
             // 이미지 저장
             profileService.saveProfileImg(userId, multipartFile);
-
             resMap.put("res", true);
             resMap.put("msg", "Registered a new profile image successfully");
             return ResponseEntity.accepted().body(resMap);

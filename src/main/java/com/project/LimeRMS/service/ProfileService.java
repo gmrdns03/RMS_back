@@ -76,8 +76,7 @@ public class ProfileService {
 
             // 기존 userImg가 있는지 확인
             // 유저가 이미 프로필 이미지가 있는경우 해당 파일 삭제
-            User user = userMapper.findByUserId(userId);
-            String profileImgPath = user.getProfileImg();
+            String profileImgPath = userMapper.findProfileImgByUserId(Integer.valueOf(userId));
             if ((profileImgPath != null) && !profileImgPath.isEmpty()) {
                 deleteProfileImg(profileImgPath);
             }

@@ -51,6 +51,12 @@
         WHERE userId = #{userId}
     </update>
 
+    <update id="updateProfileImgByManagerId">
+        UPDATE User
+        SET modfUserId = #{managerId}, profileImg = #{profileImg}
+        WHERE userId = #{userId}
+    </update>
+
     <update id="updatePwByUserId">
         UPDATE User
         SET password = #{password}, modfUserId = #{modfUserId}
@@ -63,4 +69,9 @@
         WHERE userId = #{userId}
     </update>
 
+    <select id="findProfileImgByUserId" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT profileImg
+        FROM User
+        WHERE userId = #{userId}
+    </select>
 </mapper>

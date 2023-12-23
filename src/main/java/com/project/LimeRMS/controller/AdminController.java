@@ -89,6 +89,28 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/users/delete-profile")
+    @Operation(
+        summary = "회원 프로필 이미지 삭제",
+        description = "관리자는 회원의 프로파일 이미지를 삭제할 수 있다.",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                examples = @ExampleObject(value = "{\"userId\":10}"))))
+    public ResponseEntity<?> deleteUserProfile(@RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
+        Integer managerId = Integer.valueOf(jwtProvider.getUserPk(token));
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String message = adminService.deleteUserProfile(managerId, member);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
+
     @PostMapping("/users/reset-pw")
     @Operation(
             summary = "회원 비밀번호 초기화",

@@ -7,6 +7,7 @@ import com.project.LimeRMS.dto.OverdueContentListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.entity.User;
 import com.project.LimeRMS.mapper.*;
+import java.io.File;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -80,6 +81,22 @@ public class AdminService {
 
         userMapper.updateUserByUserId(userId, userNm, authId, userStat, phoneNumber, modfUserId);
         return userNm + "님의 프로필 정보가 변경되었습니다.";
+    }
+
+    //유저 프로필 이미지 삭제
+    public String deleteUserProfile(Integer managerId, Map<String, Integer> member){
+        Integer userId = member.get("userId");
+        String profileImg = userMapper.findProfileImgByUserId(userId);
+        if (profileImg == null) {
+            profileImg = "";
+        }
+        File file = new File(profileImg);
+        if (file.exists()) {
+            file.delete();
+            userMapper.updateProfileImgByManagerId(managerId, userId, profileImg);
+            return "프로필 이미지 삭제 성공";
+        }
+        return "파일이 존재하지 않습니다.";
     }
 
     //유저 비밀번호를 지정된 값으로 초기화
