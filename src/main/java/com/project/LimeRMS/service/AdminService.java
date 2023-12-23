@@ -115,7 +115,6 @@ public class AdminService {
     }
 
     public List<OverdueContentListDto> getOverdueContentList() {
-        List<OverdueContentListDto> overdueContentListDtos = rentalMapper.findRentalByRentalStat("CD001003"); //상태: 연체
-        return overdueContentListDtos;
+        return rentalMapper.findRentalByRentalStat("CD001003"); //상태: 연체
     }
 }

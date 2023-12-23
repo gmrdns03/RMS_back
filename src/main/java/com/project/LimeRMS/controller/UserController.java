@@ -1,14 +1,13 @@
 package com.project.LimeRMS.controller;
 
 import com.project.LimeRMS.dto.CommCdDto;
-import com.project.LimeRMS.dto.JwtResponseDto;
 import com.project.LimeRMS.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.util.HashMap;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,8 +27,18 @@ public class UserController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
                             examples = @ExampleObject(value = "{\"userEmail\":\"test1@euclidsoft.co.kr\",\"password\":\"dbzmfflem1!\"}"))))
-    public JwtResponseDto login(@RequestBody Map<String, String> member) {
-        return userService.login(member);
+    public ResponseEntity<?> login(@RequestBody Map<String, String> member) {
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String accessToken = userService.login(member);
+            resMap.put("res", true);
+            resMap.put("msg", accessToken);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
     @PostMapping("/cd-list")
