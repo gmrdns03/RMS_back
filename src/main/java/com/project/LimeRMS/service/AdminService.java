@@ -67,6 +67,19 @@ public class AdminService {
         }
     }
 
+    //유저 프로필 정보 변경
+    public String updateUserProfile(String managerId, Map<String, String> member) {
+        Integer userId = Integer.valueOf(member.get("userId"));
+        String userNm = member.get("userNm");
+        Integer authId = Integer.valueOf(member.get("authId"));
+        String userStat = member.get("userStat");
+        String phoneNumber = member.get("phoneNumber");
+        Integer modfUserId = Integer.valueOf(managerId);
+
+        userMapper.updateUserByUserId(userId, userNm, authId, userStat, phoneNumber, modfUserId);
+        return userNm + "님의 프로필 정보가 변경되었습니다.";
+    }
+
     //유저 비밀번호를 지정된 값으로 초기화
     public Map<String, Object> resetUserPw(String managerId, Map<String, Integer> member){
         Map<String, Object> resMap = new HashMap<>();
@@ -112,26 +125,6 @@ public class AdminService {
             log.info("Error while getting authentication list", e);
             return Collections.emptyList();
         }
-    }
-
-    public Map<String, Object> updateUserProfile(String managerId, Map<String, String> member) {
-        Map<String, Object> resMap = new HashMap<>();
-        try {
-            Integer userId = Integer.valueOf(member.get("userId"));
-            String userNm = member.get("userNm");
-            Integer authId = Integer.valueOf(member.get("authId"));
-            String userStat = member.get("userStat");
-            String phoneNumber = member.get("phoneNumber");
-            Integer modfUserId = Integer.valueOf(managerId);
-
-            userMapper.updateUserByUserId(userId, userNm, authId, userStat, phoneNumber, modfUserId);
-            resMap.put("res", true);
-            resMap.put("msg", userNm + "님의 프로필 정보가 변경되었습니다.");
-        } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("msg", e.toString());
-        }
-        return resMap;
     }
 
     public List<OverdueContentListDto> getOverdueContentList() {

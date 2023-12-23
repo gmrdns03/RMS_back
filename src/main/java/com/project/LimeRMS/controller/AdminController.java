@@ -75,11 +75,17 @@ public class AdminController {
                             examples = @ExampleObject(value = "{\"userId\":\"10\",\"userNm\":\"김00\",\"authId\":\"4\",\"userStat\":\"CD006003\",\"phoneNumber\":\"01077778888\"}"))))
     public ResponseEntity<?> updateUserProfile(@RequestHeader("AccessToken") String token, @RequestBody Map<String, String> member){
         String managerId = jwtProvider.getUserPk(token);
-        Map<String, Object> resMap = adminService.updateUserProfile(managerId, member);
-
-        return ResponseEntity
-                .ok()
-                .body(resMap);
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String message = adminService.updateUserProfile(managerId, member);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
     @DeleteMapping("/users/reset-pw")
