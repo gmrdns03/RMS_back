@@ -53,7 +53,7 @@ public class UserController {
         try {
             List<CommCdDto> commCdDtoList = userService.getCommCdList(input);
             resMap.put("res", true);
-            resMap.put("msg", commCdDtoList);
+            resMap.put("commCds", commCdDtoList);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);

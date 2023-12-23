@@ -36,7 +36,7 @@ public class AdminController {
         try {
             List<UserInfoDto> userInfoDtoList = adminService.getUserInformation();
             resMap.put("res", true);
-            resMap.put("msg", userInfoDtoList);
+            resMap.put("userList", userInfoDtoList);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
@@ -142,7 +142,7 @@ public class AdminController {
         try {
             List<AuthListDto> authDtoList = adminService.getAuthenticationList();
             resMap.put("res", true);
-            resMap.put("msg", authDtoList);
+            resMap.put("authenticationList", authDtoList);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
@@ -160,7 +160,7 @@ public class AdminController {
         try {
             List<BoardInfoDto> boardInfoDtoList = adminService.getBoardList();
             resMap.put("res", true);
-            resMap.put("msg", boardInfoDtoList);
+            resMap.put("boardList", boardInfoDtoList);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
@@ -178,7 +178,7 @@ public class AdminController {
         try {
             List<OverdueContentListDto> overdueContentList = adminService.getOverdueContentList();
             resMap.put("res", true);
-            resMap.put("msg", overdueContentList);
+            resMap.put("overdueContents", overdueContentList);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
