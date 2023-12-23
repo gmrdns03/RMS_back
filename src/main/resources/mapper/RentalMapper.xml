@@ -9,4 +9,11 @@
         LEFT JOIN Content c ON r.contentId = c.contentId
         WHERE rentalStat = #{rentalStat}
     </select>
+
+    <update id="updateOverdue">
+        UPDATE Rental
+        SET rentalStat = 'CD001003'
+        WHERE <![CDATA[predReturnDt < NOW()]]>
+        AND rentalStat = 'CD001001'
+    </update>
 </mapper>

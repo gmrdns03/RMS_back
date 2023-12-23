@@ -8,4 +8,6 @@ import java.util.List;
 @Mapper
 public interface RentalMapper {
     List<OverdueContentListDto> findRentalByRentalStat(String rentalStat);
+
+    void updateOverdue();
 }
