@@ -30,8 +30,18 @@ public class AdminController {
     @Operation(
             summary = "모든 회원 조회",
             description = "관리자는 모든 회원의 정보를 조회할 수 있다.")
-    public List<UserInfoDto> getUserInformation(){
-        return adminService.getUserInformation();
+    public ResponseEntity<?> getUserInformation(){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            List<UserInfoDto> userInfoDtoList = adminService.getUserInformation();
+            resMap.put("res", true);
+            resMap.put("msg", userInfoDtoList);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
     @PostMapping("/users/add")
