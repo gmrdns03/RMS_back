@@ -1,6 +1,5 @@
 package com.project.LimeRMS.controller;
 
-import com.project.LimeRMS.dto.JwtResponseDto;
 import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.LikeService;
 import io.swagger.v3.oas.annotations.Operation;

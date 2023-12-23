@@ -1,6 +1,5 @@
 package com.project.LimeRMS.mapper;
 
-import com.project.LimeRMS.entity.Content;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

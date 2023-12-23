@@ -1,9 +1,7 @@
 package com.project.LimeRMS.service;
 
-import com.project.LimeRMS.entity.Content;
 import com.project.LimeRMS.mapper.LikeMapper;
 import com.project.LimeRMS.security.JwtProvider;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
