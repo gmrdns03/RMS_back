@@ -53,10 +53,17 @@ public class AdminController {
                             examples = @ExampleObject(value = "{\"userEmail\":\"test1@euclidsoft.co.kr\",\"userNm\":\"김00\",\"phoneNumber\":\"01022223333\",\"authId\":\"9\"}"))))
     public ResponseEntity<?> addUser(@RequestHeader("AccessToken") String token, @RequestBody Map<String, String> signupInfo) {
         String managerId = jwtProvider.getUserPk(token);
-        Map<String, Object> resMap = adminService.addUser(managerId, signupInfo);
-        return ResponseEntity
-                .ok()
-                .body(resMap);
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String message = adminService.addUser(managerId, signupInfo);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
     @PostMapping("/users/modify")

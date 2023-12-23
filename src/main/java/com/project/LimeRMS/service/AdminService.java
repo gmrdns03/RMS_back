@@ -27,6 +27,47 @@ public class AdminService {
     private final PasswordEncoder passwordEncoder;
     private final CommCdMapper commCdMapper;
 
+    //모든 회원의 정보 불러오기
+    public List<UserInfoDto> getUserInformation() {
+
+        List<UserInfoDto> userInfoDtoList = new ArrayList<>();
+        List<User> users = userMapper.findAllUser();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+
+        for (User user : users) {
+            Integer userId = user.getUserId();
+            String userNm = user.getUserNm();
+            String userEmail = user.getUserEmail();
+            String joinDt = formatter.format(user.getJoinDt());
+            String authNm = user.getAuthentication().getAuthNm();
+            String userStat = commCdMapper.findCdNmByCd(user.getUserStat());
+            String phoneNumber = user.getPhoneNumber();
+            UserInfoDto userInfoDto = new UserInfoDto(userId, userNm, userEmail, joinDt, authNm, userStat, phoneNumber);
+
+            userInfoDtoList.add(userInfoDto);
+        }
+        return userInfoDtoList;
+    }
+
+    //관리자의 회원 추가 기능
+    public String addUser(String managerId, Map<String, String> signupInfo) {
+        if (userMapper.findByUserEmail(signupInfo.get("userEmail")).orElse(null) != null) {
+            return signupInfo.get("userEmail") + "은 이미 가입된 Email 입니다.";
+        } else {
+            String userEmail = signupInfo.get("userEmail");
+            String userNm = signupInfo.get("userNm");
+            String phoneNumber = signupInfo.get("phoneNumber");
+            String defaultPassword = System.getenv("DEFAULT_PW"); //초기 비밀번호 환경변수에 저장 됨
+            String password = passwordEncoder.encode(defaultPassword);
+            Integer authId = Integer.valueOf(signupInfo.get("authId"));
+            Integer regUserId = Integer.valueOf(managerId);
+
+            userMapper.addUser(userEmail, userNm, password, phoneNumber, authId, regUserId);
+            return userEmail + "이 성공적으로 가입되었습니다.";
+        }
+    }
+
+    //유저 비밀번호를 지정된 값으로 초기화
     public Map<String, Object> resetUserPw(String managerId, Map<String, Integer> member){
         Map<String, Object> resMap = new HashMap<>();
         try {
@@ -61,55 +102,6 @@ public class AdminService {
             board.setBoardStat(boardStat);
         }
         return boardInfoDtoList;
-    }
-
-    //모든 회원의 정보 불러오기
-    public List<UserInfoDto> getUserInformation() {
-
-        List<UserInfoDto> userInfoDtoList = new ArrayList<>();
-        List<User> users = userMapper.findAllUser();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-
-        for (User user : users) {
-            Integer userId = user.getUserId();
-            String userNm = user.getUserNm();
-            String userEmail = user.getUserEmail();
-            String joinDt = formatter.format(user.getJoinDt());
-            String authNm = user.getAuthentication().getAuthNm();
-            String userStat = commCdMapper.findCdNmByCd(user.getUserStat());
-            String phoneNumber = user.getPhoneNumber();
-            UserInfoDto userInfoDto = new UserInfoDto(userId, userNm, userEmail, joinDt, authNm, userStat, phoneNumber);
-
-            userInfoDtoList.add(userInfoDto);
-        }
-        return userInfoDtoList;
-    }
-
-    //관리자의 회원 추가 기능
-    public Map<String, Object> addUser(String managerId, Map<String, String> signupInfo) {
-        Map<String, Object> resMap = new HashMap<>();
-        try {
-            if (userMapper.findByUserEmail(signupInfo.get("userEmail")).orElse(null) != null) {
-                resMap.put("res", false);
-                resMap.put("msg", "이미 가입된 Email 입니다.");
-            } else {
-                String userEmail = signupInfo.get("userEmail");
-                String userNm = signupInfo.get("userNm");
-                String phoneNumber = signupInfo.get("phoneNumber");
-                String defaultPassword = System.getenv("DEFAULT_PW"); //초기 비밀번호 환경변수에 저장 됨
-                String password = passwordEncoder.encode(defaultPassword);
-                Integer authId = Integer.valueOf(signupInfo.get("authId"));
-                Integer regUserId = Integer.valueOf(managerId);
-
-                userMapper.addUser(userEmail, userNm, password, phoneNumber, authId, regUserId);
-                resMap.put("res", true);
-                resMap.put("msg", userEmail + "이 성공적으로 가입되었습니다.");
-            }
-        } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("msg", e.toString());
-        }
-        return resMap;
     }
 
     //권한 종류 불러오기
