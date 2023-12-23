@@ -1,0 +1,26 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.LimeRMS.mapper.ReservationMapper">
+  <select id="findReservationListByUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.dto.ReservationListDto">
+    SELECT
+      rvs.reserveId as reserveId,
+      b.boardNm as boardNm,
+      b.boardId as boardId,
+      cc.cateNm as cateNm,
+      c.contentId as contentId,
+      c.contentNm as contentNm,
+      rvs.regDt as regDt,
+      r.rentalStat as rentalStat
+    FROM (
+      SELECT
+        rv.reserveId as reserveId,
+        rv.contentId as contentId,
+        rv.regDt as regDt
+      FROM Reservation rv
+      WHERE rv.reserveUserId = #{userId} and rv.delYn = 'N') rvs
+    LEFT JOIN Content c ON c.contentId = rvs.contentId
+    LEFT JOIN Board b ON b.boardId = c.boardId
+    LEFT JOIN ContentCategory cc ON cc.cateId = c.cateId
+    LEFT JOIN Rental r ON r.contentId = c.contentId
+    Order by regDt desc;
+  </select>
+</mapper>
