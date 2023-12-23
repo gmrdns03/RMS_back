@@ -6,7 +6,6 @@ import com.project.LimeRMS.mapper.CommCdMapper;
 import com.project.LimeRMS.mapper.UserMapper;
 import com.project.LimeRMS.security.JwtProvider;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -49,14 +48,7 @@ public class UserService {
 
     //상태값 종류 리스트로 확인 가능
     public List<CommCdDto> getCommCdList(Map<String, String> input) {
-        try {
-            List<CommCdDto> commCdDtoList = commCdMapper.findCommCdByHiCommCd(input.get("hiCommCd"));
-            return commCdDtoList;
-        } catch (Exception e) {
-            List<CommCdDto> errorList = new ArrayList<>();
-            errorList.add(new CommCdDto("error", "에러 발생: " + e.getMessage()));
-            return errorList;
-        }
+        return commCdMapper.findCommCdByHiCommCd(input.get("hiCommCd"));
     }
 
 

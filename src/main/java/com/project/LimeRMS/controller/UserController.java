@@ -48,7 +48,17 @@ public class UserController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
                             examples = @ExampleObject(value = "{\"hiCommCd\":\"CD006000\"}"))))
-    public List<CommCdDto> getCommCdList(@RequestBody Map<String, String> input){
-        return userService.getCommCdList(input);
+    public ResponseEntity<?> getCommCdList(@RequestBody Map<String, String> input){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            List<CommCdDto> commCdDtoList = userService.getCommCdList(input);
+            resMap.put("res", true);
+            resMap.put("msg", commCdDtoList);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 }
