@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 public class LikeService {
     private final LikeMapper likeMapper;
     private final CommCdMapper commCdMapper;
-    public List<LikeListDto> getUserLikesList (String userId) throws Exception {
+    public List<LikeListDto> getUserLikeList (String userId) throws Exception {
         List<LikeListDto> likeListDtos = likeMapper.findLikeListByUserId(userId);
         List<LikeListDto> resLikeListDtos = new ArrayList<>();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");

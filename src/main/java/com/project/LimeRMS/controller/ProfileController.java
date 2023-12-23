@@ -132,18 +132,19 @@ public class ProfileController {
         }
     }
 
-    @GetMapping("/likes")
+    @PostMapping("/likes")
     @Operation(summary = "사용자의 관심 목록")
-    public ResponseEntity<?> getUserLikesList(@RequestHeader("AccessToken") String token) {
+    public ResponseEntity<?> getUserLikesList(
+        @RequestBody Map<String, String> body
+    ) {
         Map<String, Object> resMap = new HashMap<>();
         try {
-            // 토큰에서 userId 추출
-            String userId = jwtProvider.getUserPk(token);
+            // body에서 userId 추출
+            String userId = body.get("userId");
 
             // 사용자의 관심 목록 받아오기
-            List<LikeListDto> likeListDtos = likeService.getUserLikesList(userId);
+            List<LikeListDto> likeListDtos = likeService.getUserLikeList(userId);
 
-            //
             resMap.put("likeList", likeListDtos);
             resMap.put("res", true);
             return ResponseEntity.ok().body(resMap);
@@ -153,4 +154,8 @@ public class ProfileController {
             return ResponseEntity.badRequest().body(resMap);
         }
     }
+
+    @PostMapping("/reservations")
+    @Operation(summary = "사용자의 예약 목록")
+    public ResponseEntity<?> getUserReservatioinList() {}
 }
