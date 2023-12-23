@@ -142,9 +142,15 @@ public class ProfileController {
 
             // 사용자의 관심 목록 받아오기
             List<LikeListDto> likeListDtos = likeService.getUserLikesList(userId);
-            return ResponseEntity.ok().body(likeListDtos);
+
+            //
+            resMap.put("likeList", likeListDtos);
+            resMap.put("res", true);
+            return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.badRequest().body(resMap);
         }
     }
 }
