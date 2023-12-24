@@ -41,6 +41,9 @@ public class Rental {
     @Column
     private LocalDateTime returnDt;
 
+    @Column
+    private LocalDateTime predReturnDt;
+
     @Column(name = "extensionCnt", nullable = false, columnDefinition = "int default 0")
     private Integer extensionCnt;
 

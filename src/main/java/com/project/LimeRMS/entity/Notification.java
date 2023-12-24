@@ -36,6 +36,9 @@ public class Notification {
     private User sender;
 
     @Column
+    private Integer contentId;
+
+    @Column
     private String notiType;
 
     @Column
