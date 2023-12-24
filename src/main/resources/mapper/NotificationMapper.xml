@@ -8,4 +8,10 @@
     SET notiStatus = 'CD005002'
     WHERE notiId = #{notiId}
   </update>
+
+  <select id="findNotificationByUserId">
+    SELECT notiContent, joinDt
+    FROM Notification
+    WHERE receiverId = #{userId}
+  </select>
 </mapper>

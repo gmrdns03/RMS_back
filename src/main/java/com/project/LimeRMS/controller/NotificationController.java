@@ -1,15 +1,20 @@
 package com.project.LimeRMS.controller;
 
+import com.project.LimeRMS.dto.NotiDto;
+import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -20,6 +25,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class NotificationController {
 
     private final NotificationService notificationService;
+    private final JwtProvider jwtProvider;
+
+    @GetMapping
+    @Operation(
+        summary = "특정 사용자의 알림 불러오기",
+        description = "사용자가 읽은 알림을 미확인 -> 확인 상태로 변경한다.")
+    public ResponseEntity<?> getAllNotification(@RequestHeader("AccessToken")String token){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String userId = jwtProvider.getUserPk(token);
+            List<NotiDto> notiDtoList = notificationService.getAllNotification(userId);
+            resMap.put("res", true);
+            resMap.put("msg", notiDtoList);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
+
 
 //    @PutMapping("/add-return")
 //    @Operation(
