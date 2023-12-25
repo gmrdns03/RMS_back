@@ -75,11 +75,12 @@ public class JwtProvider {
 
     // Request의 Header의 token 값 "AccessToken" : "tokenValue"
     public String resolveToken(HttpServletRequest request) {
-        String bearerToken = request.getHeader("Authorization");
+        String bearerToken = request.getHeader("AccessToken");
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.split(" ")[1].trim();
+        } else {
+            return  bearerToken;
         }
-        return null;
 //
     }
 

@@ -5,6 +5,8 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.security.SecurityScheme.In;
+import io.swagger.v3.oas.models.security.SecurityScheme.Type;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,11 +14,14 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
     @Bean
     public OpenAPI openAPI() {
-        String jwt = "JWT";
+        String jwt = "AccessToken";
         SecurityRequirement securityRequirement = new SecurityRequirement().addList(jwt);
         Components components = new Components().addSecuritySchemes(
             jwt,
-            new SecurityScheme().name(jwt).type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT"));
+//            new SecurityScheme().name(jwt).type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")
+            new SecurityScheme().name(jwt).type(Type.APIKEY).scheme("bearer").bearerFormat("JWT").in(
+                In.HEADER)
+        );
         return new OpenAPI()
             .components(components)
             .info(apiInfo())
