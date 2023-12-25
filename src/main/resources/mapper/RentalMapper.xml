@@ -40,8 +40,14 @@
 
     <update id="updateOverdue">
         UPDATE Rental
-        SET rentalStat = 'CD001003'
-        WHERE <![CDATA[predReturnDt < NOW()]]>
-        AND rentalStat = 'CD001001'
+        SET rentalStat = 'CD001003', modfUserId = 1
+        WHERE <![CDATA[predReturnDt < NOW()]]> AND rentalStat = 'CD001001'
     </update>
+
+    <select id="findOverdueRentalByUserId" resultType="com.project.LimeRMS.dto.OverdueContentListDto">
+        SELECT r.rentalId, r.rentalDt, r.returnDt, r.rentalStat, u.userId, u.userNm, c.contentId, c.contentNm FROM Rental r
+        LEFT JOIN User u ON r.rentalUserId = u.userId
+        LEFT JOIN Content c ON r.contentId = c.contentId
+        WHERE rentalStat = 'CD001003' AND rentalUserId = #{userId}
+    </select>
 </mapper>

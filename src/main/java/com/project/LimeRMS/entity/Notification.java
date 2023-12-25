@@ -60,4 +60,7 @@ public class Notification {
 
     @Column
     private String modfUserId;
+
+    @Column
+    private String regUserId;
 }

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -76,6 +77,25 @@ public class NotificationController {
         Map<String, Object> resMap = new HashMap<>();
         try {
             String message = notificationService.changeContentRentalStat(alarm);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
+
+    @PutMapping("/add-overdues")
+    @Operation(
+        summary = "연체된 컨텐츠 알림 목록에 추가 (매일)",
+        description = "연체된 컨테츠를 반납하도록 사용자에게 안내하는 알림을 목록에 추가한다.")
+    public ResponseEntity<?> addOverdueNotification(@RequestHeader("AccessToken")String token){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String userId = jwtProvider.getUserPk(token);
+            String message = notificationService.addOverdueNotification(userId);
             resMap.put("res", true);
             resMap.put("msg", message);
             return ResponseEntity.ok().body(resMap);
