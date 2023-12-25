@@ -1,7 +1,10 @@
 package com.project.LimeRMS.service;
 
+import com.project.LimeRMS.dto.AuthListDto;
 import com.project.LimeRMS.dto.CommCdDto;
+import com.project.LimeRMS.dto.UserAuthPriorityDto;
 import com.project.LimeRMS.entity.User;
+import com.project.LimeRMS.mapper.AuthenticationMapper;
 import com.project.LimeRMS.mapper.CommCdMapper;
 import com.project.LimeRMS.mapper.UserMapper;
 import com.project.LimeRMS.security.JwtProvider;
@@ -23,6 +26,7 @@ public class UserService {
     private final CommCdMapper commCdMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtProvider jwtProvider;
+    private final AuthenticationMapper authenticationMapper;
 
     //유저 로그인시 토큰 발급
     public String login(Map<String, String> member) {
@@ -49,6 +53,12 @@ public class UserService {
     //상태값 종류 리스트로 확인 가능
     public List<CommCdDto> getCommCdList(Map<String, String> input) {
         return commCdMapper.findCommCdByHiCommCd(input.get("hiCommCd"));
+    }
+
+    // 유저 권한 priority 확인 기능
+    public Integer getUserAuthPriority(String userId) {
+        UserAuthPriorityDto authPriorityDto = authenticationMapper.findOneAuthByuserId(userId);
+        return authPriorityDto.getPriority();
     }
 
 
