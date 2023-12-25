@@ -11,5 +11,5 @@ import java.util.List;
 public interface AuthenticationMapper {
 
     List<AuthListDto> findAllAuth();
-    UserAuthPriorityDto findOneAuthByuserId(String userId);
+    UserAuthPriorityDto findOneAuthByUserId(String userId);
 }

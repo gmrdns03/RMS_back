@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class BoardService {
     private final BoardMapper boardMapper;
+    private final UserService userService;
 
     public BoardListDto getBoardListDto(Board board) {
         String boardStat = board.getBoardStat();
@@ -34,8 +35,10 @@ public class BoardService {
         return getBoardListDto(board);
     }
 
-    public List<BoardListDto> findAllBoardList() {
-        List<Board> boardList = boardMapper.findAllBoardList();
+    public List<BoardListDto> findAllBoardList(String userId) {
+        // 유저의 권한 확인
+        Integer userAuthPriority = userService.getUserAuthPriority(userId);
+        List<Board> boardList = boardMapper.findAllBoardList(userAuthPriority);
         List<BoardListDto> boardListDtoList = new ArrayList<>();
 
         for (Board board : boardList) {

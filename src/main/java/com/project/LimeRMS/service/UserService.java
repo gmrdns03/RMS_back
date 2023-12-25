@@ -57,7 +57,7 @@ public class UserService {
 
     // 유저 권한 priority 확인 기능
     public Integer getUserAuthPriority(String userId) {
-        UserAuthPriorityDto authPriorityDto = authenticationMapper.findOneAuthByuserId(userId);
+        UserAuthPriorityDto authPriorityDto = authenticationMapper.findOneAuthByUserId(userId);
         return authPriorityDto.getPriority();
     }
 

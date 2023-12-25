@@ -17,6 +17,7 @@
     FROM Board b
     LEFT JOIN
       BoardType bt ON b.boardTypeId = bt.boardTypeId
+    WHERE b.viewAuth >= ${authPriority}
   </select>
   <resultMap id="boardResultMap" type="com.project.LimeRMS.entity.Board">
     <id property="boardId" column="boardId" />

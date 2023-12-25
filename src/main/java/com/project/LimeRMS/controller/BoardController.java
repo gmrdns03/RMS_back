@@ -2,9 +2,11 @@ package com.project.LimeRMS.controller;
 
 import com.project.LimeRMS.dto.BoardListDto;
 import com.project.LimeRMS.dto.ContentInfoDto;
+import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.BoardService;
 import com.project.LimeRMS.service.ContentService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.File;
 import java.nio.file.Files;
@@ -21,6 +23,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -31,11 +34,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class BoardController {
     private final BoardService boardService;
     private final ContentService contentService;
+    private final JwtProvider jwtProvider;
 
     // board 리스트 반환
     @GetMapping("/list")
     @Operation(summary = "보드 목록 반환")
-    public List<BoardListDto> getBoardInfoList() { return boardService.findAllBoardList(); }
+    public ResponseEntity<?> getBoardInfoList(
+        @Parameter(hidden = true) @RequestHeader("AccessToken") String token
+    ) {
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String userId = jwtProvider.getUserPk(token);
+            List<BoardListDto> boardList = boardService.findAllBoardList(userId);
+            resMap.put("boardList", boardList);
+            resMap.put("res", true);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
 
     // board에 해당하는 컨텐츠 리스트 반환
     @GetMapping("/{boardId}")

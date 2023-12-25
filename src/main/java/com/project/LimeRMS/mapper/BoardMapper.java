@@ -11,7 +11,7 @@ public interface BoardMapper {
 
     List<BoardInfoDto> findAllBoardInfoList();
 
-    List<Board> findAllBoardList();
+    List<Board> findAllBoardList(@Param("authPriority") Integer authPriority);
 
     Board findOneByBoardId(@Param("boardId") String boardId);
 
