@@ -25,4 +25,10 @@
       <result property="cateNm" column="cateNm" />
     </association>
   </resultMap>
+
+  <select id="findContentAttrByBoardId" resultType="com.project.LimeRMS.dto.ContentAttrDto">
+    SELECT ca.logicalAttr, ca.physicalAttr, ca.mustYn, ca.attrOrder
+    FROM ContentAttr ca
+    WHERE ca.boardId = ${boardId};
+  </select>
 </mapper>

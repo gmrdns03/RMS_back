@@ -50,4 +50,19 @@
     SET boardSn = #{boardSn}, modfUserId = #{modfUserId}
     WHERE boardId = #{boardId}
   </update>
+
+  <select id="findOneByContentId" resultType="com.project.LimeRMS.dto.BoardListDto">
+    SELECT
+      b.boardId,
+      b.boardNm,
+      b.boardStat,
+      b.boardDesc,
+      b.boardSn,
+      b.viewAuth,
+      b.writeAuth,
+      b.commentAuth,
+      b.modifyAuth
+    FROM Board b
+    WHERE b.boardId = (SELECT c.boardId FROM Content c WHERE c.contentId = ${contentId})
+  </select>
 </mapper>

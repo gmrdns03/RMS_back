@@ -1,11 +1,17 @@
 package com.project.LimeRMS.service;
 
+import com.project.LimeRMS.dto.BoardListDto;
+import com.project.LimeRMS.dto.ContentAttrDto;
+import com.project.LimeRMS.dto.ContentDtlDto;
 import com.project.LimeRMS.dto.ContentInfoDto;
 import com.project.LimeRMS.entity.Content;
+import com.project.LimeRMS.mapper.BoardMapper;
 import com.project.LimeRMS.mapper.ContentMapper;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +19,9 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ContentService {
     private final ContentMapper contentMapper;
+    private final BoardMapper boardMapper;
+    private final UserService userService;
+
     public List<ContentInfoDto> getContentsByBoardId(String boardId) {
         List<Content> contentList = contentMapper.findContentsByBoardId(boardId);
         List<ContentInfoDto> contentInfoDtoList = new ArrayList<>();
@@ -37,5 +46,31 @@ public class ContentService {
         }
 
         return  contentInfoDtoList;
+    }
+
+    public String getContentDtail(String userId, Integer contentId) {
+        // 1. userId로 사용자 권한 조회
+        Integer userAuthPriority = userService.getUserAuthPriority(userId);
+        // 2. 사용자 권한으로 해당 보드 조회 권한이 있는지 확인
+        // 컨텐츠 권한 확인
+        BoardListDto boardDto = boardMapper.findViewAuthByContentId(contentId);
+        if (userAuthPriority >= boardDto.getViewAuth()) {
+            return "";
+        }
+        // 3. 보드속성 테이블에서 조회 대상 컬럼 확인
+        List<ContentAttrDto> contentAttrList = contentMapper.findContentAttrByBoardId(boardDto.getBoardId());
+        List<String> pysicalAttrList = new ArrayList<>();
+        List<String> logicalAttrList = new ArrayList<>();
+        for (ContentAttrDto attr : contentAttrList) {
+            pysicalAttrList.add(attr.getPhysicalAttr());
+            logicalAttrList.add(attr.getLogicalAttr());
+        }
+        // 4. 조회 대상 컬럼까지 cotent table에서 컨텐츠 상세 조회
+        ContentDtlDto contentDtlDto = contentMapper.findOneByContentId(contentId);
+        Map<String, String> freeFieldLabel = new HashMap<>();
+        Map<String, String> freeFieldValue = new HashMap<>();
+
+
+
     }
 }
