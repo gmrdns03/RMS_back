@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.util.*;
+import org.springframework.util.StringUtils;
 
 @Component
 @RequiredArgsConstructor
@@ -74,8 +75,13 @@ public class JwtProvider {
 
     // Request의 Header의 token 값 "AccessToken" : "tokenValue"
     public String resolveToken(HttpServletRequest request) {
-//        System.out.println("request: " + request);
-        return request.getHeader("AccessToken");
+        String bearerToken = request.getHeader("AccessToken");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.split(" ")[1].trim();
+        } else {
+            return  bearerToken;
+        }
+//
     }
 
     // 토큰의 유효성 확인

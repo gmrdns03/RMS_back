@@ -10,6 +10,7 @@ import com.project.LimeRMS.service.ProfileService;
 import com.project.LimeRMS.service.RentalService;
 import com.project.LimeRMS.service.ReservationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -51,7 +52,7 @@ public class ProfileController {
     @GetMapping(value = "/user")
     @Operation(summary = "사용자 회원정보 상세조회")
     public ResponseEntity<?> getUserProfileDtl(
-        @RequestHeader("AccessToken") String token
+        @Parameter(hidden = true) @RequestHeader("AccessToken") String token
     ) {
         Map<String, Object> resMap = new HashMap<>();
         String userId = jwtProvider.getUserPk(token);
@@ -63,7 +64,7 @@ public class ProfileController {
     @PostMapping(value = "/user/save-pwd")
     @Operation(summary = "사용자 비밀번호 변경 저장")
     public ResponseEntity<?> saveUserPassword(
-        @RequestHeader("AccessToken") String token,
+        @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
         @RequestBody Map<String, String> map
     ) {
         Map<String, Object> resMap = new HashMap<>();
@@ -87,7 +88,7 @@ public class ProfileController {
     @Operation(summary = "사용자 프로필 이미지 등록")
     public ResponseEntity<?> saveProfileImg(
         @RequestPart (value = "file") MultipartFile multipartFile,
-        @RequestHeader("AccessToken") String token
+        @Parameter(hidden = true) @RequestHeader("AccessToken") String token
     ) throws IOException {
         Map<String, Object> resMap = new HashMap<String, Object>();
         try {
@@ -107,7 +108,8 @@ public class ProfileController {
 
     @GetMapping(value = "/user/img")
     @Operation(summary = "사용자 프로필 이미지 가져오기")
-    public ResponseEntity<?> getProfileImg(@RequestHeader("AccessToken") String token) {
+    public ResponseEntity<?> getProfileImg(
+        @Parameter(hidden = true) @RequestHeader("AccessToken") String token) {
         Map<String, Object> resMap = new HashMap<>();
         try {
             // 토큰에서 userId 추출
