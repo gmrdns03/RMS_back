@@ -5,4 +5,10 @@
     INSERT INTO `Like` (likeUserId, contentId)
     VALUES (#{likeUserId},#{contentId})
   </insert>
+
+  <update id="unLike">
+    UPDATE `Like`
+    SET likeUserId=#{likeUserId}, contentId=#{contentId}, delYn ='Y', modfUserId=#{likeUserId}
+    WHERE likeUserId=#{likeUserId} AND contentId=#{contentId}
+  </update>
 </mapper>

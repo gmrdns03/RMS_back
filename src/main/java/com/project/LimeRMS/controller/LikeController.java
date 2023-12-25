@@ -1,5 +1,6 @@
 package com.project.LimeRMS.controller;
 
+
 import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.LikeService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,9 +10,12 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "LikeController", description = "LikeController API")
@@ -47,5 +51,30 @@ public class LikeController {
 
         }
     }
+
+    @PutMapping ("/likes/delete")
+    @Operation(
+        summary = "좋아요 취소",
+        description = "컨텐츠 좋아요 취소",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                examples = @ExampleObject(value = "{\"contentId\":1}"))))
+    public ResponseEntity<?>cancelLikes(@RequestHeader("AccessToken") String token ,@RequestBody Map<String, Integer> content) {
+        Map<String, Object> resMap = new HashMap<>();
+        String likeUserId = jwtProvider.getUserPk(token);
+        try {
+            String message = likeService.cancelLikes(likeUserId,content);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+
+        }
+    }
+
+
 
 }
