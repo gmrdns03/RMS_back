@@ -2,9 +2,11 @@ package com.project.LimeRMS.mapper;
 
 import com.project.LimeRMS.dto.OverdueContentListDto;
 import com.project.LimeRMS.dto.RentalListDto;
+import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface RentalMapper {
@@ -15,4 +17,8 @@ public interface RentalMapper {
     List<OverdueContentListDto> findOverdueRentalByUserId(String userId);
 
     String findLatestStatByContentId(Integer contentId);
+
+    void rentalContentByContentId(@Param("rentalMap")Map<String, Object> rentalMap);
+
+    Integer findUserRentalCntByUserId(@Param("userId") String userId);
 }

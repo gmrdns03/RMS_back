@@ -22,4 +22,7 @@ public class BoardListDto {
     private Integer writeAuth;
     private Integer commentAuth;
     private Integer modifyAuth;
+    private Integer rentalPeriod;
+    private Integer extensionLimit;
+    private Integer rentalLimit;
 }

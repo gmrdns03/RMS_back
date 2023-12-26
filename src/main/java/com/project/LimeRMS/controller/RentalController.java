@@ -1,14 +1,17 @@
 package com.project.LimeRMS.controller;
 
 import com.project.LimeRMS.dto.BoardPriorityDto;
+import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.RentalService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -20,8 +23,29 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/rentals")
 public class RentalController {
-
+    private final JwtProvider jwtProvider;
     private final RentalService rentalService;
+
+    @PostMapping
+    @Operation(summary = "컨텐츠 대여")
+    public ResponseEntity<?> rental(
+        @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
+        @RequestBody Map<String, String> body
+    ) {
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String userId = jwtProvider.getUserPk(token);
+            Integer contentId = Integer.valueOf(body.get("contentId"));
+            rentalService.rental(userId, contentId);
+            resMap.put("res", true);
+            resMap.put("msg", "대여가 완료되었습니다.");
+            return ResponseEntity.accepted().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
 
     @PutMapping("/update")
     @Operation(
