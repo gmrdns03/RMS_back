@@ -60,7 +60,7 @@ public class LikeController {
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
             content = @io.swagger.v3.oas.annotations.media.Content(
                 examples = @ExampleObject(value = "{\"contentId\":1}"))))
-    public ResponseEntity<?>cancelLikes(@RequestHeader("AccessToken") String token ,@RequestBody Map<String, Integer> content) {
+    public ResponseEntity<?>cancelLikes(@Parameter(hidden = true) @RequestHeader("AccessToken") String token ,@RequestBody Map<String, Integer> content) {
         Map<String, Object> resMap = new HashMap<>();
         String likeUserId = jwtProvider.getUserPk(token);
         try {
