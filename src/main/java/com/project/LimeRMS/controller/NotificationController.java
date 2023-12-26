@@ -39,7 +39,7 @@ public class NotificationController {
             String userId = jwtProvider.getUserPk(token);
             List<NotiDto> notiDtoList = notificationService.getAllNotification(userId);
             resMap.put("res", true);
-            resMap.put("msg", notiDtoList);
+            resMap.put("notiList", notiDtoList);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
