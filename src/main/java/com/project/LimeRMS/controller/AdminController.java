@@ -169,7 +169,7 @@ public class AdminController {
         }
     }
 
-    @PostMapping("/boards/overdues")
+    @GetMapping("/overdues")
     @Operation(
             summary = "컨텐츠 연체자 정보 조회",
             description = "관리자는 연체된 컨텐츠의 정보를 확인할 수 있다")

@@ -41,7 +41,7 @@ public class SecurityConfig {
             .formLogin(formLogin -> formLogin.disable())
             .httpBasic(basic -> basic.disable())
             .authorizeHttpRequests((authorize) -> authorize
-                .requestMatchers("/testTest").hasRole("슈퍼_관리자")
+                .requestMatchers("/test").hasRole("슈퍼_관리자")
                 .requestMatchers(allowedUrls).permitAll()
                 .anyRequest().permitAll()) //수정 필요
             .exceptionHandling(exception -> exception

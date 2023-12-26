@@ -2,6 +2,8 @@ package com.project.LimeRMS.mapper;
 
 import com.project.LimeRMS.dto.NotiDto;
 import java.util.List;
+
+import com.project.LimeRMS.entity.Notification;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -12,5 +14,7 @@ public interface NotificationMapper {
 
     List<NotiDto> findNotificationByUserId(String userId);
 
-    void insertOverdueNoti(Integer contentId, Integer receiverId, Integer regUserId, String notiType, @Param("notiContent")String notiContent);
+    void insertOverdueNoti(@Param("contentId")Integer contentId, @Param("receiverId")Integer receiverId, @Param("regUserId")Integer regUserId, @Param("notiType")String notiType, @Param("notiContent")String notiContent);
+
+    Notification findNotiByContentId(@Param("contentId")Integer contentId, @Param("notiType")String notiType, @Param("receiverId")Integer receiverId);
 }

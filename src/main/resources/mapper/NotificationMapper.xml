@@ -16,8 +16,13 @@
   </select>
 
   <select id="findNotiByContentId">
-    SELECT * FROM Notification
-    WHERE contentId = #{contentId} AND DAYOFWEEK(#{joinDt}) = DAYOFWEEK(CURDATE());
+    SELECT *
+    FROM Notification
+    WHERE contentId = #{contentId}
+    AND notiType = #{notiType}
+    AND receiverId = #{receiverId}
+    ORDER BY joinDt DESC
+    LIMIT 1;
   </select>
 
   <insert id="insertOverdueNoti">
