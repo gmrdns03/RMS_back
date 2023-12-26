@@ -87,10 +87,8 @@ public class AdminService {
     public String deleteUserProfile(Integer managerId, Map<String, Integer> member){
         Integer userId = member.get("userId");
         String profileImg = userMapper.findProfileImgByUserId(userId);
-        if (profileImg == null) {
-            profileImg = "";
-        }
         File file = new File(profileImg);
+        profileImg = "";
         if (file.exists()) {
             file.delete();
             userMapper.updateProfileImgByManagerId(managerId, userId, profileImg);
