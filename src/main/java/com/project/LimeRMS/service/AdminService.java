@@ -30,7 +30,7 @@ public class AdminService {
     private final CommCdMapper commCdMapper;
 
     //모든 회원의 정보 불러오기
-    public List<UserInfoDto> getUserInformation() {
+    public List<UserInfoDto> getAllUserInformation() {
 
         List<UserInfoDto> userInfoDtoList = new ArrayList<>();
         List<User> users = userMapper.findAllUser();
