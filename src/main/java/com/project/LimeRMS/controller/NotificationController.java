@@ -4,6 +4,7 @@ import com.project.LimeRMS.dto.NotiDto;
 import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class NotificationController {
     @Operation(
         summary = "특정 사용자의 알림 불러오기",
         description = "사용자가 읽은 알림을 미확인 -> 확인 상태로 변경한다.")
-    public ResponseEntity<?> getAllNotification(@RequestHeader("AccessToken")String token){
+    public ResponseEntity<?> getAllNotification(@Parameter(hidden = true) @RequestHeader("AccessToken")String token){
         Map<String, Object> resMap = new HashMap<>();
         try {
             String userId = jwtProvider.getUserPk(token);
@@ -91,7 +92,7 @@ public class NotificationController {
     @Operation(
         summary = "연체된 컨텐츠 알림 목록에 추가 (매일)",
         description = "연체된 컨테츠를 반납하도록 사용자에게 안내하는 알림을 목록에 추가한다.")
-    public ResponseEntity<?> addOverdueNotification(@RequestHeader("AccessToken")String token){
+    public ResponseEntity<?> addOverdueNotification(@Parameter(hidden = true) @RequestHeader("AccessToken")String token){
         Map<String, Object> resMap = new HashMap<>();
         try {
             String userId = jwtProvider.getUserPk(token);

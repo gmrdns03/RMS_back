@@ -8,6 +8,7 @@ import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -52,7 +53,7 @@ public class AdminController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
                             examples = @ExampleObject(value = "{\"userEmail\":\"test1@euclidsoft.co.kr\",\"userNm\":\"김00\",\"phoneNumber\":\"01022223333\",\"authId\":\"9\"}"))))
-    public ResponseEntity<?> addUser(@RequestHeader("AccessToken") String token, @RequestBody Map<String, String> signupInfo) {
+    public ResponseEntity<?> addUser(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, String> signupInfo) {
         String managerId = jwtProvider.getUserPk(token);
         Map<String, Object> resMap = new HashMap<>();
         try {
@@ -74,7 +75,7 @@ public class AdminController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
                             examples = @ExampleObject(value = "{\"userId\":\"10\",\"userNm\":\"김00\",\"authId\":\"4\",\"userStat\":\"CD006003\",\"phoneNumber\":\"01077778888\"}"))))
-    public ResponseEntity<?> updateUserProfile(@RequestHeader("AccessToken") String token, @RequestBody Map<String, String> member){
+    public ResponseEntity<?> updateUserProfile(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, String> member){
         String managerId = jwtProvider.getUserPk(token);
         Map<String, Object> resMap = new HashMap<>();
         try {
@@ -96,7 +97,7 @@ public class AdminController {
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
             content = @io.swagger.v3.oas.annotations.media.Content(
                 examples = @ExampleObject(value = "{\"userId\":10}"))))
-    public ResponseEntity<?> deleteUserProfile(@RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
+    public ResponseEntity<?> deleteUserProfile(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
         Integer managerId = Integer.valueOf(jwtProvider.getUserPk(token));
         Map<String, Object> resMap = new HashMap<>();
         try {
@@ -118,7 +119,7 @@ public class AdminController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
                             examples = @ExampleObject(value = "{\"userId\":10}"))))
-    public ResponseEntity<?> resetUserPw(@RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
+    public ResponseEntity<?> resetUserPw(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
         String managerId = jwtProvider.getUserPk(token);
         Map<String, Object> resMap = new HashMap<>();
         try {
@@ -191,7 +192,7 @@ public class AdminController {
     @Operation(
         summary = "보드 우선순위 변경",
         description = "관리자는 보드의 우선순위를 변경할 수 있다")
-    public ResponseEntity<?> changeBoardPriorities(@RequestHeader("AccessToken") String token, @RequestBody List<BoardPriorityDto> boardPriorityDtoList){
+    public ResponseEntity<?> changeBoardPriorities(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody List<BoardPriorityDto> boardPriorityDtoList){
         String managerId = jwtProvider.getUserPk(token);
         Map<String, Object> resMap = new HashMap<>();
         try {
