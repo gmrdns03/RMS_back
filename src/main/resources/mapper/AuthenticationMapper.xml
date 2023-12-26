@@ -13,7 +13,7 @@
     FROM (
       SELECT u.authId as authId
       FROM `User` u
-      WHERE u.userId = #{userId}) us
+      WHERE u.userId = ${userId}) us
     LEFT JOIN Authentication a ON a.authId = us.authId
   </select>
 </mapper>

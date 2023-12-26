@@ -7,7 +7,18 @@
     LEFT JOIN ContentCategory cc ON ct.cateId = cc.cateId
     WHERE ct.boardId = #{boardId}
   </select>
-  
+
+  <select id="findOneByContentId" resultMap="ContentList">
+    SELECT *
+    FROM (
+      SELECT *
+      FROM Content
+      WHERE contentId = ${contentId}
+      ) c
+    LEFT JOIN ContentCategory cc ON cc.cateId = c.cateId
+    LEFT JOIN Board b ON b.boardId = c.boardId
+  </select>
+
   <resultMap id="ContentList" type="com.project.LimeRMS.entity.Content">
     <id property="contentId" column="contentId" />
     <result property="cateId" column="contentCategory" />
@@ -16,13 +27,39 @@
     <result property="noticeYn" column="noticeYn" />
     <result property="secretYn" column="secretYn" />
     <result property="location" column="location" />
+    <result property="rentalMessage" column="rentalMessage" />
     <result property="regDt" column="regDt" />
     <result property="regUserId" column="regUserId" />
     <result property="modfDt" column="modfDt" />
     <result property="modfUserId" column="modfUserId" />
+    <result property="text1" column="text1" />
+    <result property="text2" column="text2" />
+    <result property="text3" column="text3" />
+    <result property="text4" column="text4" />
+    <result property="text5" column="text5" />
+    <result property="integer1" column="integer1" />
+    <result property="integer2" column="integer2" />
+    <result property="integer3" column="integer3" />
+    <result property="integer4" column="integer4" />
+    <result property="integer5" column="integer5" />
+    <result property="date1" column="date1" />
+    <result property="date2" column="date2" />
+    <result property="date3" column="date3" />
+    <result property="date4" column="date4" />
+    <result property="date5" column="date5" />
+    <result property="bool1" column="bool1" />
+    <result property="bool2" column="bool2" />
+    <result property="bool3" column="bool3" />
+    <result property="bool4" column="bool4" />
+    <result property="bool5" column="bool5" />
+    <result property="float1" column="float1" />
+    <result property="float2" column="float2" />
     <association property="contentCategory" javaType="com.project.LimeRMS.entity.ContentCategory">
       <id property="cateId" column="cateId" />
       <result property="cateNm" column="cateNm" />
+    </association>
+    <association property="board" javaType="com.project.LimeRMS.entity.Board">
+      <id property="boardId" column="boardId" />
     </association>
   </resultMap>
 
@@ -31,4 +68,6 @@
     FROM ContentAttr ca
     WHERE ca.boardId = ${boardId};
   </select>
+
+
 </mapper>

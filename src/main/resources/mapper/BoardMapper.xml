@@ -51,7 +51,7 @@
     WHERE boardId = #{boardId}
   </update>
 
-  <select id="findOneByContentId" resultType="com.project.LimeRMS.dto.BoardListDto">
+  <select id="findViewAuthByContentId" resultType="com.project.LimeRMS.dto.BoardListDto">
     SELECT
       b.boardId,
       b.boardNm,

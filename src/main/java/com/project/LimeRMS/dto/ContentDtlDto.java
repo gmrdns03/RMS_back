@@ -19,9 +19,7 @@ public class ContentDtlDto {
     private Integer boardId;
     private String contentNm;
     private String contentDesc;
-    private String contentImg;
     private String contentHtml;
-    private String delYn;
     private String noticeYn;
     private String secretYn;
     private String location;
@@ -30,4 +28,14 @@ public class ContentDtlDto {
     private Integer regUserId;
     private String modfDt;
     private Integer modfUserId;
+
+    // 컨텐츠 대여 상태
+    private String rentalStat;
+    private String rentalStatNm;
+
+    // 컨텐츠 예약 상태
+    private String reservedYn;
+
+    // 컨텐츠 좋아요 개수
+    private Integer likeCnt;
 }
