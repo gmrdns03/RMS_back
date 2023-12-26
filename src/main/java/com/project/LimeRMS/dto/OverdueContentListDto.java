@@ -27,7 +27,7 @@ public class OverdueContentListDto {
 
     private LocalDateTime rentalDt;
 
-    private LocalDateTime returnDt; //나중에 plannedReturnDt로 수정
+    private LocalDateTime predReturnDt;
 
     private String rentalStat;
 }

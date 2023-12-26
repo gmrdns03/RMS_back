@@ -5,13 +5,29 @@
 <mapper namespace="com.project.LimeRMS.mapper.NotificationMapper">
   <update id="updateNotiStatusByNotiId">
     UPDATE Notification
-    SET notiStatus = 'CD005002'
+    SET notiStatus = 'CD005002',
     WHERE notiId = #{notiId}
   </update>
 
   <select id="findNotificationByUserId">
     SELECT notiContent, joinDt
     FROM Notification
-    WHERE receiverId = #{userId}
+    WHERE receiverId = #{userId} AND notiStatus = 'CD005001'
   </select>
+
+  <select id="findNotiByContentId">
+    SELECT *
+    FROM Notification
+    WHERE contentId = #{contentId}
+    AND notiType = #{notiType}
+    AND receiverId = #{receiverId}
+    ORDER BY joinDt DESC
+    LIMIT 1;
+  </select>
+
+  <insert id="insertOverdueNoti">
+    INSERT INTO Notification (contentId, receiverId, regUserId, notiType, notiContent)
+    VALUES (#{contentId}, #{receiverId}, #{regUserId}, #{notiType}, #{notiContent});
+  </insert>
+
 </mapper>
