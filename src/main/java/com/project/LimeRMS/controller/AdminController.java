@@ -1,12 +1,10 @@
 package com.project.LimeRMS.controller;
 
-import com.project.LimeRMS.dto.AuthListDto;
-import com.project.LimeRMS.dto.BoardInfoDto;
-import com.project.LimeRMS.dto.BoardPriorityDto;
-import com.project.LimeRMS.dto.OverdueContentListDto;
-import com.project.LimeRMS.dto.UserInfoDto;
+import com.project.LimeRMS.dto.*;
 import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.AdminService;
+import com.project.LimeRMS.service.ProfileService;
+import com.project.LimeRMS.service.RentalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -26,16 +24,42 @@ import java.util.Map;
 public class AdminController {
 
     private final AdminService adminService;
+    private final RentalService rentalService;
+    private final ProfileService profileService;
     private final JwtProvider jwtProvider;
+
+    @PostMapping("/user-detail")
+    @Operation(
+            summary = "특정 회원 조회",
+            description = "관리자는 특정 회원의 정보를 조회할 수 있다",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            examples = @ExampleObject(value = "{\"userId\":\"10\"}"))))
+    public ResponseEntity<?> getUserInformation(@RequestBody Map<String, String> member){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String userId = member.get("userId");
+            UserInfoDto userInfo = profileService.getUserProfileDtl(userId);
+            resMap.put("res", true);
+            resMap.put("userInfo", userInfo);
+            List<RentalListDto> rentalList =  rentalService.getRentalList(userId);
+            resMap.put("rentalList", rentalList);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
 
     @GetMapping("/users")
     @Operation(
             summary = "모든 회원 조회",
             description = "관리자는 모든 회원의 정보를 조회할 수 있다.")
-    public ResponseEntity<?> getUserInformation(){
+    public ResponseEntity<?> getAllUserInformation(){
         Map<String, Object> resMap = new HashMap<>();
         try {
-            List<UserInfoDto> userInfoDtoList = adminService.getUserInformation();
+            List<UserInfoDto> userInfoDtoList = adminService.getAllUserInformation();
             resMap.put("res", true);
             resMap.put("userList", userInfoDtoList);
             return ResponseEntity.ok().body(resMap);
