@@ -10,4 +10,6 @@ public interface LikeMapper {
     void likeContent(@Param("likeUserId")Integer likeUserId,@Param("contentId")Integer contentId);
     List<LikeListDto> findLikeListByUserId(String userId);
 
+    Integer countLikeByContentId(@Param("contentId") Integer contentId);
+
 }

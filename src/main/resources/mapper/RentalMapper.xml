@@ -50,4 +50,13 @@
         LEFT JOIN Content c ON r.contentId = c.contentId
         WHERE rentalStat = 'CD001003' AND rentalUserId = #{userId}
     </select>
+
+    <select id="findLatestStatByContentId">
+        SELECT
+            rentalStat
+        FROM Rental
+        WHERE contentId = ${contentId}
+        ORDER BY modfDt DESC
+        LIMIT 1
+    </select>
 </mapper>

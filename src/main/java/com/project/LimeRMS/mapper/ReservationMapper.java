@@ -9,4 +9,6 @@ import org.apache.ibatis.annotations.Param;
 public interface ReservationMapper {
     List<ReservationListDto> findReservationListByUserId(@Param("userId") String userId);
 
+    String findReserveYnByContentId(@Param("contentId") Integer contentId);
+
 }

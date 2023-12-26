@@ -13,4 +13,6 @@ public interface RentalMapper {
     List<RentalListDto> findRentalListByUserId(String userId);
 
     List<OverdueContentListDto> findOverdueRentalByUserId(String userId);
+
+    String findLatestStatByContentId(Integer contentId);
 }

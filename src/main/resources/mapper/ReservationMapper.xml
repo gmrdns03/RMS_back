@@ -23,4 +23,13 @@
     LEFT JOIN Rental r ON r.contentId = c.contentId
     Order by regDt desc;
   </select>
+
+  <select id="findReserveYnByContentId">
+    SELECT
+      delYn
+    FROM Reservation
+    WHERE contentId = ${contentId}
+    ORDER BY modfDt DESC
+    LIMIT 1
+  </select>
 </mapper>

@@ -29,4 +29,8 @@
     LEFT JOIN Rental r ON r.contentId = c.contentId
     ORDER BY regDt DESC
   </select>
+
+  <select id="countLikeByContentId">
+    SELECT COUNT(*) FROM `Like` l WHERE l.contentId = ${contentId}
+  </select>
 </mapper>
