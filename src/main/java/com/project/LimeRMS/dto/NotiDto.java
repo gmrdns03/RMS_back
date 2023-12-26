@@ -11,7 +11,9 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class JwtResponseDto {
+public class NotiDto {
 
-    private String accessToken;
+    private String notiContent;
+    private String joinDt;
+
 }

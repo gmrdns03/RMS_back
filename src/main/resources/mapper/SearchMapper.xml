@@ -1,0 +1,91 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.LimeRMS.mapper.SearchMapper">
+  <select id="findAllByKeyword" resultType="com.project.LimeRMS.dto.SearchResListDto">
+    SELECT
+      cb.contentId as contentId,
+      cb.contentNm as contentNm,
+      cb.contentDesc as contentDesc,
+      cb.modfDt as modfDt,
+      cb.boardId as boardId,
+      cb.boardNm as boardNm,
+      cb.boardSn as boardSn,
+      cc.cateNm as cateNm,
+      r.rentalStat as rentalStat,
+      rv.delYn as reservYn
+    FROM (
+      SELECT
+        ct.contentId,
+        ct.contentNm,
+        ct.contentDesc,
+        ct.modfDt,
+        ct.cateId,
+        ct.boardId,
+        b.boardNm,
+        b.boardSn
+      FROM (
+        SELECT
+          c.contentId,
+          c.contentNm,
+          c.contentDesc,
+          c.modfDt,
+          c.cateId,
+          c.boardId
+        FROM Content c
+        WHERE
+          (contentNm LIKE CONCAT('%', #{keyword}, '%') or contentDesc LIKE CONCAT('%', #{keyword}, '%'))
+          and c.delYn = 'N'
+          and c.noticeYn = 'N'
+        ) ct
+    LEFT JOIN Board b ON ct.boardId = b.boardId
+    WHERE b.viewAuth >= #{priority} and b.boardStat = 'CD003001' ) cb
+    LEFT JOIN ContentCategory cc ON cc.cateId = cb.cateId
+    LEFT JOIN Rental r ON r.contentId = cb.contentId
+    LEFT JOIN Reservation rv ON rv.contentId = cb.contentId
+  </select>
+  <select id="findAllBykeywordBoardId" resultType="com.project.LimeRMS.dto.SearchResListDto">
+    SELECT
+      cb.contentId as contentId,
+      cb.contentNm as contentNm,
+      cb.contentDesc as contentDesc,
+      cb.modfDt as modfDt,
+      cb.boardId as boardId,
+      cb.boardNm as boardNm,
+      cb.boardSn as boardSn,
+      cc.cateNm as cateNm,
+      r.rentalStat as rentalStat,
+      rv.delYn as reservYn
+    FROM (
+      SELECT
+        ct.contentId,
+        ct.contentNm,
+        ct.contentDesc,
+        ct.modfDt,
+        ct.cateId,
+        ct.boardId,
+        b.boardNm,
+        b.boardSn
+      FROM (
+        SELECT
+          c.contentId,
+          c.contentNm,
+          c.contentDesc,
+          c.modfDt,
+          c.cateId,
+          c.boardId
+        FROM Content c
+        WHERE
+        (contentNm LIKE CONCAT('%', #{keyword}, '%') or contentDesc LIKE CONCAT('%', #{keyword}, '%'))
+          and c.delYn = 'N'
+          and c.noticeYn = 'N'
+          and c.boardId = ${boardId}
+          ) ct
+      LEFT JOIN Board b ON ct.boardId = b.boardId
+      WHERE b.viewAuth >= ${priority}
+            and b.boardStat = 'CD003001'
+      ) cb
+    LEFT JOIN ContentCategory cc ON cc.cateId = cb.cateId
+    LEFT JOIN Rental r ON r.contentId = cb.contentId
+    LEFT JOIN Reservation rv ON rv.contentId = cb.contentId
+  </select>
+</mapper>

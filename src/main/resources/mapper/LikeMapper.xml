@@ -11,4 +11,32 @@
     SET  delYn ='Y', modfUserId=#{likeUserId}
     WHERE likeUserId=#{likeUserId} AND contentId=#{contentId}
   </update>
+
+  <select id="findLikeListByUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.dto.LikeListDto">
+    SELECT
+      lk.likeId as likeId,
+      b.boardNm as boardNm,
+      b.boardId as boardId,
+      cc.cateNm as cateNm,
+      c.contentId as contentId,
+      c.contentNm as contentNm,
+      lk.regDt as regDt,
+      r.rentalStat as rentalStat
+    FROM (
+        SELECT
+          l.likeId as likeId,
+          l.contentId as contentId,
+          l.regDt as regDt
+        FROM `Like` l
+        WHERE l.likeUserId = #{userId} and l.delYn = 'N') lk
+    LEFT JOIN Content c ON c.contentId = lk.contentId
+    LEFT JOIN Board b ON b.boardId = c.boardId
+    LEFT JOIN ContentCategory cc ON cc.cateId = c.cateId
+    LEFT JOIN Rental r ON r.contentId = c.contentId
+    ORDER BY regDt DESC
+  </select>
+
+  <select id="countLikeByContentId">
+    SELECT COUNT(*) FROM `Like` l WHERE l.contentId = ${contentId}
+  </select>
 </mapper>

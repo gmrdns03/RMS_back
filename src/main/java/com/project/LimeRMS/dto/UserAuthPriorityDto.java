@@ -11,17 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardInfoDto {
-
-    private Integer boardId;
-
-    private String boardNm;
-
-    private String regDt;
-
-    private String contentNum;
-
-    private String boardStat;
-
-    private Integer boardSn;
+public class UserAuthPriorityDto {
+    private Integer priority;
 }

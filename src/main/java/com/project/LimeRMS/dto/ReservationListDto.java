@@ -11,17 +11,14 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardInfoDto {
-
-    private Integer boardId;
-
+public class ReservationListDto {
+    private Integer reserveId;
     private String boardNm;
-
+    private Integer boardId;
+    private String cateNm;
+    private Integer contentId;
+    private String contentNm;
     private String regDt;
-
-    private String contentNum;
-
-    private String boardStat;
-
-    private Integer boardSn;
+    private String rentalStat;
+    private String rentalStatNm;
 }

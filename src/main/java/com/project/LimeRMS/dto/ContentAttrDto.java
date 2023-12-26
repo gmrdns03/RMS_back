@@ -11,17 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class BoardInfoDto {
+public class ContentAttrDto {
+    private String logicalAttr;
+    private String physicalAttr;
+    private String mustYn;
+    private String attrOrder;
 
-    private Integer boardId;
-
-    private String boardNm;
-
-    private String regDt;
-
-    private String contentNum;
-
-    private String boardStat;
-
-    private Integer boardSn;
 }

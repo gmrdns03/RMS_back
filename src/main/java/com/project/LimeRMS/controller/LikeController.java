@@ -4,6 +4,7 @@ package com.project.LimeRMS.controller;
 import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.LikeService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.HashMap;
@@ -34,7 +35,7 @@ public class LikeController {
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
             content = @io.swagger.v3.oas.annotations.media.Content(
                 examples = @ExampleObject(value = "{\"contentId\":1}"))))
-    public ResponseEntity<?> likes(@RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> content) {
+    public ResponseEntity<?> likes(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> content) {
         Map<String, Object> resMap = new HashMap<>();
         String likeUserId = jwtProvider.getUserPk(token);
 

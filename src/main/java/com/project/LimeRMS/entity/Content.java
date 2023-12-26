@@ -10,12 +10,11 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 import org.hibernate.annotations.UpdateTimestamp;
 
 @Getter
@@ -144,4 +143,54 @@ public class Content {
 
     @Column
     private Double float2;
+
+    public String getFreeField(String fieldNm) {
+        if (Objects.equals(fieldNm, "text1")) {
+            return this.text1;
+        }  else if (Objects.equals(fieldNm, "text2")) {
+            return this.text2;
+        } else if (Objects.equals(fieldNm, "text3")) {
+            return this.text3;
+        } else if (Objects.equals(fieldNm, "text4")) {
+            return this.text4;
+        } else if (Objects.equals(fieldNm, "text5")) {
+            return this.text5;
+        } else if (Objects.equals(fieldNm, "integer1")) {
+            return String.valueOf(this.integer1);
+        } else if (Objects.equals(fieldNm, "integer2")) {
+            return String.valueOf(this.integer2);
+        } else if (Objects.equals(fieldNm, "integer3")) {
+            return String.valueOf(this.integer3);
+        } else if (Objects.equals(fieldNm, "integer4")) {
+            return String.valueOf(this.integer4);
+        } else if (Objects.equals(fieldNm, "integer5")) {
+            return String.valueOf(this.integer5);
+        } else if (Objects.equals(fieldNm, "date1")) {
+            return String.valueOf(this.date1);
+        } else if (Objects.equals(fieldNm, "date2")) {
+            return String.valueOf(this.date2);
+        } else if (Objects.equals(fieldNm, "date3")) {
+            return String.valueOf(this.date3);
+        } else if (Objects.equals(fieldNm, "date4")) {
+            return String.valueOf(this.date4);
+        } else if (Objects.equals(fieldNm, "date5")) {
+            return String.valueOf(this.date5);
+        } else if (Objects.equals(fieldNm, "bool1")) {
+            return String.valueOf(this.bool1);
+        } else if (Objects.equals(fieldNm, "bool2")) {
+            return String.valueOf(this.bool2);
+        } else if (Objects.equals(fieldNm, "bool3")) {
+            return String.valueOf(this.bool3);
+        } else if (Objects.equals(fieldNm, "bool4")) {
+            return String.valueOf(this.bool4);
+        } else if (Objects.equals(fieldNm, "bool5")) {
+            return String.valueOf(this.bool5);
+        } else if (Objects.equals(fieldNm, "float1")) {
+            return String.valueOf(this.float1);
+        } else if (Objects.equals(fieldNm, "float2")) {
+            return String.valueOf(this.float2);
+        } else {
+            return null;
+        }
+    }
 }

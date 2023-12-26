@@ -6,28 +6,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-
 @Builder
 @Data
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class OverdueContentListDto {
-
+public class RentalListDto {
     private Integer rentalId;
-
-    private Integer userId;
-
-    private String userNm;
-
+    private String boardNm;
+    private Integer boardId;
+    private String cateNm;
     private Integer contentId;
-
     private String contentNm;
-
-    private LocalDateTime rentalDt;
-
-    private LocalDateTime predReturnDt;
-
+    private String rentalDt;
+    private String predReturnDt;
+    private String returnDt;
     private String rentalStat;
+    private String rentalStatNm;
 }

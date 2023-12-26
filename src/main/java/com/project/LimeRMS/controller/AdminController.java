@@ -2,11 +2,13 @@ package com.project.LimeRMS.controller;
 
 import com.project.LimeRMS.dto.AuthListDto;
 import com.project.LimeRMS.dto.BoardInfoDto;
+import com.project.LimeRMS.dto.BoardPriorityDto;
 import com.project.LimeRMS.dto.OverdueContentListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.AdminService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -30,8 +32,18 @@ public class AdminController {
     @Operation(
             summary = "모든 회원 조회",
             description = "관리자는 모든 회원의 정보를 조회할 수 있다.")
-    public List<UserInfoDto> getUserInformation(){
-        return adminService.getUserInformation();
+    public ResponseEntity<?> getUserInformation(){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            List<UserInfoDto> userInfoDtoList = adminService.getUserInformation();
+            resMap.put("res", true);
+            resMap.put("userList", userInfoDtoList);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
     @PostMapping("/users/add")
@@ -41,12 +53,19 @@ public class AdminController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
                             examples = @ExampleObject(value = "{\"userEmail\":\"test1@euclidsoft.co.kr\",\"userNm\":\"김00\",\"phoneNumber\":\"01022223333\",\"authId\":\"9\"}"))))
-    public ResponseEntity<?> addUser(@RequestHeader("AccessToken") String token, @RequestBody Map<String, String> signupInfo) {
+    public ResponseEntity<?> addUser(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, String> signupInfo) {
         String managerId = jwtProvider.getUserPk(token);
-        Map<String, Object> resMap = adminService.addUser(managerId, signupInfo);
-        return ResponseEntity
-                .ok()
-                .body(resMap);
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String message = adminService.addUser(managerId, signupInfo);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
     @PostMapping("/users/modify")
@@ -56,48 +75,102 @@ public class AdminController {
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
                             examples = @ExampleObject(value = "{\"userId\":\"10\",\"userNm\":\"김00\",\"authId\":\"4\",\"userStat\":\"CD006003\",\"phoneNumber\":\"01077778888\"}"))))
-    public ResponseEntity<?> updateUserProfile(@RequestHeader("AccessToken") String token, @RequestBody Map<String, String> member){
+    public ResponseEntity<?> updateUserProfile(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, String> member){
         String managerId = jwtProvider.getUserPk(token);
-        Map<String, Object> resMap = adminService.updateUserProfile(managerId, member);
-
-        return ResponseEntity
-                .ok()
-                .body(resMap);
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String message = adminService.updateUserProfile(managerId, member);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
-    @DeleteMapping("/users/reset-pw")
+    @PostMapping("/users/delete-profile")
+    @Operation(
+        summary = "회원 프로필 이미지 삭제",
+        description = "관리자는 회원의 프로파일 이미지를 삭제할 수 있다.",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                examples = @ExampleObject(value = "{\"userId\":10}"))))
+    public ResponseEntity<?> deleteUserProfile(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
+        Integer managerId = Integer.valueOf(jwtProvider.getUserPk(token));
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String message = adminService.deleteUserProfile(managerId, member);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
+
+    @PostMapping("/users/reset-pw")
     @Operation(
             summary = "회원 비밀번호 초기화",
             description = "관리자는 회원의 비밀번호를 초기화할 수 있다.",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
                             examples = @ExampleObject(value = "{\"userId\":10}"))))
-    public ResponseEntity<?> resetUserPw(@RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
+    public ResponseEntity<?> resetUserPw(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
         String managerId = jwtProvider.getUserPk(token);
-        Map<String, Object> resMap = adminService.resetUserPw(managerId, member);
-
-        return ResponseEntity
-                .ok()
-                .body(resMap);
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String message = adminService.resetUserPw(managerId, member);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
     @GetMapping("/auth-list")
     @Operation(
             summary = "모든 권한 종류 조회",
             description = "관리자는 모든 종류의 권한 정보를 조회할 수 있다.")
-    public List<AuthListDto> getAuthenticationList(){
-        return adminService.getAuthenticationList();
+    public ResponseEntity<?> getAuthenticationList(){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            List<AuthListDto> authDtoList = adminService.getAuthenticationList();
+            resMap.put("res", true);
+            resMap.put("authenticationList", authDtoList);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
     @GetMapping("/boards")
     @Operation(
             summary = "모든 보드 정보 불러오기",
             description = "관리자는 모든 보드의 정보를 조회할 수 있다.")
-    public List<BoardInfoDto> getBoardList(){
-        return adminService.getBoardList();
+    public ResponseEntity<?> getBoardList(){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            List<BoardInfoDto> boardInfoDtoList = adminService.getBoardList();
+            resMap.put("res", true);
+            resMap.put("boardList", boardInfoDtoList);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
-    @PostMapping("/boards/overdues")
+    @GetMapping("/overdues")
     @Operation(
             summary = "컨텐츠 연체자 정보 조회",
             description = "관리자는 연체된 컨텐츠의 정보를 확인할 수 있다")
@@ -106,7 +179,7 @@ public class AdminController {
         try {
             List<OverdueContentListDto> overdueContentList = adminService.getOverdueContentList();
             resMap.put("res", true);
-            resMap.put("msg", overdueContentList);
+            resMap.put("overdueContents", overdueContentList);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
@@ -114,4 +187,24 @@ public class AdminController {
             return ResponseEntity.ok().body(resMap);
         }
     }
+
+    @PostMapping("/boards/priorities")
+    @Operation(
+        summary = "보드 우선순위 변경",
+        description = "관리자는 보드의 우선순위를 변경할 수 있다")
+    public ResponseEntity<?> changeBoardPriorities(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody List<BoardPriorityDto> boardPriorityDtoList){
+        String managerId = jwtProvider.getUserPk(token);
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String message = adminService.changeBoardPriorities(managerId, boardPriorityDtoList);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
+
 }

@@ -22,4 +22,8 @@ public interface UserMapper {
     void updatePwByUserId(@Param("userId")Integer userId, @Param("password")String password, @Param("modfUserId")Integer modfUserId);
 
     void updateUserByUserId(@Param("userId")Integer userId, @Param("userNm")String userNm, @Param("authId")Integer authId, @Param("userStat")String userStat, @Param("phoneNumber")String phoneNumber, @Param("modfUserId")Integer modfUserId);
+
+    String findProfileImgByUserId(Integer userId);
+
+    void updateProfileImgByManagerId(@Param("managerId")Integer managerId, @Param("userId")Integer userId, @Param("profileImg")String profileImg);
 }

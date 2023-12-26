@@ -36,6 +36,9 @@ public class Notification {
     private User sender;
 
     @Column
+    private Integer contentId;
+
+    @Column
     private String notiType;
 
     @Column
@@ -57,4 +60,7 @@ public class Notification {
 
     @Column
     private String modfUserId;
+
+    @Column
+    private String regUserId;
 }

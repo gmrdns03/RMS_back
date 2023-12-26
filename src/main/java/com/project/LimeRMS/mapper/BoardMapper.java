@@ -1,6 +1,7 @@
 package com.project.LimeRMS.mapper;
 
 import com.project.LimeRMS.dto.BoardListDto;
+import com.project.LimeRMS.dto.ContentAttrDto;
 import com.project.LimeRMS.entity.Board;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
@@ -9,8 +10,15 @@ import com.project.LimeRMS.dto.BoardInfoDto;
 
 @Mapper
 public interface BoardMapper {
+
     List<BoardInfoDto> findAllBoardInfoList();
-    List<Board> findAllBoardList();
+
+    List<Board> findAllBoardList(@Param("authPriority") Integer authPriority);
+
     Board findOneByBoardId(@Param("boardId") String boardId);
+
+    BoardListDto findViewAuthByContentId(@Param("contentId") Integer contentId);
+
+    void updateBoardSnByBoardId(@Param("boardSn")Integer boardSn, @Param("boardId")Integer boardId, @Param("modfUserId")String modfUserId);
 
 }
