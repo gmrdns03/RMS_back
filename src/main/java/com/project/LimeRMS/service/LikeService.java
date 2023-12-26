@@ -1,7 +1,6 @@
 package com.project.LimeRMS.service;
 
 import com.project.LimeRMS.mapper.LikeMapper;
-import com.project.LimeRMS.security.JwtProvider;
 import java.util.Map;
 import com.project.LimeRMS.dto.LikeListDto;
 import com.project.LimeRMS.mapper.CommCdMapper;
@@ -16,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class LikeService {
+
     private final LikeMapper likeMapper;
     private final CommCdMapper commCdMapper;
 
@@ -25,6 +25,11 @@ public class LikeService {
         likeMapper.likeContent(Integer.valueOf(likeUserId), contentId);
         return "좋아요가 등록되었습니다.";
     }
+
+    public String cancelLikes(String likeUserId, Map<String, Integer> content) {
+        Integer contentId = content.get("contentId");
+        likeMapper.unLike(likeUserId,contentId);
+        return "좋아요가 취소되었습니다.";
 
     public List<LikeListDto> getUserLikeList (String userId) throws Exception {
         List<LikeListDto> likeListDtos = likeMapper.findLikeListByUserId(userId);

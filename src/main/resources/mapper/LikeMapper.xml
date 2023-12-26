@@ -6,6 +6,12 @@
     VALUES (#{likeUserId},#{contentId})
   </insert>
 
+  <update id="unLike">
+    UPDATE `Like`
+    SET  delYn ='Y', modfUserId=#{likeUserId}
+    WHERE likeUserId=#{likeUserId} AND contentId=#{contentId}
+  </update>
+
   <select id="findLikeListByUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.dto.LikeListDto">
     SELECT
       lk.likeId as likeId,
