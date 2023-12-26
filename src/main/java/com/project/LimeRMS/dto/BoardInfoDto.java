@@ -19,7 +19,7 @@ public class BoardInfoDto {
 
     private String regDt;
 
-    private Integer contentNum;
+    private String contentNum;
 
     private String boardStat;
 
