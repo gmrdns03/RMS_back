@@ -61,7 +61,10 @@
       b.viewAuth,
       b.writeAuth,
       b.commentAuth,
-      b.modifyAuth
+      b.modifyAuth,
+      b.rentalPeriod,
+      b.extensionLimit,
+      b.rentalLimit
     FROM Board b
     WHERE b.boardId = (SELECT c.boardId FROM Content c WHERE c.contentId = ${contentId})
   </select>

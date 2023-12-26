@@ -3,6 +3,7 @@ package com.project.LimeRMS.service;
 import com.project.LimeRMS.dto.BoardListDto;
 import com.project.LimeRMS.entity.Board;
 import com.project.LimeRMS.mapper.BoardMapper;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,8 +27,11 @@ public class BoardService {
         Integer writeAuth = board.getWriteAuth();
         Integer commentAuth = board.getCommentAuth();
         Integer modifyAuth = board.getModifyAuth();
+        Integer rentalPeriod = board.getRentalPeriod();
+        Integer extensionLimit = board.getExtensionLimit();
+        Integer rentalLimit = board.getRentalLimit();
         return new BoardListDto(boardId, boardTypeNm, boardNm, boardStat,
-            boardDesc, boardSn, viewAuth, writeAuth, commentAuth, modifyAuth);
+            boardDesc, boardSn, viewAuth, writeAuth, commentAuth, modifyAuth, rentalPeriod, extensionLimit, rentalLimit);
     }
 
     public BoardListDto getBoardInfo(String boardId) {

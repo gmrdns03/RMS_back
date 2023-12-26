@@ -67,7 +67,7 @@ public class ContentService {
         BoardListDto boardDto = boardMapper.findViewAuthByContentId(contentId);
         Integer boardViewAuth = boardDto.getViewAuth();
         if (userAuthPriority >= boardViewAuth) {
-            throw new IllegalAccessException("해당 페이지에 접근 권한이 없습니다.");
+            throw new IllegalAccessException("해당 컨텐츠에 대한 접근 권한이 없습니다.");
         }
         // 3. 보드속성 테이블에서 조회 대상 컬럼 확인
         List<ContentAttrDto> contentAttrList = contentMapper.findContentAttrByBoardId(boardDto.getBoardId());

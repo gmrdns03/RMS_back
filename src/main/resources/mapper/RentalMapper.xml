@@ -59,4 +59,22 @@
         ORDER BY modfDt DESC
         LIMIT 1
     </select>
+
+    <insert id="rentalContentByContentId" parameterType="map">
+        INSERT INTO Rental (rentalUserId, contentId, rentalDt, predReturnDt, rentalStat, regUserId, modfUserId)
+        VALUES (
+            #{rentalMap.userId},
+            #{rentalMap.contentId},
+            #{rentalMap.rentalDt},
+            #{rentalMap.predReturnDt},
+            #{rentalMap.rentalStat},
+            #{rentalMap.regUserId},
+            #{rentalMap.modfUserId}
+        )
+    </insert>
+
+    <select id="findUserRentalCntByUserId">
+        SELECT COUNT(*) FROM Rental r
+        WHERE rentalUserId = ${userId} AND rentalStat NOT IN ('CD001002', 'CD001003')
+    </select>
 </mapper>
