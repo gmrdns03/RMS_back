@@ -11,4 +11,6 @@ public interface RentalMapper {
     List<OverdueContentListDto> findRentalByRentalStat(String rentalStat);
     void updateOverdue();
     List<RentalListDto> findRentalListByUserId(String userId);
+
+    String findLatestStatByContentId(Integer contentId);
 }

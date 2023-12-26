@@ -44,4 +44,13 @@
         WHERE <![CDATA[predReturnDt < NOW()]]>
         AND rentalStat = 'CD001001'
     </update>
+
+    <select id="findLatestStatByContentId">
+        SELECT
+            rentalStat
+        FROM Rental
+        WHERE contentId = ${contentId}
+        ORDER BY modfDt DESC
+        LIMIT 1
+    </select>
 </mapper>
