@@ -90,18 +90,25 @@ public class RentalService {
             String cateNm = dto.getCateNm();
             Integer contentId = dto.getContentId();
             String contentNm = dto.getContentNm();
-            // 날짜 형식 변환
+            // 날짜 형식 변환 대여일
             String rentalDtString = dto.getRentalDt();
-            String predReturnDtString = dto.getPredReturnDt();
-            String returnDtString = dto.getReturnDt();
-
             Date rentalDtDateType = dateParser.parse(rentalDtString);
-            Date predReturnDtDateType = dateParser.parse(predReturnDtString);
-            Date returnDtDateType = dateParser.parse(returnDtString);
-
             String rentalDt = formatter.format(rentalDtDateType);
+
+            // 날짜 형식 변환 반납예정일
+            String predReturnDtString = dto.getPredReturnDt();
+            Date predReturnDtDateType = dateParser.parse(predReturnDtString);
             String predReturnDt = formatter.format(predReturnDtDateType);
-            String returnDt = formatter.format(returnDtDateType);
+
+            // 날짜 형식 변환 반납일
+            String returnDt;
+            if (dto.getReturnDt() == null) {
+                returnDt = null;
+            } else {
+                String returnDtString = dto.getReturnDt();
+                Date returnDtDateType = dateParser.parse(returnDtString);
+                returnDt = formatter.format(returnDtDateType);
+            }
 
             // rentalStat이 비어 있을 경우 디폴트 값 셋팅
             String rentalStat = dto.getRentalStat();
