@@ -64,7 +64,7 @@ public class ContentService {
         Integer userAuthPriority = userService.getUserAuthPriority(userId);
         // 2. 사용자 권한으로 해당 보드 조회 권한이 있는지 확인
         // 컨텐츠 권한 확인
-        BoardListDto boardDto = boardMapper.findViewAuthByContentId(contentId);
+        BoardListDto boardDto = boardMapper.findOneByContentId(contentId);
         Integer boardViewAuth = boardDto.getViewAuth();
         if (userAuthPriority >= boardViewAuth) {
             throw new IllegalAccessException("해당 컨텐츠에 대한 접근 권한이 없습니다.");
@@ -129,7 +129,7 @@ public class ContentService {
             i++;
         }
 
-        resMap.put("boardDtl", boardDto);
+        resMap.put("boardInfo", boardDto);
         resMap.put("contentDtl", contentDtlDto);
         resMap.put("contentFreeFields", freeFieldMap);
         return resMap;

@@ -35,7 +35,7 @@ public class RentalService {
 
         // 1. 유저의 권한 확인
         Integer userAuthPriority = userService.getUserAuthPriority(String.valueOf(userId));
-        BoardListDto boardDto = boardMapper.findViewAuthByContentId(contentId);
+        BoardListDto boardDto = boardMapper.findOneByContentId(contentId);
         if (boardDto == null) {
             throw new IllegalAccessException("존재하지 않는 contentId 입니다. 값을 확인해주세요");
         }

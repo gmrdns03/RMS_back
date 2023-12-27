@@ -3,7 +3,6 @@ package com.project.LimeRMS.service;
 import com.project.LimeRMS.dto.BoardListDto;
 import com.project.LimeRMS.entity.Board;
 import com.project.LimeRMS.mapper.BoardMapper;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +19,8 @@ public class BoardService {
         String boardStat = board.getBoardStat();
         Integer boardId = board.getBoardId();
         String boardTypeNm = board.getBoardType().getBoardTypeNm();
+        String boardViewType = board.getBoardType().getBoardViewType();
+        String contentViewType = board.getBoardType().getContentViewType();
         String boardNm = board.getBoardNm();
         String boardDesc = board.getBoardDesc();
         Integer boardSn = board.getBoardSn();
@@ -30,12 +31,17 @@ public class BoardService {
         Integer rentalPeriod = board.getRentalPeriod();
         Integer extensionLimit = board.getExtensionLimit();
         Integer rentalLimit = board.getRentalLimit();
-        return new BoardListDto(boardId, boardTypeNm, boardNm, boardStat,
+        return new BoardListDto(boardId, boardTypeNm, boardViewType, contentViewType, boardNm, boardStat,
             boardDesc, boardSn, viewAuth, writeAuth, commentAuth, modifyAuth, rentalPeriod, extensionLimit, rentalLimit);
     }
 
-    public BoardListDto getBoardInfo(String boardId) {
+    public BoardListDto getBoardInfo(Integer loginUserId, String boardId) throws Exception {
+        Integer userAuthPriority = userService.getUserAuthPriority(String.valueOf(loginUserId));
         Board board = boardMapper.findOneByBoardId(boardId);
+        Integer boardViewAuth = board.getViewAuth();
+        if (userAuthPriority > boardViewAuth) {
+            throw new IllegalAccessException("해당 게시판에 대한 접근 권한이 없습니다.");
+        }
         return getBoardListDto(board);
     }
 
@@ -53,6 +59,7 @@ public class BoardService {
             }
             boardListDtoList.add(boardListDto);
         }
+
         return boardListDtoList;
     }
 

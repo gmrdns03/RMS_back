@@ -17,7 +17,7 @@ public interface BoardMapper {
 
     Board findOneByBoardId(@Param("boardId") String boardId);
 
-    BoardListDto findViewAuthByContentId(@Param("contentId") Integer contentId);
+    BoardListDto findOneByContentId(@Param("contentId") Integer contentId);
 
     void updateBoardSnByBoardId(@Param("boardSn")Integer boardSn, @Param("boardId")Integer boardId, @Param("modfUserId")String modfUserId);
 

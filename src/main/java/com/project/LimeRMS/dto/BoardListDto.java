@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 public class BoardListDto {
     private Integer boardId;
     private String boardTypeNm;
+    private String boardViewType;
+    private String contentViewType;
     private String boardNm;
     private String boardStat;
     private String boardDesc;

@@ -59,13 +59,23 @@ public class BoardController {
     // board에 해당하는 컨텐츠 리스트 반환
     @GetMapping("/{boardId}")
     @Operation(summary = "보드의 컨텐츠 리스트 반환")
-    public ResponseEntity<Map<String, Object>> getContentInfoList(@PathVariable("boardId") String boardId) {
+    public ResponseEntity<Map<String, Object>> getContentInfoList(
+        @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
+        @PathVariable("boardId") String boardId
+    ) {
         Map<String, Object> resMap = new HashMap<>();
-        BoardListDto boardInfo = boardService.getBoardInfo(boardId);
-        List<ContentInfoDto> contentInfoList = contentService.getContentsByBoardId(boardId);
-        resMap.put("boardInfo", boardInfo);
-        resMap.put("contentInfoList", contentInfoList);
-        return ResponseEntity.ok(resMap);
+        try {
+            Integer loginUserId = Integer.valueOf(jwtProvider.getUserPk(token));
+            BoardListDto boardInfo = boardService.getBoardInfo(loginUserId, boardId);
+            List<ContentInfoDto> contentInfoList = contentService.getContentsByBoardId(boardId);
+            resMap.put("boardInfo", boardInfo);
+            resMap.put("contentInfoList", contentInfoList);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.badRequest().body(resMap);
+        }
     }
 
     // board 대표 이미지 반환
