@@ -2,6 +2,7 @@ package com.project.LimeRMS.mapper;
 
 import com.project.LimeRMS.dto.OverdueContentListDto;
 import com.project.LimeRMS.dto.RentalListDto;
+import java.time.LocalDateTime;
 import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 
@@ -20,5 +21,7 @@ public interface RentalMapper {
 
     void rentalContentByContentId(@Param("rentalMap")Map<String, Object> rentalMap);
 
-    Integer findUserRentalCntByUserId(@Param("userId") String userId);
+    Integer findUserRentalCntByUserId(@Param("userId") Integer userId);
+
+    void contentReturn(@Param("userId") Integer userId, @Param("contentId") Integer contentId, @Param("returnDt") LocalDateTime returnDt);
 }

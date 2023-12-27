@@ -77,4 +77,10 @@
         SELECT COUNT(*) FROM Rental r
         WHERE rentalUserId = ${userId} AND rentalStat NOT IN ('CD001002', 'CD001003')
     </select>
+
+    <update id="contentReturn">
+        UPDATE Rental
+        SET rentalStat = 'CD001002', returnDt = #{returnDt}, modfUserId = #{userId}
+        WHERE rentalUserId = #{userId} and contentId = #{contentId}
+    </update>
 </mapper>
