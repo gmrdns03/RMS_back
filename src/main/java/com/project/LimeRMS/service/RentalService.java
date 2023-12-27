@@ -1,7 +1,6 @@
 package com.project.LimeRMS.service;
 
 import com.project.LimeRMS.dto.BoardListDto;
-import com.project.LimeRMS.entity.Rental;
 import com.project.LimeRMS.mapper.BoardMapper;
 import com.project.LimeRMS.mapper.RentalMapper;
 import com.project.LimeRMS.dto.RentalListDto;
@@ -25,9 +24,17 @@ public class RentalService {
     private final BoardMapper boardMapper;
     private final UserService userService;
 
-    public void rental(String userId, Integer contentId) throws Exception {
+    public void rental(Integer loginUserId, Integer userId, Integer contentId) throws Exception {
+        // 1. 로그인 유저의 권한 확인
+        if (!loginUserId.equals(userId)) {
+            Integer loginUserAuthPriority = userService.getUserAuthPriority(String.valueOf(loginUserId));
+            if (loginUserAuthPriority > 4) {
+                throw new IllegalAccessException("타인에게 컨텐츠를 대여해줄 권한이 없습니다.");
+            }
+        }
+
         // 1. 유저의 권한 확인
-        Integer userAuthPriority = userService.getUserAuthPriority(userId);
+        Integer userAuthPriority = userService.getUserAuthPriority(String.valueOf(userId));
         BoardListDto boardDto = boardMapper.findViewAuthByContentId(contentId);
         if (boardDto == null) {
             throw new IllegalAccessException("존재하지 않는 contentId 입니다. 값을 확인해주세요");
@@ -70,6 +77,21 @@ public class RentalService {
             // 대여 혹은 연체 중인 컨텐츠 -> 대여 진행 못함
             throw new IllegalAccessException("이미 대여 중인 컨텐츠 입니다. 상태를 다시 확인해주세요");
         }
+    }
+
+    public void rentalContentReturn (Integer loginUserId, Integer userId, Integer contentId) throws Exception {
+        // 1. 로그인 유저의 권한 확인
+        if (!loginUserId.equals(userId)) {
+            // 로그인 유저 권한 확인
+            Integer userAuthPriority = userService.getUserAuthPriority(String.valueOf(loginUserId));
+            if (userAuthPriority > 4) {
+                throw new IllegalAccessException("타인의 컨텐츠를 반납할 권한이 없습니다.");
+            }
+        }
+
+        // 2. 유저 대여 반납
+        LocalDateTime now = LocalDateTime.now();
+        rentalMapper.contentReturn(userId, contentId, now);
     }
 
     public String changeContentRentalStat(){

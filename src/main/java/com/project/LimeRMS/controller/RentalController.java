@@ -5,7 +5,9 @@ import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.RentalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,16 +29,23 @@ public class RentalController {
     private final RentalService rentalService;
 
     @PostMapping
-    @Operation(summary = "컨텐츠 대여")
+    @Operation(summary = "컨텐츠 대여",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+        content = @io.swagger.v3.oas.annotations.media.Content(
+            examples = @ExampleObject(value = "{\"contentId\": \"1\", \"userId\": \"1\"}")
+            )
+        )
+    )
     public ResponseEntity<?> rental(
         @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
         @RequestBody Map<String, String> body
     ) {
         Map<String, Object> resMap = new HashMap<>();
         try {
-            String userId = jwtProvider.getUserPk(token);
+            Integer loginUserId = Integer.valueOf(jwtProvider.getUserPk(token));
+            Integer userId = Integer.valueOf(body.get("userId"));
             Integer contentId = Integer.valueOf(body.get("contentId"));
-            rentalService.rental(userId, contentId);
+            rentalService.rental(loginUserId, userId, contentId);
             resMap.put("res", true);
             resMap.put("msg", "대여가 완료되었습니다.");
             return ResponseEntity.accepted().body(resMap);
@@ -44,6 +53,34 @@ public class RentalController {
             resMap.put("res", false);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
+        }
+    }
+
+    @PutMapping("/return")
+    @Operation(summary = "대여한 컨텐츠 반납",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                examples = @ExampleObject(value = "{\"contentId\": \"1\", \"userId\": \"1\"}")
+            )
+        )
+    )
+    public ResponseEntity<?> rentalContentRetrun(
+        @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
+        @RequestBody Map<String, String> body
+    ) {
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            Integer loginUserId = Integer.valueOf(jwtProvider.getUserPk(token));
+            Integer userId = Integer.valueOf(body.get("userId"));
+            Integer contentId = Integer.valueOf(body.get("contentId"));
+            rentalService.rentalContentReturn(loginUserId, userId, contentId);
+            resMap.put("res", true);
+            resMap.put("msg", "반납이 완료되었습니다.");
+            return ResponseEntity.accepted().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.badRequest().body(resMap);
         }
     }
 
