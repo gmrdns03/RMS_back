@@ -37,16 +37,18 @@ public class LikeController {
                 examples = @ExampleObject(value = "{\"contentId\":1}"))))
     public ResponseEntity<?> likes(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> content) {
         Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         String likeUserId = jwtProvider.getUserPk(token);
-
         try {
             String message = likeService.likes(likeUserId,content);
             resMap.put("res", true);
             resMap.put("msg", message);
+            resMap.put("statusCode", 201);
             return ResponseEntity.ok().body(resMap);
         }
         catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
 
@@ -67,10 +69,12 @@ public class LikeController {
             String message = likeService.cancelLikes(likeUserId,content);
             resMap.put("res", true);
             resMap.put("msg", message);
+            resMap.put("statusCode", 201);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
             resMap.put("msg", e.getMessage());
+            resMap.put("statusCode", 400);
             return ResponseEntity.ok().body(resMap);
 
         }

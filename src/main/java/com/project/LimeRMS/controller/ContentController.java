@@ -29,14 +29,28 @@ public class ContentController {
         @PathVariable("contentId") Integer contentId
     ) {
         Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         try {
             String userId = jwtProvider.getUserPk(token);
             Map<String, Object> contentDtlRes = contentService.getContentDtail(userId, contentId);
+            data.putAll(contentDtlRes);
             resMap.put("res", true);
-            resMap.putAll(contentDtlRes);
+            resMap.put("statusCode", 200);
+            resMap.put("data", data);
+            return ResponseEntity.ok().body(resMap);
+        } catch (NullPointerException e) {
+            resMap.put("res", false);
+            resMap.put("statusCode", 404);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        } catch (IllegalAccessException e) {
+            resMap.put("res", false);
+            resMap.put("statusCode", 403);
+            resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         }

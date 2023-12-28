@@ -5,6 +5,7 @@ import com.project.LimeRMS.entity.Board;
 import com.project.LimeRMS.mapper.BoardMapper;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -92,7 +93,7 @@ public class BoardService {
         }
     }
 
-    public void saveBoardImg(String loginUserId, Integer boardId, MultipartFile multipartFile) throws Exception {
+    public void saveBoardImg(String loginUserId, Integer boardId, MultipartFile multipartFile) throws IllegalAccessException, IOException {
         // 로그인 유저의 권한 확인
         Integer loginUserAuthPriority = userService.getUserAuthPriority(loginUserId);
         if (loginUserAuthPriority > 4) {
@@ -114,7 +115,7 @@ public class BoardService {
                 Files.createDirectories(folderPath);
             }
         } else {
-            throw new FileNotFoundException("Not enough elements. Plz check your data");
+            throw new IOException("Not enough elements. Plz check your data");
         }
 
         // 보내온 파일 저장

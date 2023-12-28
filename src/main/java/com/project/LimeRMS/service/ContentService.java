@@ -56,15 +56,19 @@ public class ContentService {
         return  contentInfoDtoList;
     }
 
-    public Map<String, Object> getContentDtail(String userId, Integer contentId) throws Exception {
-        Map<String, Object> resMap = new HashMap<>();
+    public Map<String, Object> getContentDtail(String userId, Integer contentId) throws NullPointerException, IllegalAccessException, Exception {
+        Map<String, Object> data = new HashMap<>();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
         // 1. userId로 사용자 권한 조회
         Integer userAuthPriority = userService.getUserAuthPriority(userId);
-        // 2. 사용자 권한으로 해당 보드 조회 권한이 있는지 확인
-        // 컨텐츠 권한 확인
+
         BoardListDto boardDto = boardMapper.findOneByContentId(contentId);
+        if (boardDto == null) {
+            throw new NullPointerException("요청에 대한 컨텐츠가 존재하지 않습니다. url을 확인해주세요");
+        }
+
+        // 2. 사용자 권한으로 해당 보드 조회 권한이 있는지 확인
         Integer boardViewAuth = boardDto.getViewAuth();
         if (userAuthPriority >= boardViewAuth) {
             throw new IllegalAccessException("해당 컨텐츠에 대한 접근 권한이 없습니다.");
@@ -129,9 +133,9 @@ public class ContentService {
             i++;
         }
 
-        resMap.put("boardInfo", boardDto);
-        resMap.put("contentDtl", contentDtlDto);
-        resMap.put("contentFreeFields", freeFieldMap);
-        return resMap;
+        data.put("boardInfo", boardDto);
+        data.put("contentDtl", contentDtlDto);
+        data.put("contentFreeFields", freeFieldMap);
+        return data;
     }
 }

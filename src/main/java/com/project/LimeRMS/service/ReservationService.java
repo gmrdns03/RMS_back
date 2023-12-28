@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,12 @@ public class ReservationService {
     private final ReservationMapper reservationMapper;
     private final CommCdMapper commCdMapper;
     public List<ReservationListDto> getReservationList(String userId) throws Exception {
-        List<ReservationListDto> reservationListDtos = reservationMapper.findReservationListByUserId(userId);
+        List<ReservationListDto> reservationListDtos;
+        reservationListDtos = reservationMapper.findReservationListByUserId(userId);
+        if (reservationListDtos == null) {
+            return null;
+        }
+
         List<ReservationListDto> resReservationListDtos = new ArrayList<>();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
         SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

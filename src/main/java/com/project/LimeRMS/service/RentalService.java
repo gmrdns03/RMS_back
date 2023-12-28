@@ -101,6 +101,10 @@ public class RentalService {
 
     public List<RentalListDto> getRentalList(String userId) throws Exception {
         List<RentalListDto> rentalListDtos = rentalMapper.findRentalListByUserId(userId);
+        if (rentalListDtos == null) {
+            return null;
+        }
+
         List<RentalListDto> resRentalListDtos = new ArrayList<>();
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy.MM.dd");
         SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

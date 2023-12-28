@@ -35,15 +35,19 @@ public class NotificationController {
         description = "사용자가 읽은 알림을 미확인 -> 확인 상태로 변경한다.")
     public ResponseEntity<?> getAllNotification(@Parameter(hidden = true) @RequestHeader("AccessToken")String token){
         Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         try {
             String userId = jwtProvider.getUserPk(token);
             List<NotiDto> notiDtoList = notificationService.getAllNotification(userId);
+            data.put("notiList", notiDtoList);
             resMap.put("res", true);
-            resMap.put("notiList", notiDtoList);
+            resMap.put("statusCode", 200);
+            resMap.put("data", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
             resMap.put("msg", e.getMessage());
+            resMap.put("statusCode", 400);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -79,10 +83,12 @@ public class NotificationController {
         try {
             String message = notificationService.changeContentRentalStat(alarm);
             resMap.put("res", true);
+            resMap.put("statusCode", 201);
             resMap.put("msg", message);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         }
@@ -98,10 +104,12 @@ public class NotificationController {
             String userId = jwtProvider.getUserPk(token);
             String message = notificationService.addOverdueNotification(userId);
             resMap.put("res", true);
+            resMap.put("statusCode", 201);
             resMap.put("msg", message);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         }

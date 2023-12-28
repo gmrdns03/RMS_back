@@ -49,10 +49,12 @@ public class RentalController {
             Integer contentId = Integer.valueOf(body.get("contentId"));
             rentalService.rental(loginUserId, userId, contentId);
             resMap.put("res", true);
+            resMap.put("statusCode", 201);
             resMap.put("msg", "대여가 완료되었습니다.");
-            return ResponseEntity.accepted().body(resMap);
+            return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         }
@@ -77,12 +79,14 @@ public class RentalController {
             Integer contentId = Integer.valueOf(body.get("contentId"));
             rentalService.rentalContentReturn(loginUserId, userId, contentId);
             resMap.put("res", true);
+            resMap.put("statusCode", 201);
             resMap.put("msg", "반납이 완료되었습니다.");
-            return ResponseEntity.accepted().body(resMap);
+            return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statuscode", 400);
             resMap.put("msg", e.getMessage());
-            return ResponseEntity.badRequest().body(resMap);
+            return ResponseEntity.ok().body(resMap);
         }
     }
 
@@ -95,10 +99,12 @@ public class RentalController {
         try {
             String message = rentalService.changeContentRentalStat();
             resMap.put("res", true);
+            resMap.put("statusCode", 201);
             resMap.put("msg", message);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         }

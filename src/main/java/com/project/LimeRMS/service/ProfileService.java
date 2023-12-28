@@ -7,6 +7,7 @@ import com.project.LimeRMS.mapper.UserMapper;
 import java.io.File;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -59,7 +60,7 @@ public class ProfileService {
         }
     }
 
-    public boolean saveProfileImg(String userId, MultipartFile multipartFile) throws Exception {
+    public void saveProfileImg(String userId, MultipartFile multipartFile) throws Exception {
         // multipartFile이 비어 있지 않으면 진행
         if(multipartFile != null && !multipartFile.isEmpty()) {
             // profile 폴더가 없는경우 폴더 생성
@@ -85,9 +86,8 @@ public class ProfileService {
             // userImg 테이블에 업데이트
             String newProfilePath = profileFolderPath + "/" + fileNm;
             userMapper.updateProfileImgByUserId(userId, newProfilePath);
-            return true;
         } else {
-            throw new Exception("Not enough elements. Plz check your data");
+            throw new IOException("Not enough elements. Plz check your data");
         }
     }
 

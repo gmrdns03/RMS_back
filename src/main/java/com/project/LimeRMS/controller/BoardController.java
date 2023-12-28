@@ -9,6 +9,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -46,15 +48,19 @@ public class BoardController {
         @Parameter(hidden = true) @RequestHeader("AccessToken") String token
     ) {
         Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         try {
             String userId = jwtProvider.getUserPk(token);
             List<BoardListDto> boardList = boardService.findAllBoardList(userId);
-            resMap.put("boardList", boardList);
+            data.put("boardList", boardList);
             resMap.put("res", true);
+            resMap.put("statusCode", 200);
+            resMap.put("data", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
             resMap.put("msg", e.getMessage());
+            resMap.put("statusCode", 204);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -67,17 +73,22 @@ public class BoardController {
         @PathVariable("boardId") String boardId
     ) {
         Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         try {
             Integer loginUserId = Integer.valueOf(jwtProvider.getUserPk(token));
             BoardListDto boardInfo = boardService.getBoardInfo(loginUserId, boardId);
             List<ContentInfoDto> contentInfoList = contentService.getContentsByBoardId(boardId);
-            resMap.put("boardInfo", boardInfo);
-            resMap.put("contentInfoList", contentInfoList);
+            data.put("boardInfo", boardInfo);
+            data.put("contentInfoList", contentInfoList);
+            resMap.put("res", true);
+            resMap.put("statusCode", 200);
+            resMap.put("data", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 204);
             resMap.put("msg", e.getMessage());
-            return ResponseEntity.badRequest().body(resMap);
+            return ResponseEntity.ok().body(resMap);
         }
     }
 
@@ -85,6 +96,7 @@ public class BoardController {
     @GetMapping("/{boardId}/img")
     public ResponseEntity<?> getBoardImg(@PathVariable("boardId") String boardId) {
         Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         try {
             File destFile = boardService.getBoardImg(boardId);
 
@@ -94,7 +106,10 @@ public class BoardController {
                 mimeType = "octet-steam";
             }
             Resource rs = new UrlResource(destFile.toURI());
-
+            data.put("image", rs);
+            resMap.put("res", true);
+            resMap.put("statusCode", 200);
+            resMap.put("data", data);
             return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; \"")
@@ -102,7 +117,8 @@ public class BoardController {
                 .contentType(MediaType.parseMediaType(mimeType))
                 .body(rs);
         } catch (Exception e) {
-            resMap.put("res", null);
+            resMap.put("res", false);
+            resMap.put("statusCode", 404);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         }
@@ -123,12 +139,19 @@ public class BoardController {
             String loginUserId = jwtProvider.getUserPk(token);
             boardService.saveBoardImg(loginUserId, boardId, multipartFile);
             resMap.put("res", true);
+            resMap.put("statusCode", 201);
             resMap.put("msg", "Registered a new board image successfully");
-            return ResponseEntity.accepted().body(resMap);
-        } catch (Exception e) {
+            return ResponseEntity.ok().body(resMap);
+        } catch (IllegalAccessException e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 403);
             resMap.put("msg", e.getMessage());
-            return ResponseEntity.badRequest().body(resMap);
+            return ResponseEntity.ok().body(resMap);
+        } catch (IOException e) {
+            resMap.put("res", false);
+            resMap.put("statusCode", 400);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
         }
     }
 }

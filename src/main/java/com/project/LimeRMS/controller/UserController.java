@@ -29,13 +29,18 @@ public class UserController {
                             examples = @ExampleObject(value = "{\"userEmail\":\"test1@euclidsoft.co.kr\",\"password\":\"dbzmfflem1!\"}"))))
     public ResponseEntity<?> login(@RequestBody Map<String, String> member) {
         Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         try {
             String accessToken = userService.login(member);
+            data.put("AccessToken", accessToken);
             resMap.put("res", true);
-            resMap.put("msg", accessToken);
+            resMap.put("msg", "로그인이 완료되었습니다.");
+            resMap.put("statusCode", 200);
+            resMap.put("data", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 401);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         }
@@ -50,13 +55,17 @@ public class UserController {
                             examples = @ExampleObject(value = "{\"hiCommCd\":\"CD006000\"}"))))
     public ResponseEntity<?> getCommCdList(@RequestBody Map<String, String> input){
         Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         try {
             List<CommCdDto> commCdDtoList = userService.getCommCdList(input);
+            data.put("commCds", commCdDtoList);
             resMap.put("res", true);
-            resMap.put("commCds", commCdDtoList);
+            resMap.put("statusCode", 200);
+            resMap.put("data", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         }
