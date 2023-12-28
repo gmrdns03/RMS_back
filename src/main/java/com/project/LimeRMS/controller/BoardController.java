@@ -106,16 +106,12 @@ public class BoardController {
                 mimeType = "octet-steam";
             }
             Resource rs = new UrlResource(destFile.toURI());
-            data.put("image", rs);
-            resMap.put("data", data);
-            resMap.put("res", true);
-            resMap.put("statusCode", 200);
             return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; \"")
                 .cacheControl(CacheControl.noCache())
                 .contentType(MediaType.parseMediaType(mimeType))
-                .body(resMap);
+                .body(rs);
         } catch (Exception e) {
             resMap.put("res", false);
             resMap.put("statusCode", 404);

@@ -74,7 +74,11 @@ public class ProfileController {
     }
 
     @PostMapping(value = "/user/save-pwd")
-    @Operation(summary = "사용자 비밀번호 변경 저장")
+    @Operation(summary = "사용자 비밀번호 변경 저장",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                examples = @ExampleObject(value = "{\"password\":\"dbzmfflem1!\"}")))
+    )
     public ResponseEntity<?> saveUserPassword(
         @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
         @RequestBody Map<String, String> map
@@ -141,16 +145,12 @@ public class ProfileController {
                 mimeType = "octet-steam";
             }
             Resource rs = new UrlResource(destFile.toURI());
-            data.put("image", rs);
-            resMap.put("res", true);
-            resMap.put("statusCode", 200);
-            resMap.put("data", data);
             return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; \"")
                 .cacheControl(CacheControl.noCache())
                 .contentType(MediaType.parseMediaType(mimeType))
-                .body(resMap);
+                .body(rs);
         } catch (FileNotFoundException e) {
             resMap.put("res", null);
             resMap.put("statusCode", 204);
