@@ -226,7 +226,7 @@ public class AdminController {
         Map<String, Object> resMap = new HashMap<>();
         Map<String, Object> data = new HashMap<>();
         try {
-            List<OverdueContentListDto> overdueContentList = adminService.getOverdueContentList();
+            List<ContentListDto> overdueContentList = adminService.getOverdueContentList();
             resMap.put("res", true);
             data.put("overdueContents", overdueContentList);
             resMap.put("statusCode", 200);

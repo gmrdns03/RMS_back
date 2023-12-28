@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.project.LimeRMS.mapper.RentalMapper">
-    <select id="findRentalByRentalStat" resultType="com.project.LimeRMS.dto.OverdueContentListDto">
+    <select id="findRentalByRentalStat" resultType="com.project.LimeRMS.dto.ContentListDto">
         SELECT r.rentalId, r.rentalDt, r.predReturnDt, r.rentalStat, u.userId, u.userNm, c.contentId, c.contentNm FROM Rental r
         LEFT JOIN User u ON r.rentalUserId = u.userId
         LEFT JOIN Content c ON r.contentId = c.contentId
@@ -44,11 +44,18 @@
         WHERE <![CDATA[predReturnDt < NOW()]]> AND rentalStat = 'CD001001'
     </update>
 
-    <select id="findOverdueRentalByUserId" resultType="com.project.LimeRMS.dto.OverdueContentListDto">
-        SELECT r.rentalId, r.rentalDt, r.returnDt, r.rentalStat, u.userId, u.userNm, c.contentId, c.contentNm FROM Rental r
+    <select id="findOverdueRentalByUserId" resultType="com.project.LimeRMS.dto.ContentListDto">
+        SELECT r.rentalId, r.rentalDt, r.predReturnDt, r.rentalStat, u.userId, u.userNm, c.contentId, c.contentNm FROM Rental r
         LEFT JOIN User u ON r.rentalUserId = u.userId
         LEFT JOIN Content c ON r.contentId = c.contentId
         WHERE rentalStat = 'CD001003' AND rentalUserId = #{userId}
+    </select>
+
+    <select id="findReturnRentalByUserId" resultType="com.project.LimeRMS.dto.ContentListDto">
+        SELECT r.rentalId, r.rentalDt, r.predReturnDt, r.rentalStat, u.userId, u.userNm, c.contentId, c.contentNm FROM Rental r
+        LEFT JOIN User u ON r.rentalUserId = u.userId
+        LEFT JOIN Content c ON r.contentId = c.contentId
+        WHERE rentalUserId = #{userId} AND rentalStat = 'CD001001' AND <![CDATA[DATEDIFF(DATE(predReturnDt), CURDATE()) <= 3]]>;
     </select>
 
     <select id="findLatestStatByContentId">
