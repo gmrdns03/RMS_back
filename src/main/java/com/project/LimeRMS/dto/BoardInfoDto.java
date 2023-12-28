@@ -23,5 +23,7 @@ public class BoardInfoDto {
 
     private String boardStat;
 
+    private String boardStatNm;
+
     private Integer boardSn;
 }
