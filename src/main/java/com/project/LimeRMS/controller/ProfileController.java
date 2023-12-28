@@ -113,7 +113,7 @@ public class ProfileController {
             resMap.put("res", true);
             resMap.put("statusCode", 201);
             resMap.put("msg", "Registered a new profile image successfully");
-            return ResponseEntity.accepted().body(resMap);
+            return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
             resMap.put("StatusCode", 400);
@@ -194,7 +194,7 @@ public class ProfileController {
             resMap.put("res", false);
             resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
-            return ResponseEntity.badRequest().body(resMap);
+            return ResponseEntity.ok().body(resMap);
         }
     }
 
@@ -257,7 +257,7 @@ public class ProfileController {
             resMap.put("res", false);
             resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
-            return ResponseEntity.badRequest().body(resMap);
+            return ResponseEntity.ok().body(resMap);
         }
     }
 }

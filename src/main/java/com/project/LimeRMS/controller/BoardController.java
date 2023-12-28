@@ -107,15 +107,15 @@ public class BoardController {
             }
             Resource rs = new UrlResource(destFile.toURI());
             data.put("image", rs);
+            resMap.put("data", data);
             resMap.put("res", true);
             resMap.put("statusCode", 200);
-            resMap.put("data", data);
             return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; \"")
                 .cacheControl(CacheControl.noCache())
                 .contentType(MediaType.parseMediaType(mimeType))
-                .body(rs);
+                .body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
             resMap.put("statusCode", 404);
