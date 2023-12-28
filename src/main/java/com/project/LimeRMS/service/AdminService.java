@@ -125,14 +125,20 @@ public class AdminService {
             String formattedRegDt = regDt.format(outputFormatter);
             board.setRegDt(formattedRegDt);
             //Cd를 Nm으로 변경
-            String boardStat = commCdMapper.findCdNmByCd(board.getBoardStat());
-            board.setBoardStat(boardStat);
+            String boardStatNm = commCdMapper.findCdNmByCd(board.getBoardStat());
+            board.setBoardStatNm(boardStatNm);
         }
         return boardInfoDtoList;
     }
 
     public List<OverdueContentListDto> getOverdueContentList() {
-        return rentalMapper.findRentalByRentalStat("CD001003"); //상태: 연체
+        List<OverdueContentListDto> overdueContents = rentalMapper.findRentalByRentalStat("CD001003"); //상태: 연체
+        for (OverdueContentListDto overdueContent : overdueContents){
+            String rentalStatNm = commCdMapper.findCdNmByCd(overdueContent.getRentalStat());
+            overdueContent.setRentalStatNm(rentalStatNm);
+        }
+
+        return overdueContents;
     }
 
     public String changeBoardPriorities(String managerId, List<BoardPriorityDto> boardPriorityDtoList){

@@ -30,4 +30,6 @@ public class OverdueContentListDto {
     private LocalDateTime predReturnDt;
 
     private String rentalStat;
+
+    private String rentalStatNm;
 }
