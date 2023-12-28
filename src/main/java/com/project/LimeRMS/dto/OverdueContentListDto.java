@@ -25,9 +25,9 @@ public class OverdueContentListDto {
 
     private String contentNm;
 
-    private LocalDateTime rentalDt;
+    private String rentalDt;
 
-    private LocalDateTime predReturnDt;
+    private String predReturnDt;
 
     private String rentalStat;
 

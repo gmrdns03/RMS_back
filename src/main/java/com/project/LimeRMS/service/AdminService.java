@@ -124,7 +124,7 @@ public class AdminService {
             LocalDateTime regDt = LocalDateTime.parse(board.getRegDt(), inputFormatter);
             String formattedRegDt = regDt.format(outputFormatter);
             board.setRegDt(formattedRegDt);
-            //Cd를 Nm으로 변경
+            //Cd -> Nm 찾기
             String boardStatNm = commCdMapper.findCdNmByCd(board.getBoardStat());
             board.setBoardStatNm(boardStatNm);
         }
@@ -133,11 +133,21 @@ public class AdminService {
 
     public List<OverdueContentListDto> getOverdueContentList() {
         List<OverdueContentListDto> overdueContents = rentalMapper.findRentalByRentalStat("CD001003"); //상태: 연체
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
         for (OverdueContentListDto overdueContent : overdueContents){
+            //rentalDt 포맷 변경
+            LocalDateTime rentalDt = LocalDateTime.parse(overdueContent.getPredReturnDt(), inputFormatter);
+            String formattedRentalDt = rentalDt.format(outputFormatter);
+            overdueContent.setRentalDt(formattedRentalDt);
+            //predReturnDt 포맷 변경
+            LocalDateTime predReturnDt = LocalDateTime.parse(overdueContent.getPredReturnDt(), inputFormatter);
+            String formattedPredReturnDt = predReturnDt.format(outputFormatter);
+            overdueContent.setPredReturnDt(formattedPredReturnDt);
+            //Cd -> Nm 찾기
             String rentalStatNm = commCdMapper.findCdNmByCd(overdueContent.getRentalStat());
             overdueContent.setRentalStatNm(rentalStatNm);
         }
-
         return overdueContents;
     }
 
