@@ -85,4 +85,20 @@
         FROM BoardType bt
     ) btt ON bb.boardTypeId = btt.boardTypeId;
   </select>
+
+  <select id="findAllBoardManagerByBoardId">
+    SELECT userId
+    FROM BoardManager
+    WHERE delYn != 'Y' AND boardId = #{boardId}
+  </select>
+
+  <select id="findBoardImgPathByBoardId">
+    SELECT boardImg FROM Board WHERE boardId = #{boardId}
+  </select>
+
+  <update id="updateBoardImgByBoardId">
+    UPDATE Board
+    SET boardImg = #{boardImgPath}, modfUserId = #{modfUserId}
+    WHERE boardId = #{boardId}
+  </update>
 </mapper>

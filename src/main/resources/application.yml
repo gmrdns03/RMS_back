@@ -43,3 +43,4 @@ springdoc:
 
 filesPath:
   profile: \src\main\resources\static\files\profile
+  board: \src\main\resources\static\files\board

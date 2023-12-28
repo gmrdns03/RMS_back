@@ -23,9 +23,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "BoardController", description = "BoardController API")
 @RestController
@@ -81,6 +84,7 @@ public class BoardController {
     // board 대표 이미지 반환
     @GetMapping("/{boardId}/img")
     public ResponseEntity<?> getBoardImg(@PathVariable("boardId") String boardId) {
+        Map<String, Object> resMap = new HashMap<>();
         try {
             File destFile = boardService.getBoardImg(boardId);
 
@@ -98,8 +102,33 @@ public class BoardController {
                 .contentType(MediaType.parseMediaType(mimeType))
                 .body(rs);
         } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body(null);
+            resMap.put("res", null);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
+
+    @PostMapping("/{boardId}/save-img")
+    @Operation(
+        summary = "보드 대표 이미지 저장",
+        description = "게시판 수정권한이 있으면서, 게시판 관리자여야 게시판 이미지 수정 가능"
+    )
+    public ResponseEntity<?> saveBoardImg(
+        @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
+        @PathVariable("boardId") Integer boardId,
+        @RequestPart(value = "file") MultipartFile multipartFile
+    ) {
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String loginUserId = jwtProvider.getUserPk(token);
+            boardService.saveBoardImg(loginUserId, boardId, multipartFile);
+            resMap.put("res", true);
+            resMap.put("msg", "Registered a new board image successfully");
+            return ResponseEntity.accepted().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.badRequest().body(resMap);
         }
     }
 }

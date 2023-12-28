@@ -7,6 +7,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import com.project.LimeRMS.dto.BoardInfoDto;
+import org.springframework.security.core.parameters.P;
 
 @Mapper
 public interface BoardMapper {
@@ -21,4 +22,9 @@ public interface BoardMapper {
 
     void updateBoardSnByBoardId(@Param("boardSn")Integer boardSn, @Param("boardId")Integer boardId, @Param("modfUserId")String modfUserId);
 
+    List<String> findAllBoardManagerByBoardId(@Param("boardId") Integer boardId);
+
+    String findBoardImgPathByBoardId(@Param("boardId") Integer boardId);
+
+    void updateBoardImgByBoardId(@Param("boardId") Integer boardId, @Param("boardImgPath") String boardImgPath, @Param("modfUserId") String modfUserId);
 }

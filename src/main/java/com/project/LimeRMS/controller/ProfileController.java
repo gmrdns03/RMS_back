@@ -134,7 +134,7 @@ public class ProfileController {
         } catch (Exception e) {
             resMap.put("res", null);
             resMap.put("msg", e.getMessage());
-            return ResponseEntity.badRequest().body(resMap);
+            return ResponseEntity.ok().body(resMap);
         }
     }
 
