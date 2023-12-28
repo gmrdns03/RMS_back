@@ -3,7 +3,7 @@ package com.project.LimeRMS.service;
 import com.project.LimeRMS.dto.AuthListDto;
 import com.project.LimeRMS.dto.BoardInfoDto;
 import com.project.LimeRMS.dto.BoardPriorityDto;
-import com.project.LimeRMS.dto.OverdueContentListDto;
+import com.project.LimeRMS.dto.ContentListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.entity.User;
 import com.project.LimeRMS.mapper.*;
@@ -131,11 +131,11 @@ public class AdminService {
         return boardInfoDtoList;
     }
 
-    public List<OverdueContentListDto> getOverdueContentList() {
-        List<OverdueContentListDto> overdueContents = rentalMapper.findRentalByRentalStat("CD001003"); //상태: 연체
+    public List<ContentListDto> getOverdueContentList() {
+        List<ContentListDto> overdueContents = rentalMapper.findRentalByRentalStat("CD001003"); //상태: 연체
         DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
-        for (OverdueContentListDto overdueContent : overdueContents){
+        for (ContentListDto overdueContent : overdueContents){
             //rentalDt 포맷 변경
             LocalDateTime rentalDt = LocalDateTime.parse(overdueContent.getPredReturnDt(), inputFormatter);
             String formattedRentalDt = rentalDt.format(outputFormatter);

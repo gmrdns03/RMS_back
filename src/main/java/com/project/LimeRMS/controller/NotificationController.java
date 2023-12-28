@@ -49,23 +49,26 @@ public class NotificationController {
     }
 
 
-//    @PutMapping("/add-return")
-//    @Operation(
-//        summary = "대여일과 반납 예정일을 비교하여 알림 추가",
-//        description = "반납 예정일 3일전부터 매일 알람을 추가(같은 상태의 ~~가 있다면 제일 최근1건만 표기)")
-//    public ResponseEntity<?> changeContentRentalStat(){
-//        Map<String, Object> resMap = new HashMap<>();
-//        try {
-//            String message = rentalService.changeContentRentalStat();
-//            resMap.put("res", true);
-//            resMap.put("msg", message);
-//            return ResponseEntity.ok().body(resMap);
-//        } catch (Exception e) {
-//            resMap.put("res", false);
-//            resMap.put("msg", e.getMessage());
-//            return ResponseEntity.ok().body(resMap);
-//        }
-//    }
+    @PutMapping("/add-return")
+    @Operation(
+        summary = "대여일과 반납 예정일을 비교하여 알림 추가",
+        description = "반납 예정일 3일전부터 매일 알람을 추가(같은 상태의 ~~가 있다면 제일 최근1건만 표기)")
+    public ResponseEntity<?> addReturnNotification(@Parameter(hidden = true) @RequestHeader("AccessToken")String token){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String userId = jwtProvider.getUserPk(token);
+            String message = notificationService.addReturnNotification(userId);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            resMap.put("statusCode", 201);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            resMap.put("statusCode", 400);
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
 
     @PostMapping("/update")
     @Operation(

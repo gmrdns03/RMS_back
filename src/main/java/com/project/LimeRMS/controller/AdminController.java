@@ -201,7 +201,7 @@ public class AdminController {
     public ResponseEntity<?> getOverdueContentList(){
         Map<String, Object> resMap = new HashMap<>();
         try {
-            List<OverdueContentListDto> overdueContentList = adminService.getOverdueContentList();
+            List<ContentListDto> overdueContentList = adminService.getOverdueContentList();
             resMap.put("res", true);
             resMap.put("overdueContents", overdueContentList);
             return ResponseEntity.ok().body(resMap);
