@@ -51,6 +51,9 @@ public class Board {
     @Column
     private Integer extensionLimit;
 
+    @Column
+    private Integer rentalLimit;
+
     @Column(columnDefinition = "TINYINT default 9", nullable = false)
     private Integer viewAuth;
 

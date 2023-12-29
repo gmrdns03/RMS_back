@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -55,14 +56,29 @@ public class ProfileController {
         @Parameter(hidden = true) @RequestHeader("AccessToken") String token
     ) {
         Map<String, Object> resMap = new HashMap<>();
-        String userId = jwtProvider.getUserPk(token);
-        UserInfoDto userInfoDto =  profileService.getUserProfileDtl(userId);
-        resMap.put("userInfo", userInfoDto);
-        return ResponseEntity.ok().body(resMap);
+        Map<String, Object> data = new HashMap<>();
+        try {
+            String userId = jwtProvider.getUserPk(token);
+            UserInfoDto userInfoDto =  profileService.getUserProfileDtl(userId);
+            data.put("userInfo", userInfoDto);
+            resMap.put("res", true);
+            resMap.put("statusCode", 200);
+            resMap.put("data", data);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("statusCode", 400);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
     }
 
     @PostMapping(value = "/user/save-pwd")
-    @Operation(summary = "사용자 비밀번호 변경 저장")
+    @Operation(summary = "사용자 비밀번호 변경 저장",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                examples = @ExampleObject(value = "{\"password\":\"dbzmfflem1!\"}")))
+    )
     public ResponseEntity<?> saveUserPassword(
         @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
         @RequestBody Map<String, String> map
@@ -73,12 +89,14 @@ public class ProfileController {
             String password = map.get("password");
             profileService.saveProfilePwd(userId, password);
             resMap.put("res", true);
+            resMap.put("statusCode", 201);
             resMap.put("msg", "password successfully updated");
-            return ResponseEntity.accepted().body(resMap);
+            return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
-            return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(resMap);
+            return ResponseEntity.ok().body(resMap);
 
         }
 
@@ -97,10 +115,12 @@ public class ProfileController {
             // 이미지 저장
             profileService.saveProfileImg(userId, multipartFile);
             resMap.put("res", true);
+            resMap.put("statusCode", 201);
             resMap.put("msg", "Registered a new profile image successfully");
-            return ResponseEntity.accepted().body(resMap);
+            return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("StatusCode", 400);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         }
@@ -111,6 +131,7 @@ public class ProfileController {
     public ResponseEntity<?> getProfileImg(
         @Parameter(hidden = true) @RequestHeader("AccessToken") String token) {
         Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         try {
             // 토큰에서 userId 추출
             String userId = jwtProvider.getUserPk(token);
@@ -124,17 +145,22 @@ public class ProfileController {
                 mimeType = "octet-steam";
             }
             Resource rs = new UrlResource(destFile.toURI());
-
             return ResponseEntity
                 .ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, "inline; \"")
                 .cacheControl(CacheControl.noCache())
                 .contentType(MediaType.parseMediaType(mimeType))
                 .body(rs);
+        } catch (FileNotFoundException e) {
+            resMap.put("res", null);
+            resMap.put("statusCode", 204);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", null);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
-            return ResponseEntity.badRequest().body(resMap);
+            return ResponseEntity.ok().body(resMap);
         }
     }
 
@@ -151,6 +177,7 @@ public class ProfileController {
         @RequestBody Map<String, String> body
     ) {
         Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         try {
             // body에서 userId 추출
             String userId = body.get("userId");
@@ -158,13 +185,16 @@ public class ProfileController {
             // 사용자의 관심 목록 받아오기
             List<LikeListDto> likeListDtos = likeService.getUserLikeList(userId);
 
-            resMap.put("likeList", likeListDtos);
+            data.put("likeList", likeListDtos);
             resMap.put("res", true);
+            resMap.put("statusCode", 200);
+            resMap.put("data", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
-            return ResponseEntity.badRequest().body(resMap);
+            return ResponseEntity.ok().body(resMap);
         }
     }
 
@@ -181,16 +211,20 @@ public class ProfileController {
         @RequestBody Map<String, String> body
     ) {
         Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         try {
             // body에서 userId 추출
             String userId = body.get("userId");
             // 사용자 예약 목록 받아오기
             List<ReservationListDto> reservationInfoList = reservationService.getReservationList(userId);
-            resMap.put("reservationInfo", reservationInfoList);
+            data.put("reservationInfo", reservationInfoList);
             resMap.put("res", true);
+            resMap.put("statusCode", 200);
+            resMap.put("data", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         }
@@ -209,17 +243,21 @@ public class ProfileController {
         @RequestBody Map<String, String> body
     ) {
         Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         try {
             // body에서 userId 추출
             String userId = body.get("userId");
             List<RentalListDto> rentalListDtoList =  rentalService.getRentalList(userId);
-            resMap.put("rentalInfo", rentalListDtoList);
+            data.put("rentalInfo", rentalListDtoList);
             resMap.put("res", true);
+            resMap.put("statusCode", 200);
+            resMap.put("data", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
-            return ResponseEntity.badRequest().body(resMap);
+            return ResponseEntity.ok().body(resMap);
         }
     }
 }

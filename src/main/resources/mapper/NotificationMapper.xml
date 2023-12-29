@@ -10,7 +10,7 @@
   </update>
 
   <select id="findNotificationByUserId">
-    SELECT notiContent, joinDt
+    SELECT notiId, notiContent, joinDt
     FROM Notification
     WHERE receiverId = #{userId} AND notiStatus = 'CD005001'
   </select>

@@ -35,37 +35,44 @@ public class NotificationController {
         description = "사용자가 읽은 알림을 미확인 -> 확인 상태로 변경한다.")
     public ResponseEntity<?> getAllNotification(@Parameter(hidden = true) @RequestHeader("AccessToken")String token){
         Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
         try {
             String userId = jwtProvider.getUserPk(token);
             List<NotiDto> notiDtoList = notificationService.getAllNotification(userId);
+            data.put("notiList", notiDtoList);
             resMap.put("res", true);
-            resMap.put("notiList", notiDtoList);
+            resMap.put("statusCode", 200);
+            resMap.put("data", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
             resMap.put("msg", e.getMessage());
+            resMap.put("statusCode", 400);
             return ResponseEntity.ok().body(resMap);
         }
     }
 
 
-//    @PutMapping("/add-return")
-//    @Operation(
-//        summary = "대여일과 반납 예정일을 비교하여 알림 추가",
-//        description = "반납 예정일 3일전부터 매일 알람을 추가(같은 상태의 ~~가 있다면 제일 최근1건만 표기)")
-//    public ResponseEntity<?> changeContentRentalStat(){
-//        Map<String, Object> resMap = new HashMap<>();
-//        try {
-//            String message = rentalService.changeContentRentalStat();
-//            resMap.put("res", true);
-//            resMap.put("msg", message);
-//            return ResponseEntity.ok().body(resMap);
-//        } catch (Exception e) {
-//            resMap.put("res", false);
-//            resMap.put("msg", e.getMessage());
-//            return ResponseEntity.ok().body(resMap);
-//        }
-//    }
+    @PutMapping("/add-return")
+    @Operation(
+        summary = "대여일과 반납 예정일을 비교하여 알림 추가",
+        description = "반납 예정일 3일전부터 매일 알람을 추가(같은 상태의 ~~가 있다면 제일 최근1건만 표기)")
+    public ResponseEntity<?> addReturnNotification(@Parameter(hidden = true) @RequestHeader("AccessToken")String token){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String userId = jwtProvider.getUserPk(token);
+            String message = notificationService.addReturnNotification(userId);
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            resMap.put("statusCode", 201);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            resMap.put("statusCode", 400);
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
 
     @PostMapping("/update")
     @Operation(
@@ -79,10 +86,12 @@ public class NotificationController {
         try {
             String message = notificationService.changeContentRentalStat(alarm);
             resMap.put("res", true);
+            resMap.put("statusCode", 201);
             resMap.put("msg", message);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         }
@@ -98,10 +107,12 @@ public class NotificationController {
             String userId = jwtProvider.getUserPk(token);
             String message = notificationService.addOverdueNotification(userId);
             resMap.put("res", true);
+            resMap.put("statusCode", 201);
             resMap.put("msg", message);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         }

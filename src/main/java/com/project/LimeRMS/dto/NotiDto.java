@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 @NoArgsConstructor
 public class NotiDto {
 
+    private Integer notiId;
     private String notiContent;
     private String joinDt;
 

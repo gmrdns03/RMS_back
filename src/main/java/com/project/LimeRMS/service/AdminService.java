@@ -3,7 +3,7 @@ package com.project.LimeRMS.service;
 import com.project.LimeRMS.dto.AuthListDto;
 import com.project.LimeRMS.dto.BoardInfoDto;
 import com.project.LimeRMS.dto.BoardPriorityDto;
-import com.project.LimeRMS.dto.OverdueContentListDto;
+import com.project.LimeRMS.dto.ContentListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
 import com.project.LimeRMS.entity.User;
 import com.project.LimeRMS.mapper.*;
@@ -87,10 +87,8 @@ public class AdminService {
     public String deleteUserProfile(Integer managerId, Map<String, Integer> member){
         Integer userId = member.get("userId");
         String profileImg = userMapper.findProfileImgByUserId(userId);
-        if (profileImg == null) {
-            profileImg = "";
-        }
         File file = new File(profileImg);
+        profileImg = "";
         if (file.exists()) {
             file.delete();
             userMapper.updateProfileImgByManagerId(managerId, userId, profileImg);
@@ -126,15 +124,31 @@ public class AdminService {
             LocalDateTime regDt = LocalDateTime.parse(board.getRegDt(), inputFormatter);
             String formattedRegDt = regDt.format(outputFormatter);
             board.setRegDt(formattedRegDt);
-            //Cd를 Nm으로 변경
-            String boardStat = commCdMapper.findCdNmByCd(board.getBoardStat());
-            board.setBoardStat(boardStat);
+            //Cd -> Nm 찾기
+            String boardStatNm = commCdMapper.findCdNmByCd(board.getBoardStat());
+            board.setBoardStatNm(boardStatNm);
         }
         return boardInfoDtoList;
     }
 
-    public List<OverdueContentListDto> getOverdueContentList() {
-        return rentalMapper.findRentalByRentalStat("CD001003"); //상태: 연체
+    public List<ContentListDto> getOverdueContentList() {
+        List<ContentListDto> overdueContents = rentalMapper.findRentalByRentalStat("CD001003"); //상태: 연체
+        DateTimeFormatter inputFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        DateTimeFormatter outputFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
+        for (ContentListDto overdueContent : overdueContents){
+            //rentalDt 포맷 변경
+            LocalDateTime rentalDt = LocalDateTime.parse(overdueContent.getPredReturnDt(), inputFormatter);
+            String formattedRentalDt = rentalDt.format(outputFormatter);
+            overdueContent.setRentalDt(formattedRentalDt);
+            //predReturnDt 포맷 변경
+            LocalDateTime predReturnDt = LocalDateTime.parse(overdueContent.getPredReturnDt(), inputFormatter);
+            String formattedPredReturnDt = predReturnDt.format(outputFormatter);
+            overdueContent.setPredReturnDt(formattedPredReturnDt);
+            //Cd -> Nm 찾기
+            String rentalStatNm = commCdMapper.findCdNmByCd(overdueContent.getRentalStat());
+            overdueContent.setRentalStatNm(rentalStatNm);
+        }
+        return overdueContents;
     }
 
     public String changeBoardPriorities(String managerId, List<BoardPriorityDto> boardPriorityDtoList){

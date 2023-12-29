@@ -18,6 +18,7 @@
     LEFT JOIN
       BoardType bt ON b.boardTypeId = bt.boardTypeId
     WHERE b.viewAuth >= ${authPriority}
+    ORDER BY b.boardSn
   </select>
   <resultMap id="boardResultMap" type="com.project.LimeRMS.entity.Board">
     <id property="boardId" column="boardId" />
@@ -29,9 +30,14 @@
     <result property="writeAuth" column="writeAuth" />
     <result property="commentAuth" column="commentAuth" />
     <result property="modifyAuth" column="modifyAuth" />
+    <result property="rentalPeriod" column="rentalPeriod" />
+    <result property="extensionLimit" column="extensionLimit" />
+    <result property="rentalLimit" column="rentalLimit" />
     <association property="boardType" javaType="com.project.LimeRMS.entity.BoardType">
       <id property="boardTypeId" column="boardTypeid" />
       <result property="boardTypeNm" column="boardTypeNm" />
+      <result property="contentViewType" column="contentViewType" />
+      <result property="boardViewType" column="boardViewType" />
     </association>
   </resultMap>
 
@@ -51,18 +57,48 @@
     WHERE boardId = #{boardId}
   </update>
 
-  <select id="findViewAuthByContentId" resultType="com.project.LimeRMS.dto.BoardListDto">
-    SELECT
-      b.boardId,
-      b.boardNm,
-      b.boardStat,
-      b.boardDesc,
-      b.boardSn,
-      b.viewAuth,
-      b.writeAuth,
-      b.commentAuth,
-      b.modifyAuth
-    FROM Board b
-    WHERE b.boardId = (SELECT c.boardId FROM Content c WHERE c.contentId = ${contentId})
+  <select id="findOneByContentId" resultType="com.project.LimeRMS.dto.BoardListDto">
+    SELECT *
+    FROM (
+        SELECT
+            b.boardId,
+            b.boardNm,
+            b.boardTypeId,
+            b.boardStat,
+            b.boardDesc,
+            b.boardSn,
+            b.viewAuth,
+            b.writeAuth,
+            b.commentAuth,
+            b.modifyAuth,
+            b.rentalPeriod,
+            b.extensionLimit,
+            b.rentalLimit
+        FROM Board b
+        WHERE b.boardId = (SELECT c.boardId FROM Content c WHERE c.contentId = ${contentId})) bb
+    LEFT JOIN (
+        SELECT
+            bt.boardTypeId,
+            bt.boardTypeNm,
+            bt.boardViewType,
+            bt.contentViewType
+        FROM BoardType bt
+    ) btt ON bb.boardTypeId = btt.boardTypeId;
   </select>
+
+  <select id="findAllBoardManagerByBoardId">
+    SELECT userId
+    FROM BoardManager
+    WHERE delYn != 'Y' AND boardId = #{boardId}
+  </select>
+
+  <select id="findBoardImgPathByBoardId">
+    SELECT boardImg FROM Board WHERE boardId = #{boardId}
+  </select>
+
+  <update id="updateBoardImgByBoardId">
+    UPDATE Board
+    SET boardImg = #{boardImgPath}, modfUserId = #{modfUserId}
+    WHERE boardId = #{boardId}
+  </update>
 </mapper>
