@@ -78,6 +78,8 @@ public class BoardController {
             Integer loginUserId = Integer.valueOf(jwtProvider.getUserPk(token));
             BoardListDto boardInfo = boardService.getBoardInfo(loginUserId, boardId);
             List<ContentInfoDto> contentInfoList = contentService.getContentsByBoardId(boardId);
+            Map<String, Object> boardFreeFields = boardService.getBoardFreeField(boardId);
+            data.put("boardFreeFields", boardFreeFields);
             data.put("boardInfo", boardInfo);
             data.put("contentInfoList", contentInfoList);
             resMap.put("res", true);

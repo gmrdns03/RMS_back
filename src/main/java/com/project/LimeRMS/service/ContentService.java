@@ -143,7 +143,7 @@ public class ContentService {
         data.put("readOnly", readOnly);
         data.put("boardInfo", boardDto);
         data.put("contentDtl", contentDtlDto);
-        data.put("contentFreeFields", freeFieldMap);
+        data.put("boardFreeFields", freeFieldMap);
         return data;
     }
 }
