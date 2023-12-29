@@ -11,6 +11,8 @@ import com.project.LimeRMS.mapper.ContentMapper;
 import com.project.LimeRMS.mapper.LikeMapper;
 import com.project.LimeRMS.mapper.RentalMapper;
 import com.project.LimeRMS.mapper.ReservationMapper;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -145,5 +147,23 @@ public class ContentService {
         data.put("contentDtl", contentDtlDto);
         data.put("boardFreeFields", freeFieldMap);
         return data;
+    }
+
+    public File getContentImg(Integer contentId) throws FileNotFoundException {
+        // Content에서 contentId에 해당하는 contentImg 조회
+        String contentImgPath = contentMapper.findOneContentImgByContentId(contentId);
+
+        // 없는 경우 null 반환
+        if (contentImgPath == null || contentImgPath.isEmpty()) {
+            throw new FileNotFoundException("there is no board image");
+        }
+
+        // 경로가 있는 경우 파일 불러오기
+        File destFile = new File(contentImgPath);
+        if (destFile.exists()) {
+            return destFile;
+        } else {
+            throw  new FileNotFoundException("cannot be resolved in the file system for checking its content length");
+        }
     }
 }

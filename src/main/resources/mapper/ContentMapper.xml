@@ -70,5 +70,7 @@
     ORDER BY ca.attrOrder ASC
   </select>
 
-
+  <select id="findOneContentImgByContentId">
+    SELECT contentImg FROM Content WHERE contentid = ${contentId}
+  </select>
 </mapper>
