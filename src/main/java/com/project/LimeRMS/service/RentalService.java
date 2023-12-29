@@ -154,7 +154,7 @@ public class RentalService {
         //1. 대상 대여 데이터에 관하여 rental 테이블에서 extensionCnt(연장 횟수)를 확인
         Integer extensionCnt = rental.get("extensionCnt");
         //2. board 테이블에서 extensionLimit(연장 횟수 제한)을 확인
-        Integer extensionLimit = rental.
+//        Integer extensionLimit = rental.
         //3. 해당 컨텐츠에 대하여 예약자가 있는지 확인
         //연장 횟수 제한보다 연장 횟수가 적을 경우, 예약자가 없을 경우 연장을 진행
         //4. 연장 할 때 대여 데이터의 extensionCnt를 +1 으로 update 하면됨
@@ -163,7 +163,7 @@ public class RentalService {
         //6. 연장 할 때 대여 데이터의 modfUserId를 token에서 가져온 userId로 update
         //7. 연장 할 때 대여 데이터의 rentalStat(대여상태)를 'CD001001'(대여 중)으로 update
 
-
+        return "";
 
     }
 }
