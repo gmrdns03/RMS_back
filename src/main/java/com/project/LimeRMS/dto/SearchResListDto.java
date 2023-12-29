@@ -19,8 +19,14 @@ public class SearchResListDto {
     private Integer boardId;
     private String boardNm;
     private Integer boardSn;
-    private String cateNm;
+    private Integer cateId;
     private String rentalStat;
     private String rentalStatNm;
-    private String reservYn;
+    private String reserveYn;
+    private String smallCateNm;
+    private String middleCateNm;
+    private String majorCateNm;
+    private Integer smallCateId;
+    private Integer middleCateId;
+    private Integer majorCateId;
 }

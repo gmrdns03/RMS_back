@@ -18,7 +18,9 @@ public class SearchService {
     private final UserService userService;
     private final SearchMapper searchMapper;
     private final CommCdMapper commCdMapper;
-    public Map<String, List<SearchResListDto>> getSearchResultList(String keyword, String userId, Integer inputBoardId) throws Exception{
+    private final CommonService commonService;
+
+    public List<SearchResListDto> getSearchResultList(String keyword, String userId, Integer inputBoardId) throws Exception{
         // 1. user의 권한 확인
         Integer userAuthPriority = userService.getUserAuthPriority(userId);
         // 2. 권한으로 검색 가능한 컨텐츠 리스트 조회
@@ -34,45 +36,35 @@ public class SearchService {
         SimpleDateFormat dateParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         for (SearchResListDto searchRes : searchResListDtoList) {
-
-            Integer contentId = searchRes.getContentId();
-            String contentNm = searchRes.getContentNm();
-            String contentDesc = searchRes.getContentDesc();
-
             // 날짜 형식 변환
             String modfDtString = searchRes.getModfDt();
             Date modfDtDateType = dateParser.parse(modfDtString);
             String modfDt = formatter.format(modfDtDateType);
-
-            Integer boardId = searchRes.getBoardId();
-            String boardNm = searchRes.getBoardNm();
-            Integer boardSn = searchRes.getBoardSn();
-            String cateNm = searchRes.getCateNm();
+            searchRes.setModfDt(modfDt);
 
             // rentalStat이 비어 있을 경우 디폴트 값 셋팅
             String rentalStat = searchRes.getRentalStat();
             if (rentalStat == null || rentalStat.isEmpty()) {
                 rentalStat = "CD001002";
             }
+            searchRes.setRentalStat(rentalStat);
+
+            // 대여 상태 이름 set
             String rentalStatNm = commCdMapper.findCdNmByCd(rentalStat);
+            searchRes.setRentalStatNm(rentalStatNm);
 
-            // reservYn이 비어있을 경우 디폴트 값 셋팅
-            String reservYn = searchRes.getReservYn();
-            if (reservYn == null || reservYn.isEmpty()) {
-                reservYn = "N";
-            }
-            SearchResListDto tempSearchRes = new SearchResListDto(
-                contentId, contentNm, contentDesc, modfDt, boardId, boardNm, boardSn,
-                cateNm, rentalStat, rentalStatNm, reservYn
-            );
+            // 카테고리 set
+            Integer cateId = searchRes.getCateId();
 
-            boolean isBoardNm = searchResMap.containsKey(boardNm);
-            if (!isBoardNm) {
-                searchResMap.put(boardNm, new ArrayList<>());
-            }
-            searchResMap.get(boardNm).add(tempSearchRes);
+            Map<String, Object> cateMap = commonService.getContentHigherachy(cateId);
+            searchRes.setSmallCateId((Integer) cateMap.get("smallCateId"));
+            searchRes.setMiddleCateId((Integer) cateMap.get("middleCateId"));
+            searchRes.setMajorCateId((Integer) cateMap.get("majorCateId"));
+            searchRes.setSmallCateNm((String) cateMap.get("smallCateNm"));
+            searchRes.setMiddleCateNm((String) cateMap.get("middleCateNm"));
+            searchRes.setMajorCateNm((String) cateMap.get("majorCateNm"));
         }
 
-        return searchResMap;
+        return searchResListDtoList;
     }
 }
