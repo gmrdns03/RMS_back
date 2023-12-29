@@ -40,4 +40,34 @@ public class RentalController {
             return ResponseEntity.ok().body(resMap);
         }
     }
+
+    @PostMapping("/extensions")
+    @Operation(
+        summary = "대여 연장",
+        description = "대여 연장 횟수를 확인한 후 연장 진행.",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                examples = @ExampleObject(value = "{\"hiCommCd\":\"CD006000\"}"))))
+    public ResponseEntity<?> contentRentalExtension(@RequestHeader("AccessToken") String token ,@RequestBody Map<String, Integer> rental) {
+){
+        Map<String, Object> resMap = new HashMap<>();
+        String rentalUserId = jwtProvider.getUserPk(token);
+        try {
+            String message = rentalService.contentRentalExtension();
+            resMap.put("res", true);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
+
+
+
+
+
+
+
 }

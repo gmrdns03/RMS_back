@@ -60,4 +60,21 @@ public class RentalService {
         }
         return resRentalListDtos;
     }
+
+    public String contentRentalExtension(String likeUserId, Map<String, Integer> rental){
+        //1. 대상 대여 데이터에 관하여 rental 테이블에서 extensionCnt(연장 횟수)를 확인
+        Integer extensionCnt = rental.get("extensionCnt");
+        //2. board 테이블에서 extensionLimit(연장 횟수 제한)을 확인
+        Integer extensionLimit = rental.
+        //3. 해당 컨텐츠에 대하여 예약자가 있는지 확인
+        //연장 횟수 제한보다 연장 횟수가 적을 경우, 예약자가 없을 경우 연장을 진행
+        //4. 연장 할 때 대여 데이터의 extensionCnt를 +1 으로 update 하면됨
+        //5. 연장 할 때 대여 데이터의 predReturnDt(반납 예정일)를 기존 predReturnDt + Board.rentalPeriod 로 update 하면 됨
+        //이 때 rentalPeriod는 시간단위 이므로 기존 predReturnDt에 대여기간을 시간 단위로 더한 후 해당일 밤 11시 59분 59초로 시간을 변경
+        //6. 연장 할 때 대여 데이터의 modfUserId를 token에서 가져온 userId로 update
+        //7. 연장 할 때 대여 데이터의 rentalStat(대여상태)를 'CD001001'(대여 중)으로 update
+
+
+
+    }
 }

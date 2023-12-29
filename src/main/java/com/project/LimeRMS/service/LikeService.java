@@ -28,8 +28,9 @@ public class LikeService {
 
     public String cancelLikes(String likeUserId, Map<String, Integer> content) {
         Integer contentId = content.get("contentId");
-        likeMapper.unLike(likeUserId,contentId);
+        likeMapper.unLike(likeUserId, contentId);
         return "좋아요가 취소되었습니다.";
+    }
 
     public List<LikeListDto> getUserLikeList (String userId) throws Exception {
         List<LikeListDto> likeListDtos = likeMapper.findLikeListByUserId(userId);
