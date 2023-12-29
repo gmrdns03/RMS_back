@@ -14,6 +14,7 @@ import org.springframework.stereotype.Component;
 public class ContentAttrDto {
     private String logicalAttr;
     private String physicalAttr;
+    private String attrType;
     private String mustYn;
     private String attrOrder;
 

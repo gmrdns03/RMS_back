@@ -18,6 +18,7 @@ public class BoardListDto {
     private String contentViewType;
     private String boardNm;
     private String boardStat;
+    private String boardStatNm;
     private String boardDesc;
     private Integer boardSn;
     private Integer viewAuth;

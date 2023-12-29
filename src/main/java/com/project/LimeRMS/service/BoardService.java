@@ -3,6 +3,7 @@ package com.project.LimeRMS.service;
 import com.project.LimeRMS.dto.BoardListDto;
 import com.project.LimeRMS.entity.Board;
 import com.project.LimeRMS.mapper.BoardMapper;
+import com.project.LimeRMS.mapper.CommCdMapper;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,12 +23,14 @@ import org.springframework.web.multipart.MultipartFile;
 public class BoardService {
     private final BoardMapper boardMapper;
     private final UserService userService;
+    private final CommCdMapper commCdMapper;
 
     @Value("${filesPath.board}")
     private String DtlBoardPath;
 
     public BoardListDto getBoardListDto(Board board) {
         String boardStat = board.getBoardStat();
+        String boardStatNm = commCdMapper.findCdNmByCd(boardStat);
         Integer boardId = board.getBoardId();
         String boardTypeNm = board.getBoardType().getBoardTypeNm();
         String boardViewType = board.getBoardType().getBoardViewType();
@@ -42,7 +45,7 @@ public class BoardService {
         Integer rentalPeriod = board.getRentalPeriod();
         Integer extensionLimit = board.getExtensionLimit();
         Integer rentalLimit = board.getRentalLimit();
-        return new BoardListDto(boardId, boardTypeNm, boardViewType, contentViewType, boardNm, boardStat,
+        return new BoardListDto(boardId, boardTypeNm, boardViewType, contentViewType, boardNm, boardStat, boardStatNm,
             boardDesc, boardSn, viewAuth, writeAuth, commentAuth, modifyAuth, rentalPeriod, extensionLimit, rentalLimit);
     }
 

@@ -31,8 +31,8 @@ public class ContentController {
         Map<String, Object> resMap = new HashMap<>();
         Map<String, Object> data = new HashMap<>();
         try {
-            String userId = jwtProvider.getUserPk(token);
-            Map<String, Object> contentDtlRes = contentService.getContentDtail(userId, contentId);
+            String loginUserId = jwtProvider.getUserPk(token);
+            Map<String, Object> contentDtlRes = contentService.getContentDtail(loginUserId, contentId);
             data.putAll(contentDtlRes);
             resMap.put("res", true);
             resMap.put("statusCode", 200);
