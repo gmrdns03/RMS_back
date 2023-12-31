@@ -5,7 +5,7 @@
 <mapper namespace="com.project.LimeRMS.mapper.NotificationMapper">
   <update id="updateNotiStatusByNotiId">
     UPDATE Notification
-    SET notiStatus = 'CD005002',
+    SET notiStatus = 'CD005002'
     WHERE notiId = #{notiId}
   </update>
 
