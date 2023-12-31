@@ -85,6 +85,12 @@
         WHERE rentalUserId = ${userId} AND rentalStat NOT IN ('CD001002', 'CD001003')
     </select>
 
+    <update id="findRentalByContentId">
+        UPDATE Rental
+        SET rentalStat = 'CD001001', modfUserId = #{modfUserId}
+        WHERE rentalUserId = #{rentalUserId} AND contentId = #{contentId} AND rentalStat = 'CD001002'
+    </update>
+
     <update id="contentReturn">
         UPDATE Rental
         SET rentalStat = 'CD001002', returnDt = #{returnDt}, modfUserId = #{userId}

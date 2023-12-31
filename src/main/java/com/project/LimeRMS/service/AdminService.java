@@ -151,6 +151,14 @@ public class AdminService {
         return overdueContents;
     }
 
+    public String changeContentRentalStat(String modfUserId, Map<String, Integer> member){
+        Integer rentalUserId = member.get("rentalUserId");
+        Integer contentId = member.get("contentId");
+        //rentalUserId, contentId가 같은 컨텐츠를 찾아 rentalStat = "CD001002" 반납 -> "CD001001" 대여 상태로 변경
+        rentalMapper.findRentalByContentId(rentalUserId, contentId, modfUserId);
+        return "컨텐츠의 상태가 반납에서 대여로 변경되었습니다.";
+    }
+
     public String changeBoardPriorities(String managerId, List<BoardPriorityDto> boardPriorityDtoList){
         for (BoardPriorityDto boardPriorityDto : boardPriorityDtoList){
             Integer boardSn = boardPriorityDto.getBoardSn();

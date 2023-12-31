@@ -240,6 +240,30 @@ public class AdminController {
         }
     }
 
+    @PostMapping("/overdues/change-stat")
+    @Operation(
+        summary = "관리자가 컨텐츠 반납 -> 미반납 상태 변경",
+        description = "관리자는 사용자가 아직 반납하지 않았는데도 불구하고 상태를 반납으로 변경했을 때 다시 미반납으로 변경할 수 있다.",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                examples = @ExampleObject(value = "{\"rentalUserId\":1, \"contentId\":1}"))))
+    public ResponseEntity<?> changeContentRentalStat(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String modfUserId = jwtProvider.getUserPk(token);
+            String message = adminService.changeContentRentalStat(modfUserId, member);
+            resMap.put("res", true);
+            resMap.put("statusCode", 201);
+            resMap.put("msg", message);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap.put("res", false);
+            resMap.put("statusCode", 400);
+            resMap.put("msg", e.getMessage());
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
+
     @PostMapping("/boards/priorities")
     @Operation(
         summary = "보드 우선순위 변경",
