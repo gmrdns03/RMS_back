@@ -26,4 +26,14 @@ public interface RentalMapper {
     Integer findUserRentalCntByUserId(@Param("userId") Integer userId);
 
     void contentReturn(@Param("userId") Integer userId, @Param("contentId") Integer contentId, @Param("returnDt") LocalDateTime returnDt);
+
+    Integer findExtensionCntByContentId(@Param("contentId")Integer contentId,@Param("rentalUserId")String rentalUserId);
+
+
+    Integer findExtensionLimitByContentId(@Param("contentId")Integer contentId);
+
+    Integer findRentalPeriod(@Param("contentId")Integer contentId);
+
+    void updateRental(@Param("rentalUserId")String userId, @Param("contentId")Integer contentId, @Param("predReturnDt")LocalDateTime predReturnDt,
+        @Param("extensionCnt") Integer extensionCnt);
 }
