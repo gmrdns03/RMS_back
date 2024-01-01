@@ -21,6 +21,7 @@
     WHERE contentId = #{contentId}
     AND notiType = #{notiType}
     AND receiverId = #{receiverId}
+    AND DATE(joinDt) = CURDATE()
     ORDER BY joinDt DESC
     LIMIT 1;
   </select>
