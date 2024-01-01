@@ -35,6 +35,6 @@
   
   <select id="findReserveIdByContentId">
     SELECT reserveId FROM Reservation
-    WHERE contentId = #{contentId} AND delYn ='Y'
+    WHERE contentId = #{contentId} AND delYn ='N'
   </select>
 </mapper>

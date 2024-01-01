@@ -123,13 +123,14 @@ public class RentalController {
     )
     public ResponseEntity<?> contentRentalExtension(
         @Parameter(hidden = true) @RequestHeader("AccessToken") String token ,
-        @RequestBody Map<String, Integer> content)
+        @RequestBody Map<String, String> content)
     {
         Map<String, Object> resMap = new HashMap<>();
         try {
+
             String loginUserId = jwtProvider.getUserPk(token);
             String userId = String.valueOf(content.get("userId"));
-            Integer contentId = content.get("contentId");
+            String contentId = content.get("contentId");
             String message = rentalService.contentRentalExtension(loginUserId,userId,contentId);
             resMap.put("res", true);
             resMap.put("statusCode", 200);

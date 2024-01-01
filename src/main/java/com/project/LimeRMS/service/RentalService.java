@@ -1,6 +1,7 @@
 package com.project.LimeRMS.service;
 
 import com.project.LimeRMS.dto.BoardListDto;
+import com.project.LimeRMS.entity.BoardManager;
 import com.project.LimeRMS.mapper.BoardMapper;
 import com.project.LimeRMS.mapper.RentalMapper;
 import com.project.LimeRMS.dto.RentalListDto;
@@ -152,34 +153,38 @@ public class RentalService {
         return resRentalListDtos;
     }
 
-    public String contentRentalExtension(String loginUserId,String userId,Integer contentId)throws Exception  {
+    public String contentRentalExtension(String loginUserId,String userId,String contentId)throws Exception  {
         // 유저의 권한 확인
+        // 유저의 권한이 4보다 높고 유저아이디와 맞지 않을 때
         Integer loginUserAuthPriority = userService.getUserAuthPriority(String.valueOf(loginUserId));
-        if (loginUserAuthPriority < 4 && !loginUserId.equals(userId)) {
+        Integer boardId = rentalMapper.getBoardId(Integer.valueOf(contentId));
+        List<BoardManager> boardMangerAuthPriority = rentalMapper.getBoardMangerAuthPriority(userId, boardId);
+        if (loginUserAuthPriority > 4 && !loginUserId.equals(userId) && boardMangerAuthPriority.isEmpty()) {
             throw new IllegalAccessException("타인에게 컨텐츠를 연장해줄 권한이 없습니다.");
         }
         //1. 대상 대여 데이터에 관하여 rental 테이블에서 extensionCnt(연장 횟수)를 확인
-        Integer extensionCnt = rentalMapper.findExtensionCntByContentId(contentId,userId);
-        //2. board 테이블에서 extensionLimit(연장 횟수 제한)을 확인
-        Integer extensionLimit = rentalMapper.findExtensionLimitByContentId(contentId);
-        //3. 해당 컨텐츠에 대하여 예약자가 있는지 확인
-        String reserveId = reservationMapper.findReserveIdByContentId(contentId);
-        //연장 횟수 제한보다 연장 횟수가 적을 경우, 예약자가 없을 경우 연장을 진행
-        if(extensionLimit > extensionCnt && reserveId == null){
-            //4. 연장 할 때 대여 데이터의 extensionCnt를 +1 으로 update 하면됨
-            LocalDateTime now = LocalDateTime.now();
-            //5. 연장 할 때 대여 데이터의 predReturnDt(반납 예정일)를 기존 predReturnDt + Board.rentalPeriod 로 update 하면 됨
-            //이 때 rentalPeriod는 시간단위 이므로 기존 predReturnDt에 대여기간을 시간 단위로 더한 후 해당일 밤 11시 59분 59초로 시간을 변경
-            Integer rentalPeriod = rentalMapper.findRentalPeriod(contentId);
-            LocalDateTime predReturnDt = now.plusHours(rentalPeriod).with(LocalTime.of(23, 59, 59));
-            //6. 연장 할 때 대여 데이터의 modfUserId를 token에서 가져온 userId로 update
-            //7. 연장 할 때 대여 데이터의 rentalStat(대여상태)를 'CD001001'(대여 중)으로 update
-             rentalMapper.updateRental(userId,contentId,predReturnDt,extensionCnt);
+            Integer extensionCnt = rentalMapper.findExtensionCntByContentId(
+                Integer.valueOf(contentId),userId);
+            //2. board 테이블에서 extensionLimit(연장 횟수 제한)을 확인
+            Integer extensionLimit = rentalMapper.findExtensionLimitByContentId(
+                Integer.valueOf(contentId));
+            //3. 해당 컨텐츠에 대하여 예약자가 있는지 확인
+            String reserveId = reservationMapper.findReserveIdByContentId(
+                Integer.valueOf(contentId));
+            //연장 횟수 제한보다 연장 횟수가 적을 경우, 예약자가 없을 경우 연장을 진행
+            if(extensionLimit > extensionCnt && reserveId == null){
+                //4. 연장 할 때 대여 데이터의 extensionCnt를 +1 으로 update 하면됨
+                LocalDateTime now = LocalDateTime.now();
+                //5. 연장 할 때 대여 데이터의 predReturnDt(반납 예정일)를 기존 predReturnDt + Board.rentalPeriod 로 update 하면 됨
+                //이 때 rentalPeriod는 시간단위 이므로 기존 predReturnDt에 대여기간을 시간 단위로 더한 후 해당일 밤 11시 59분 59초로 시간을 변경
+                Integer rentalPeriod = rentalMapper.findRentalPeriod(Integer.valueOf(contentId));
+                LocalDateTime predReturnDt = now.plusHours(rentalPeriod).with(LocalTime.of(23, 59, 59));
+                //6. 연장 할 때 대여 데이터의 modfUserId를 token에서 가져온 userId로 update
+                //7. 연장 할 때 대여 데이터의 rentalStat(대여상태)를 'CD001001'(대여 중)으로 update
+                rentalMapper.updateRental(userId,Integer.valueOf(contentId),predReturnDt,extensionCnt);
 
-             return "연장에 성공했습니다.";
-        }
-
+                return "연장에 성공했습니다.";
+            }
         return "연장에 실패했습니다.";
-
     }
 }

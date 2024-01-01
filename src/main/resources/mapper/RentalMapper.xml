@@ -97,9 +97,8 @@
     </select>
 
     <select id="findExtensionLimitByContentId">
-        SELECT extensionLimit FROM Board b
+        SELECT b.extensionLimit FROM Board b
         LEFT JOIN Content c ON b.boardId = c.boardId
-        LEFT JOIN Rental r ON c.contentId = r.contentId
         WHERE c.contentId = #{contentId}
         LIMIT 1
     </select>
@@ -112,11 +111,22 @@
 
 
     <select id="findRentalPeriod">
-    SELECT rentalPeriod FROM Board b
-    LEFT JOIN Content c ON b.boardId = c.boardId
-    LEFT JOIN Rental r ON c.contentId = r.contentId
-    WHERE r.contentId = #{contentId}
-    LIMIT 1
+        SELECT b.rentalPeriod FROM Board b
+        LEFT JOIN Content c ON b.boardId = c.boardId
+        WHERE c.contentId = #{contentId}
+        LIMIT 1
+    </select>
+
+    <select id="getBoardMangerAuthPriority">
+        SELECT * FROM BoardManager
+        WHERE userId = #{userId} AND boardId = #{boardId} AND delYn = 'N'
+    </select>
+
+    <select id="getBoardId">
+        SELECT b.boardId FROM Board b
+        LEFT JOIN Content c ON b.boardId = c.boardId
+        WHERE c.contentId = #{contentId}
+
     </select>
 
 
