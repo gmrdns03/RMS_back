@@ -32,4 +32,9 @@
     ORDER BY modfDt DESC
     LIMIT 1
   </select>
+  
+  <select id="findReserveIdByContentId">
+    SELECT reserveId FROM Reservation
+    WHERE contentId = #{contentId} AND delYn ='N'
+  </select>
 </mapper>

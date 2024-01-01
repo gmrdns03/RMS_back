@@ -1,5 +1,6 @@
 package com.project.LimeRMS.controller;
 
+import ch.qos.logback.classic.util.LogbackMDCAdapter;
 import com.project.LimeRMS.dto.BoardPriorityDto;
 import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.RentalService;
@@ -116,17 +117,28 @@ public class RentalController {
         description = "대여 연장 횟수를 확인한 후 연장 진행.",
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
             content = @io.swagger.v3.oas.annotations.media.Content(
-                examples = @ExampleObject(value = "{\"hiCommCd\":\"CD006000\"}"))))
-    public ResponseEntity<?> contentRentalExtension(@RequestHeader("AccessToken") String token ,@RequestBody Map<String, Integer> rental) {
+                examples = @ExampleObject(value = "{\"contentId\": \"1\", \"userId\": \"1\"}")
+            )
+        )
+    )
+    public ResponseEntity<?> contentRentalExtension(
+        @Parameter(hidden = true) @RequestHeader("AccessToken") String token ,
+        @RequestBody Map<String, String> content)
+    {
         Map<String, Object> resMap = new HashMap<>();
-        String rentalUserId = jwtProvider.getUserPk(token);
         try {
-//            String message = rentalService.contentRentalExtension();
-//            resMap.put("res", true);
-//            resMap.put("msg", message);
+
+            String loginUserId = jwtProvider.getUserPk(token);
+            String userId = String.valueOf(content.get("userId"));
+            String contentId = content.get("contentId");
+            String message = rentalService.contentRentalExtension(loginUserId,userId,contentId);
+            resMap.put("res", true);
+            resMap.put("statusCode", 200);
+            resMap.put("msg", message);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
+            resMap.put("statusCode", 400);
             resMap.put("msg", e.getMessage());
             return ResponseEntity.ok().body(resMap);
         }

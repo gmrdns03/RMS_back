@@ -113,4 +113,44 @@
         SET rentalStat = 'CD001002', returnDt = #{returnDt}, modfUserId = #{userId}
         WHERE rentalUserId = #{userId} and contentId = #{contentId}
     </update>
+
+    <select id="findExtensionCntByContentId">
+        SELECT extensionCnt FROM Rental
+        WHERE contentId = #{contentId} and rentalUserId=#{rentalUserId}
+    </select>
+
+    <select id="findExtensionLimitByContentId">
+        SELECT b.extensionLimit FROM Board b
+        LEFT JOIN Content c ON b.boardId = c.boardId
+        WHERE c.contentId = #{contentId}
+        LIMIT 1
+    </select>
+
+    <update id="updateRental">
+        UPDATE Rental
+        SET rentalStat = 'CD001001' ,predReturnDt=#{predReturnDt}, modfUserId=#{rentalUserId}, extensionCnt =extensionCnt+1
+        WHERE rentalUserId = #{rentalUserId} and contentId=#{contentId}
+    </update>
+
+
+    <select id="findRentalPeriod">
+        SELECT b.rentalPeriod FROM Board b
+        LEFT JOIN Content c ON b.boardId = c.boardId
+        WHERE c.contentId = #{contentId}
+        LIMIT 1
+    </select>
+
+    <select id="getBoardMangerAuthPriority">
+        SELECT * FROM BoardManager
+        WHERE userId = #{userId} AND boardId = #{boardId} AND delYn = 'N'
+    </select>
+
+    <select id="getBoardId">
+        SELECT b.boardId FROM Board b
+        LEFT JOIN Content c ON b.boardId = c.boardId
+        WHERE c.contentId = #{contentId}
+
+    </select>
+
+
 </mapper>

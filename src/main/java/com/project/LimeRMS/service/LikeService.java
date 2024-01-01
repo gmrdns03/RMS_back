@@ -4,7 +4,6 @@ import com.project.LimeRMS.mapper.LikeMapper;
 import java.util.Map;
 import com.project.LimeRMS.dto.LikeListDto;
 import com.project.LimeRMS.mapper.CommCdMapper;
-import com.project.LimeRMS.mapper.LikeMapper;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

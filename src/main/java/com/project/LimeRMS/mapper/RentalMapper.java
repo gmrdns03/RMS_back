@@ -2,6 +2,7 @@ package com.project.LimeRMS.mapper;
 
 import com.project.LimeRMS.dto.ContentListDto;
 import com.project.LimeRMS.dto.RentalListDto;
+import com.project.LimeRMS.entity.BoardManager;
 import java.time.LocalDateTime;
 import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
@@ -27,7 +28,22 @@ public interface RentalMapper {
 
     void contentReturn(@Param("userId") Integer userId, @Param("contentId") Integer contentId, @Param("returnDt") LocalDateTime returnDt);
 
+    Integer findExtensionCntByContentId(@Param("contentId")Integer contentId,@Param("rentalUserId")String rentalUserId);
+
+
+    Integer findExtensionLimitByContentId(@Param("contentId")Integer contentId);
+
+    Integer findRentalPeriod(@Param("contentId")Integer contentId);
+
+    void updateRental(@Param("rentalUserId")String userId, @Param("contentId")Integer contentId, @Param("predReturnDt")LocalDateTime predReturnDt,
+        @Param("extensionCnt") Integer extensionCnt);
+
+    List<BoardManager> getBoardMangerAuthPriority(@Param("userId")String userId, @Param("boardId")Integer boardId);
+
+    Integer getBoardId(@Param("contentId")Integer contentId);
+
     void findRentalByContentId(@Param("rentalUserId")Integer rentalUserId, @Param("contentId")Integer contentId, @Param("modfUserId")String modfUserId);
 
     ContentListDto findCanceledRentalByUserId(@Param("userId")Integer receiverId, @Param("contentId")Integer contentId);
+
 }
