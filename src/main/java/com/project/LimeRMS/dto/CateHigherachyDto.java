@@ -11,11 +11,9 @@ import org.springframework.stereotype.Component;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class ContentAttrDto {
-    private String logicalAttr;
-    private String physicalAttr;
-    private String attrType;
-    private String mustYn;
-    private String attrOrder;
-
+public class CateHigherachyDto {
+    private Integer cateId;
+    private Integer highCate;
+    private String CateNm;
+    private Integer depth;
 }

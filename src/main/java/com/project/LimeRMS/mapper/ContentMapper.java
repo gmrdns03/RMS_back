@@ -13,4 +13,6 @@ public interface ContentMapper {
     List<ContentAttrDto> findContentAttrByBoardId(@Param("boardId") Integer boardId);
 
     Content findOneByContentId(@Param("contentId")Integer contentId);
+
+    String findOneContentImgByContentId(@Param("contentId") Integer contentId);
 }

@@ -78,6 +78,8 @@ public class BoardController {
             Integer loginUserId = Integer.valueOf(jwtProvider.getUserPk(token));
             BoardListDto boardInfo = boardService.getBoardInfo(loginUserId, boardId);
             List<ContentInfoDto> contentInfoList = contentService.getContentsByBoardId(boardId);
+            Map<String, Object> boardFreeFields = boardService.getBoardFreeField(boardId);
+            data.put("boardFreeFields", boardFreeFields);
             data.put("boardInfo", boardInfo);
             data.put("contentInfoList", contentInfoList);
             resMap.put("res", true);
@@ -96,7 +98,6 @@ public class BoardController {
     @GetMapping("/{boardId}/img")
     public ResponseEntity<?> getBoardImg(@PathVariable("boardId") String boardId) {
         Map<String, Object> resMap = new HashMap<>();
-        Map<String, Object> data = new HashMap<>();
         try {
             File destFile = boardService.getBoardImg(boardId);
 

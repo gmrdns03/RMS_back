@@ -45,17 +45,34 @@
     </update>
 
     <select id="findOverdueRentalByUserId" resultType="com.project.LimeRMS.dto.ContentListDto">
-        SELECT r.rentalId, r.rentalDt, r.predReturnDt, r.rentalStat, u.userId, u.userNm, c.contentId, c.contentNm FROM Rental r
-        LEFT JOIN User u ON r.rentalUserId = u.userId
-        LEFT JOIN Content c ON r.contentId = c.contentId
-        WHERE rentalStat = 'CD001003' AND rentalUserId = #{userId}
+        SELECT *
+            FROM (
+            SELECT r.rentalId, r.rentalDt, r.predReturnDt, r.rentalStat, u.userId, u.userNm, c.contentId, c.contentNm FROM Rental r
+            LEFT JOIN User u ON r.rentalUserId = u.userId
+            LEFT JOIN Content c ON r.contentId = c.contentId
+            WHERE rentalStat = 'CD001003' AND rentalUserId = #{userId}
+            ) trg
+        WHERE (trg.contentId, trg.userId) not in (SELECT contentId, receiverId FROM Notification WHERE DATE(joinDt) = CURDATE());
     </select>
 
     <select id="findReturnRentalByUserId" resultType="com.project.LimeRMS.dto.ContentListDto">
+        SELECT *
+            FROM (
+            SELECT r.rentalId, r.rentalDt, r.predReturnDt, r.rentalStat, u.userId, u.userNm, c.contentId, c.contentNm FROM Rental r
+            LEFT JOIN User u ON r.rentalUserId = u.userId
+            LEFT JOIN Content c ON r.contentId = c.contentId
+            WHERE rentalUserId = #{userId} AND rentalStat = 'CD001001' AND <![CDATA[DATEDIFF(DATE(predReturnDt), CURDATE()) <= 3]]>
+            ) trg
+        WHERE (trg.contentId, trg.userId) not in (SELECT contentId, receiverId FROM Notification WHERE DATE(joinDt) = CURDATE());
+    </select>
+
+    <select id="findCanceledRentalByUserId" resultType="com.project.LimeRMS.dto.ContentListDto">
         SELECT r.rentalId, r.rentalDt, r.predReturnDt, r.rentalStat, u.userId, u.userNm, c.contentId, c.contentNm FROM Rental r
         LEFT JOIN User u ON r.rentalUserId = u.userId
         LEFT JOIN Content c ON r.contentId = c.contentId
-        WHERE rentalUserId = #{userId} AND rentalStat = 'CD001001' AND <![CDATA[DATEDIFF(DATE(predReturnDt), CURDATE()) <= 3]]>;
+        WHERE r.rentalUserId = #{userId} AND r.contentId = #{contentId} AND r.rentalStat = 'CD001001'
+        ORDER BY r.modfDt DESC
+        LIMIT 1;
     </select>
 
     <select id="findLatestStatByContentId">
@@ -84,6 +101,12 @@
         SELECT COUNT(*) FROM Rental r
         WHERE rentalUserId = ${userId} AND rentalStat NOT IN ('CD001002', 'CD001003')
     </select>
+
+    <update id="findRentalByContentId">
+        UPDATE Rental
+        SET rentalStat = 'CD001001', modfUserId = #{modfUserId}
+        WHERE rentalUserId = #{rentalUserId} AND contentId = #{contentId} AND rentalStat = 'CD001002'
+    </update>
 
     <update id="contentReturn">
         UPDATE Rental

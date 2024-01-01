@@ -11,6 +11,8 @@ import com.project.LimeRMS.mapper.ContentMapper;
 import com.project.LimeRMS.mapper.LikeMapper;
 import com.project.LimeRMS.mapper.RentalMapper;
 import com.project.LimeRMS.mapper.ReservationMapper;
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,6 +31,7 @@ public class ContentService {
     private final ReservationMapper reservationMapper;
     private final LikeMapper likeMapper;
     private final UserService userService;
+    private final CommonService commonService;
 
     public List<ContentInfoDto> getContentsByBoardId(String boardId) {
         List<Content> contentList = contentMapper.findContentsByBoardId(boardId);
@@ -56,39 +59,29 @@ public class ContentService {
         return  contentInfoDtoList;
     }
 
-    public Map<String, Object> getContentDtail(String userId, Integer contentId) throws NullPointerException, IllegalAccessException, Exception {
+    public Map<String, Object> getContentDtail(String loginUserId, Integer contentId) throws NullPointerException, IllegalAccessException, Exception {
         Map<String, Object> data = new HashMap<>();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
         // 1. userId로 사용자 권한 조회
-        Integer userAuthPriority = userService.getUserAuthPriority(userId);
+        Integer userAuthPriority = userService.getUserAuthPriority(loginUserId);
 
         BoardListDto boardDto = boardMapper.findOneByContentId(contentId);
         if (boardDto == null) {
             throw new NullPointerException("요청에 대한 컨텐츠가 존재하지 않습니다. url을 확인해주세요");
         }
+        boardDto.setBoardStatNm(commCdMapper.findCdNmByCd(boardDto.getBoardStat()));
 
         // 2. 사용자 권한으로 해당 보드 조회 권한이 있는지 확인
         Integer boardViewAuth = boardDto.getViewAuth();
         if (userAuthPriority >= boardViewAuth) {
             throw new IllegalAccessException("해당 컨텐츠에 대한 접근 권한이 없습니다.");
         }
-        // 3. 보드속성 테이블에서 조회 대상 컬럼 확인
-        List<ContentAttrDto> contentAttrList = contentMapper.findContentAttrByBoardId(boardDto.getBoardId());
-        List<String> pysicalAttrArr = new ArrayList<>();
-        List<String> logicalAttrArr = new ArrayList<>();
-        List<Integer> attrOrderArr = new ArrayList<>();
-        for (ContentAttrDto attr : contentAttrList) {
-            pysicalAttrArr.add(attr.getPhysicalAttr());
-            logicalAttrArr.add(attr.getLogicalAttr());
-            attrOrderArr.add(Integer.valueOf(attr.getAttrOrder()));
-        }
 
-        // 4. 조회 대상 컬럼까지 cotent table에서 컨텐츠 상세 조회
+        // 3. 조회 대상 컬럼까지 cotent table에서 컨텐츠 상세 조회
         Content content = contentMapper.findOneByContentId(contentId);
         Integer contentDtlId = content.getContentId();
         Integer cateId = content.getContentCategory().getCateId();
-        String cateNm = content.getContentCategory().getCateNm();
         Integer boardId = content.getBoard().getBoardId();
         String contentNm = content.getContentNm();
         String contentDesc = content.getContentDesc();
@@ -102,6 +95,20 @@ public class ContentService {
         String modfDt = formatter.format(content.getModfDt());
         Integer modfUserId = Integer.valueOf(content.getModfUserId());
 
+        // 4. 보드속성 테이블에서 자유필드 컬럼 확인
+        List<ContentAttrDto> contentAttrList = contentMapper.findContentAttrByBoardId(boardDto.getBoardId());
+        Map<String, Object> freeFieldMap = new HashMap<>();
+        for (ContentAttrDto dto : contentAttrList) {
+            Map<String, Object> freeField = new HashMap<>();
+            freeField.put("label", dto.getLogicalAttr());
+            freeField.put("value", content.getFreeField(dto.getPhysicalAttr()));
+            freeField.put("order", dto.getAttrOrder());
+            String type = commCdMapper.findCdNmByCd(dto.getAttrType());
+            freeField.put("type", type);
+            freeField.put("required", dto.getMustYn());
+            freeFieldMap.put(dto.getAttrOrder(), freeField);
+        }
+
         // 컨텐츠 대여 상태 조회
         String rentalStat = rentalMapper.findLatestStatByContentId(contentId);
         if (rentalStat == null || rentalStat.isEmpty()) {
@@ -111,31 +118,52 @@ public class ContentService {
 
         // 컨텐츠 예약 상태 조회
         String reservedYn = reservationMapper.findReserveYnByContentId(contentId);
-        if (reservedYn == null || reservedYn.isEmpty()) {
-            reservedYn = "N";
-        }
 
         // 컨텐츠 좋아요 개수 조회
         Integer likeCnt = likeMapper.countLikeByContentId(contentId);
 
+        // 컨텐츠 카테고리 조회
+        Map<String, Object> cateHigherachy = commonService.getContentHigherachy(cateId);
+
         ContentDtlDto contentDtlDto = new ContentDtlDto(
-            contentDtlId, cateId, cateNm, boardId, contentNm, contentDesc, contentHtml, noticeYn, secretYn,
-            location, rentalMessage, regDt, regUserId, modfDt, modfUserId, rentalStat, rentalStatNm, reservedYn, likeCnt
+            contentDtlId, cateId, boardId, contentNm, contentDesc, contentHtml, noticeYn, secretYn,
+            location, rentalMessage, regDt, regUserId, modfDt, modfUserId, rentalStat, rentalStatNm, reservedYn, likeCnt,
+            (String) cateHigherachy.get("smallCateNm"),
+            (String) cateHigherachy.get("middleCateNm"),
+            (String) cateHigherachy.get("majorCateNm"),
+            (Integer) cateHigherachy.get("smallCateId"),
+            (Integer) cateHigherachy.get("middleCateId"),
+            (Integer) cateHigherachy.get("majorCateId")
         );
 
-        Map<String, Object> freeFieldMap = new HashMap<>();
-        int i = 0;
-        for (Integer attrOrder : attrOrderArr) {
-            Map<String, String> freeField = new HashMap<>();
-            freeField.put("label", logicalAttrArr.get(i));
-            freeField.put("value", content.getFreeField(pysicalAttrArr.get(i)));
-            freeFieldMap.put(String.valueOf(attrOrder), freeField);
-            i++;
+        // 로그인 한 사용자가 작성자인지 여부 확인
+        boolean readOnly = true;
+        if (modfUserId.equals(Integer.valueOf(loginUserId))) {
+            readOnly = false;
         }
 
+        data.put("readOnly", readOnly);
         data.put("boardInfo", boardDto);
         data.put("contentDtl", contentDtlDto);
-        data.put("contentFreeFields", freeFieldMap);
+        data.put("boardFreeFields", freeFieldMap);
         return data;
+    }
+
+    public File getContentImg(Integer contentId) throws FileNotFoundException {
+        // Content에서 contentId에 해당하는 contentImg 조회
+        String contentImgPath = contentMapper.findOneContentImgByContentId(contentId);
+
+        // 없는 경우 null 반환
+        if (contentImgPath == null || contentImgPath.isEmpty()) {
+            throw new FileNotFoundException("there is no board image");
+        }
+
+        // 경로가 있는 경우 파일 불러오기
+        File destFile = new File(contentImgPath);
+        if (destFile.exists()) {
+            return destFile;
+        } else {
+            throw  new FileNotFoundException("cannot be resolved in the file system for checking its content length");
+        }
     }
 }

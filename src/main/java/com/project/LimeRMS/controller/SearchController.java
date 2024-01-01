@@ -35,7 +35,7 @@ public class SearchController {
         Map<String, Object> data = new HashMap<>();
         try {
             String userId = jwtProvider.getUserPk(token);
-            Map<String, List<SearchResListDto>> searchRes = searchService.getSearchResultList(keyword, userId, boardId);
+            List<SearchResListDto> searchRes = searchService.getSearchResultList(keyword, userId, boardId);
             data.put("searchResult", searchRes);
             resMap.put("res", true);
             resMap.put("statusCode", 200);

@@ -64,10 +64,13 @@
   </resultMap>
 
   <select id="findContentAttrByBoardId" resultType="com.project.LimeRMS.dto.ContentAttrDto">
-    SELECT ca.logicalAttr, ca.physicalAttr, ca.mustYn, ca.attrOrder
+    SELECT ca.logicalAttr, ca.physicalAttr, ca.attrType, ca.mustYn, ca.attrOrder
     FROM ContentAttr ca
-    WHERE ca.boardId = ${boardId};
+    WHERE ca.boardId = ${boardId}
+    ORDER BY ca.attrOrder ASC
   </select>
 
-
+  <select id="findOneContentImgByContentId">
+    SELECT contentImg FROM Content WHERE contentid = ${contentId}
+  </select>
 </mapper>

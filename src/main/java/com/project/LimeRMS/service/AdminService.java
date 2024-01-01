@@ -5,6 +5,7 @@ import com.project.LimeRMS.dto.BoardInfoDto;
 import com.project.LimeRMS.dto.BoardPriorityDto;
 import com.project.LimeRMS.dto.ContentListDto;
 import com.project.LimeRMS.dto.UserInfoDto;
+import com.project.LimeRMS.entity.Notification;
 import com.project.LimeRMS.entity.User;
 import com.project.LimeRMS.mapper.*;
 import java.io.File;
@@ -26,6 +27,7 @@ public class AdminService {
     private final BoardMapper boardMapper;
     private final RentalMapper rentalMapper;
     private final AuthenticationMapper authenticationMapper;
+    private final NotificationMapper notificationMapper;
     private final PasswordEncoder passwordEncoder;
     private final CommCdMapper commCdMapper;
 
@@ -149,6 +151,40 @@ public class AdminService {
             overdueContent.setRentalStatNm(rentalStatNm);
         }
         return overdueContents;
+    }
+
+    public String changeContentRentalStat(String modfUserId, Map<String, Integer> member){
+        Integer rentalUserId = member.get("rentalUserId");
+        Integer contentId = member.get("contentId");
+        //rentalUserId, contentId가 같은 컨텐츠를 찾아 rentalStat = "CD001002" 반납 -> "CD001001" 대여 상태로 변경
+        rentalMapper.findRentalByContentId(rentalUserId, contentId, modfUserId);
+        return "컨텐츠의 상태가 반납에서 대여로 변경되었습니다.";
+    }
+
+    public String addReReturnNotification(String regUserId, Map<String, Integer> member){
+
+        Integer receiverId = member.get("userId");
+        Integer contentId = member.get("contentId");
+        //유저가 잘못 반납한 컨텐츠의 대여 정보 불러오기 (관리자가 다시 미반납처리 했다는 가정)
+        ContentListDto reReturnRental = rentalMapper.findCanceledRentalByUserId(receiverId, contentId);
+        String notiType = "CD004005"; //반납취소
+        String contentNm = reReturnRental.getContentNm();
+        String notiContent = "컨텐츠 '"+contentNm+"'의 반납이 확인되지 않아 미반납처리 되었습니다. 해당 컨텐츠가 정상적으로 반납되었는지 다시 확인부탁드립니다.";
+
+        //이 contentId로 된 나에게 온 notiType이 반납취소인 오늘 생성된 알람이 있는가?
+        Notification noti = notificationMapper.findNotiByContentId(contentId, notiType, receiverId);
+        if (noti != null){
+            notificationMapper.insertOverdueNoti(contentId, receiverId, Integer.valueOf(regUserId), notiType, notiContent);
+            Integer notiId = noti.getNotiId();
+            String notiStatus = noti.getNotiStatus();
+            //미확인("CD005001")이라면 전 일자의 알림은 비활성화
+            if (Objects.equals(notiStatus, "CD005001")){
+                notificationMapper.updateNotiStatusByNotiId(notiId);
+            }
+        } else { //해당 알림이 없다면 추가
+            notificationMapper.insertOverdueNoti(contentId, receiverId, Integer.valueOf(regUserId), notiType, notiContent);
+        }
+        return "대여 상태로 변경된 반납 컨텐츠가 성공적으로 알림에 추가되었습니다.";
     }
 
     public String changeBoardPriorities(String managerId, List<BoardPriorityDto> boardPriorityDtoList){

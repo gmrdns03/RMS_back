@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 public class ContentDtlDto {
     private Integer contentId;
     private Integer cateId;
-    private String cateNm;
     private Integer boardId;
     private String contentNm;
     private String contentDesc;
@@ -38,4 +37,12 @@ public class ContentDtlDto {
 
     // 컨텐츠 좋아요 개수
     private Integer likeCnt;
+
+    // 컨텐츠 카테고리
+    private String smallCateNm;
+    private String middleCateNm;
+    private String majorCateNm;
+    private Integer smallCateId;
+    private Integer middleCateId;
+    private Integer majorCateId;
 }

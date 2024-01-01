@@ -10,9 +10,9 @@
       cb.boardId as boardId,
       cb.boardNm as boardNm,
       cb.boardSn as boardSn,
-      cc.cateNm as cateNm,
+      cc.cateId as cateId,
       r.rentalStat as rentalStat,
-      rv.delYn as reservYn
+      IF(rv.delYn = 'N', 'Y', 'N') as reserveYn
     FROM (
       SELECT
         ct.contentId,
@@ -52,9 +52,9 @@
       cb.boardId as boardId,
       cb.boardNm as boardNm,
       cb.boardSn as boardSn,
-      cc.cateNm as cateNm,
+      cc.cateId as cateId,
       r.rentalStat as rentalStat,
-      rv.delYn as reservYn
+      IF(rv.delYn = 'N', 'Y', 'N') as reserveYn
     FROM (
       SELECT
         ct.contentId,

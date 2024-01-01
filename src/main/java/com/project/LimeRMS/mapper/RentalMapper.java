@@ -41,4 +41,9 @@ public interface RentalMapper {
     List<BoardManager> getBoardMangerAuthPriority(@Param("userId")String userId, @Param("boardId")Integer boardId);
 
     Integer getBoardId(@Param("contentId")Integer contentId);
+
+    void findRentalByContentId(@Param("rentalUserId")Integer rentalUserId, @Param("contentId")Integer contentId, @Param("modfUserId")String modfUserId);
+
+    ContentListDto findCanceledRentalByUserId(@Param("userId")Integer receiverId, @Param("contentId")Integer contentId);
+
 }

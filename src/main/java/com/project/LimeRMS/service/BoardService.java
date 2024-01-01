@@ -1,8 +1,11 @@
 package com.project.LimeRMS.service;
 
 import com.project.LimeRMS.dto.BoardListDto;
+import com.project.LimeRMS.dto.ContentAttrDto;
 import com.project.LimeRMS.entity.Board;
 import com.project.LimeRMS.mapper.BoardMapper;
+import com.project.LimeRMS.mapper.CommCdMapper;
+import com.project.LimeRMS.mapper.ContentMapper;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -10,7 +13,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,12 +27,15 @@ import org.springframework.web.multipart.MultipartFile;
 public class BoardService {
     private final BoardMapper boardMapper;
     private final UserService userService;
+    private final CommCdMapper commCdMapper;
+    private final ContentMapper contentMapper;
 
     @Value("${filesPath.board}")
     private String DtlBoardPath;
 
     public BoardListDto getBoardListDto(Board board) {
         String boardStat = board.getBoardStat();
+        String boardStatNm = commCdMapper.findCdNmByCd(boardStat);
         Integer boardId = board.getBoardId();
         String boardTypeNm = board.getBoardType().getBoardTypeNm();
         String boardViewType = board.getBoardType().getBoardViewType();
@@ -42,7 +50,7 @@ public class BoardService {
         Integer rentalPeriod = board.getRentalPeriod();
         Integer extensionLimit = board.getExtensionLimit();
         Integer rentalLimit = board.getRentalLimit();
-        return new BoardListDto(boardId, boardTypeNm, boardViewType, contentViewType, boardNm, boardStat,
+        return new BoardListDto(boardId, boardTypeNm, boardViewType, contentViewType, boardNm, boardStat, boardStatNm,
             boardDesc, boardSn, viewAuth, writeAuth, commentAuth, modifyAuth, rentalPeriod, extensionLimit, rentalLimit);
     }
 
@@ -138,5 +146,22 @@ public class BoardService {
     public void deleteFile(String filePath) {
         File file = new File(filePath);
         if (file.exists()) {file.delete();}
+    }
+
+    public Map<String, Object> getBoardFreeField(String boardId) {
+        // 4. 보드속성 테이블에서 자유필드 컬럼 확인
+        List<ContentAttrDto> contentAttrList = contentMapper.findContentAttrByBoardId(Integer.valueOf(boardId));
+        Map<String, Object> freeFieldMap = new HashMap<>();
+        for (ContentAttrDto dto : contentAttrList) {
+            Map<String, Object> freeField = new HashMap<>();
+            freeField.put("label", dto.getLogicalAttr());
+            freeField.put("value", null);
+            freeField.put("order", dto.getAttrOrder());
+            String type = commCdMapper.findCdNmByCd(dto.getAttrType());
+            freeField.put("type", type);
+            freeField.put("required", dto.getMustYn());
+            freeFieldMap.put(dto.getAttrOrder(), freeField);
+        }
+        return freeFieldMap;
     }
 }
