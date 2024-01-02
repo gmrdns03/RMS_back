@@ -1,16 +1,12 @@
 package com.project.LimeRMS.controller;
 
-import ch.qos.logback.classic.util.LogbackMDCAdapter;
-import com.project.LimeRMS.dto.BoardPriorityDto;
 import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.RentalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.persistence.criteria.CriteriaBuilder.In;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,9 +15,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "RentalController", description = "RentalController API")
 @RestController
@@ -102,6 +96,7 @@ public class RentalController {
             resMap.put("res", true);
             resMap.put("statusCode", 201);
             resMap.put("msg", message);
+            resMap.put("data", true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
             resMap.put("res", false);
