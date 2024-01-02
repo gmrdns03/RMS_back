@@ -1,0 +1,45 @@
+version: '3.8'
+
+x-rms-common: 
+  &rms-back-common
+  #  image: rms_back:latest
+  build:
+    context: .
+    dockerfile: Dockerfile
+  environment:
+    DB_PORT: ${DB_PORT}
+    DB_HOST: ${DB_HOST}
+    DB_NAME: ${DB_NAME}
+    DB_USER: ${DB_USER}
+    DB_PASSWORD: ${DB_PASSWORD}
+    JWT_SECRET: ${JWT_SECRET}
+    DEFAULT_PW: ${DEFAULT_PW}
+  volumes:
+    - ./files:/app/RMS_back/build/libs/resources/main/files
+  networks:
+    - rms_net
+  
+services:
+  rms_back_0:
+    <<: *rms-back-common
+    container_name: rms_back_0
+
+  rms_back_1:
+    <<: *rms-back-common
+    container_name: rms_back_1
+
+  nginx:
+    # image: nginx:custom
+    container_name: nginx_webserver
+    build:
+      context: .
+      dockerfile: Dockerfile_nginx
+    ports:
+      - 8090:8090
+    restart: always
+    networks:
+      - rms_net
+
+networks:
+  rms_net:
+    driver: bridge

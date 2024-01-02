@@ -1,0 +1,4 @@
+FROM nginx
+
+COPY ./nginx_conf/rms_back.conf /etc/nginx/conf.d/rms_back.conf
+

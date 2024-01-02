@@ -42,6 +42,6 @@ springdoc:
     path: /swagger-ui.html
 
 filesPath:
-  profile: \src\main\resources\static\files\profile
-  board: \src\main\resources\static\files\board
-  content: \src\main\resources\static\files\content
+  profile: ${FILE_PATH}profile
+  board: ${FILE_PATH}board
+  content: ${FILE_PATH}content
