@@ -2,6 +2,7 @@ package com.project.LimeRMS.controller;
 
 import com.project.LimeRMS.dto.NotiDto;
 import com.project.LimeRMS.security.JwtProvider;
+import com.project.LimeRMS.service.CommonService;
 import com.project.LimeRMS.service.NotificationService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -28,26 +29,23 @@ public class NotificationController {
 
     private final NotificationService notificationService;
     private final JwtProvider jwtProvider;
+    private final CommonService commonService;
 
     @GetMapping
     @Operation(
         summary = "특정 사용자의 알림 불러오기",
         description = "사용자가 읽은 알림을 미확인 -> 확인 상태로 변경한다.")
     public ResponseEntity<?> getAllNotification(@Parameter(hidden = true) @RequestHeader("AccessToken")String token){
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         Map<String, Object> data = new HashMap<>();
         try {
             String userId = jwtProvider.getUserPk(token);
             List<NotiDto> notiDtoList = notificationService.getAllNotification(userId);
             data.put("notiList", notiDtoList);
-            resMap.put("res", true);
-            resMap.put("statusCode", 200);
-            resMap.put("data", data);
+            resMap = commonService.makeReturnData(true, 200, "완료", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("msg", e.getMessage());
-            resMap.put("statusCode", 400);
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -58,18 +56,14 @@ public class NotificationController {
         summary = "대여일과 반납 예정일을 비교하여 알림 추가",
         description = "반납 예정일 3일전부터 매일 알람을 추가(같은 상태의 ~~가 있다면 제일 최근1건만 표기)")
     public ResponseEntity<?> addReturnNotification(@Parameter(hidden = true) @RequestHeader("AccessToken")String token){
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             String userId = jwtProvider.getUserPk(token);
             String message = notificationService.addReturnNotification(userId);
-            resMap.put("res", true);
-            resMap.put("msg", message);
-            resMap.put("statusCode", 201);
+            resMap = commonService.makeReturnData(true, 201, message, true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("msg", e.getMessage());
-            resMap.put("statusCode", 400);
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -82,17 +76,13 @@ public class NotificationController {
             content = @io.swagger.v3.oas.annotations.media.Content(
                 examples = @ExampleObject(value = "{\"notiId\":1}"))))
     public ResponseEntity<?> changeContentRentalStat(@RequestBody Map<String, Integer> alarm){
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             String message = notificationService.changeContentRentalStat(alarm);
-            resMap.put("res", true);
-            resMap.put("statusCode", 201);
-            resMap.put("msg", message);
+            resMap = commonService.makeReturnData(true, 201, message, true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -106,14 +96,10 @@ public class NotificationController {
         try {
             String userId = jwtProvider.getUserPk(token);
             String message = notificationService.addOverdueNotification(userId);
-            resMap.put("res", true);
-            resMap.put("statusCode", 201);
-            resMap.put("msg", message);
+            resMap = commonService.makeReturnData(true, 201, message, true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }

@@ -1,6 +1,7 @@
 package com.project.LimeRMS.controller;
 
 import com.project.LimeRMS.security.JwtProvider;
+import com.project.LimeRMS.service.CommonService;
 import com.project.LimeRMS.service.ContentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -30,43 +31,37 @@ import org.springframework.web.bind.annotation.RestController;
 public class ContentController {
     private final JwtProvider jwtProvider;
     private final ContentService contentService;
+    private final CommonService commonService;
+
     @GetMapping(value = "/{contentId}")
     @Operation(summary = "컨텐츠 상세")
     public ResponseEntity<?> getContentDtl(
         @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
         @PathVariable("contentId") Integer contentId
     ) {
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         Map<String, Object> data = new HashMap<>();
         try {
             String loginUserId = jwtProvider.getUserPk(token);
             Map<String, Object> contentDtlRes = contentService.getContentDtail(loginUserId, contentId);
             data.putAll(contentDtlRes);
-            resMap.put("res", true);
-            resMap.put("statusCode", 200);
-            resMap.put("data", data);
+            resMap = commonService.makeReturnData(true, 200, "완료", data);
             return ResponseEntity.ok().body(resMap);
         } catch (NullPointerException e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 404);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 404, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         } catch (IllegalAccessException e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 403);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 403, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
 
     @GetMapping("/{contentId}/img")
     public ResponseEntity<?> getContentImg(@PathVariable("contentId") Integer contentId) {
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             File destFile = contentService.getContentImg(contentId);
 
@@ -83,9 +78,7 @@ public class ContentController {
                 .contentType(MediaType.parseMediaType(mimeType))
                 .body(rs);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 404);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 404, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }

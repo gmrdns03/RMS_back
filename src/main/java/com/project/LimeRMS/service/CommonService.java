@@ -13,6 +13,15 @@ import org.springframework.stereotype.Service;
 public class CommonService {
     private final CommonMapper commonMapper;
 
+    public Map<String, Object> makeReturnData(Boolean res, Integer statusCode, String msg, Object data) {
+        Map<String, Object> resMap = new HashMap<>();
+        resMap.put("res", res);
+        resMap.put("statusCode", statusCode);
+        resMap.put("msg", msg);
+        resMap.put("data", data);
+        return resMap;
+    }
+
     public Map<String, Object> getContentHigherachy(Integer cateId) {
         Map<String, Object> resMap = new HashMap<>();
         resMap.put("smallCateNm", null);

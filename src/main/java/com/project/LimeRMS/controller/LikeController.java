@@ -2,6 +2,7 @@ package com.project.LimeRMS.controller;
 
 
 import com.project.LimeRMS.security.JwtProvider;
+import com.project.LimeRMS.service.CommonService;
 import com.project.LimeRMS.service.LikeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,6 +25,7 @@ public class LikeController {
 
     private final LikeService likeService;
     private final JwtProvider jwtProvider;
+    private final CommonService commonService;
 
 
     @PostMapping("/likes")
@@ -34,20 +36,16 @@ public class LikeController {
             content = @io.swagger.v3.oas.annotations.media.Content(
                 examples = @ExampleObject(value = "{\"contentId\":1}"))))
     public ResponseEntity<?> likes(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> content) {
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         Map<String, Object> data = new HashMap<>();
         String likeUserId = jwtProvider.getUserPk(token);
         try {
             String message = likeService.likes(likeUserId,content);
-            resMap.put("res", true);
-            resMap.put("msg", message);
-            resMap.put("statusCode", 201);
+            resMap = commonService.makeReturnData(true, 201, message, true);
             return ResponseEntity.ok().body(resMap);
         }
         catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
 
         }
@@ -61,18 +59,14 @@ public class LikeController {
             content = @io.swagger.v3.oas.annotations.media.Content(
                 examples = @ExampleObject(value = "{\"contentId\":1}"))))
     public ResponseEntity<?>cancelLikes(@Parameter(hidden = true) @RequestHeader("AccessToken") String token ,@RequestBody Map<String, Integer> content) {
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         String likeUserId = jwtProvider.getUserPk(token);
         try {
             String message = likeService.cancelLikes(likeUserId,content);
-            resMap.put("res", true);
-            resMap.put("msg", message);
-            resMap.put("statusCode", 201);
+            resMap = commonService.makeReturnData(true, 201, message, true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("msg", e.getMessage());
-            resMap.put("statusCode", 400);
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
 
         }

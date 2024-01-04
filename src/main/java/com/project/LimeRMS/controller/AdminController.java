@@ -3,6 +3,7 @@ package com.project.LimeRMS.controller;
 import com.project.LimeRMS.dto.*;
 import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.AdminService;
+import com.project.LimeRMS.service.CommonService;
 import com.project.LimeRMS.service.ProfileService;
 import com.project.LimeRMS.service.RentalService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,6 +28,7 @@ public class AdminController {
     private final RentalService rentalService;
     private final ProfileService profileService;
     private final JwtProvider jwtProvider;
+    private final CommonService commonService;
 
     @PostMapping("/user-detail")
     @Operation(
@@ -36,22 +38,18 @@ public class AdminController {
                     content = @io.swagger.v3.oas.annotations.media.Content(
                             examples = @ExampleObject(value = "{\"userId\":\"10\"}"))))
     public ResponseEntity<?> getUserInformation(@RequestBody Map<String, String> member){
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap;
         Map<String, Object> data = new HashMap<>();
         try {
             String userId = member.get("userId");
             UserInfoDto userInfo = profileService.getUserProfileDtl(userId);
-            resMap.put("res", true);
-            data.put("userInfo", userInfo);
             List<RentalListDto> rentalList =  rentalService.getRentalList(userId);
+            data.put("userInfo", userInfo);
             data.put("rentalList", rentalList);
-            resMap.put("statusCode", 200);
-            resMap.put("data", data);
+            resMap = commonService.makeReturnData(true, 200, "완료", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -61,19 +59,15 @@ public class AdminController {
             summary = "모든 회원 조회",
             description = "관리자는 모든 회원의 정보를 조회할 수 있다.")
     public ResponseEntity<?> getAllUserInformation(){
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap;
         Map<String, Object> data = new HashMap<>();
         try {
             List<UserInfoDto> userInfoDtoList = adminService.getAllUserInformation();
-            resMap.put("res", true);
-            resMap.put("statusCode", 200);
             data.put("userList", userInfoDtoList);
-            resMap.put("data", data);
+            resMap = commonService.makeReturnData(true, 200, "완료", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -87,17 +81,13 @@ public class AdminController {
                             examples = @ExampleObject(value = "{\"userEmail\":\"test1@euclidsoft.co.kr\",\"userNm\":\"김00\",\"phoneNumber\":\"01022223333\",\"authId\":\"9\"}"))))
     public ResponseEntity<?> addUser(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, String> signupInfo) {
         String managerId = jwtProvider.getUserPk(token);
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             String message = adminService.addUser(managerId, signupInfo);
-            resMap.put("res", true);
-            resMap.put("statusCode", 201);
-            resMap.put("msg", message);
+            resMap = commonService.makeReturnData(true, 201, message, true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -111,17 +101,13 @@ public class AdminController {
                             examples = @ExampleObject(value = "{\"userId\":\"10\",\"userNm\":\"김00\",\"authId\":\"4\",\"userStat\":\"CD006003\",\"phoneNumber\":\"01077778888\"}"))))
     public ResponseEntity<?> updateUserProfile(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, String> member){
         String managerId = jwtProvider.getUserPk(token);
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             String message = adminService.updateUserProfile(managerId, member);
-            resMap.put("res", true);
-            resMap.put("statusCode", 201);
-            resMap.put("msg", message);
+            resMap = commonService.makeReturnData(true, 201, message, true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -135,17 +121,13 @@ public class AdminController {
                 examples = @ExampleObject(value = "{\"userId\":10}"))))
     public ResponseEntity<?> deleteUserProfile(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
         Integer managerId = Integer.valueOf(jwtProvider.getUserPk(token));
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             String message = adminService.deleteUserProfile(managerId, member);
-            resMap.put("res", true);
-            resMap.put("statusCode", 201);
-            resMap.put("msg", message);
+            resMap = commonService.makeReturnData(true, 201, message, true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -159,17 +141,13 @@ public class AdminController {
                             examples = @ExampleObject(value = "{\"userId\":10}"))))
     public ResponseEntity<?> resetUserPw(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
         String managerId = jwtProvider.getUserPk(token);
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             String message = adminService.resetUserPw(managerId, member);
-            resMap.put("res", true);
-            resMap.put("statusCode", 201);
-            resMap.put("msg", message);
+            resMap = commonService.makeReturnData(true, 201, message, true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -179,19 +157,15 @@ public class AdminController {
             summary = "모든 권한 종류 조회",
             description = "관리자는 모든 종류의 권한 정보를 조회할 수 있다.")
     public ResponseEntity<?> getAuthenticationList(){
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap;
         Map<String, Object> data = new HashMap<>();
         try {
             List<AuthListDto> authDtoList = adminService.getAuthenticationList();
-            resMap.put("res", true);
             data.put("authenticationList", authDtoList);
-            resMap.put("statusCode", 200);
-            resMap.put("data", data);
+            resMap = commonService.makeReturnData(true, 200, "완료", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -201,19 +175,15 @@ public class AdminController {
             summary = "모든 보드 정보 불러오기",
             description = "관리자는 모든 보드의 정보를 조회할 수 있다.")
     public ResponseEntity<?> getBoardList(){
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap;
         Map<String, Object> data = new HashMap<>();
         try {
             List<BoardInfoDto> boardInfoDtoList = adminService.getBoardList();
-            resMap.put("res", true);
             data.put("boardList", boardInfoDtoList);
-            resMap.put("statusCode", 200);
-            resMap.put("data", data);
+            resMap = commonService.makeReturnData(true, 200, "완료", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -223,19 +193,15 @@ public class AdminController {
             summary = "컨텐츠 연체자 정보 조회",
             description = "관리자는 연체된 컨텐츠의 정보를 확인할 수 있다")
     public ResponseEntity<?> getOverdueContentList(){
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         Map<String, Object> data = new HashMap<>();
         try {
             List<ContentListDto> overdueContentList = adminService.getOverdueContentList();
-            resMap.put("res", true);
             data.put("overdueContents", overdueContentList);
-            resMap.put("statusCode", 200);
-            resMap.put("data", data);
+            resMap = commonService.makeReturnData(true, 200, "완료", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -248,18 +214,14 @@ public class AdminController {
             content = @io.swagger.v3.oas.annotations.media.Content(
                 examples = @ExampleObject(value = "{\"rentalUserId\":1, \"contentId\":1}"))))
     public ResponseEntity<?> changeContentRentalStat(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             String modfUserId = jwtProvider.getUserPk(token);
             String message = adminService.changeContentRentalStat(modfUserId, member);
-            resMap.put("res", true);
-            resMap.put("statusCode", 201);
-            resMap.put("msg", message);
+            resMap = commonService.makeReturnData(true, 201, message, true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -272,18 +234,14 @@ public class AdminController {
             content = @io.swagger.v3.oas.annotations.media.Content(
                 examples = @ExampleObject(value = "{\"userId\":1, \"contentId\":1}"))))
     public ResponseEntity<?> addReReturnNotification(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, Integer> member){
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             String regUserId = jwtProvider.getUserPk(token);
             String message = adminService.addReReturnNotification(regUserId, member);
-            resMap.put("res", true);
-            resMap.put("statusCode", 201);
-            resMap.put("msg", message);
+            resMap = commonService.makeReturnData(true, 201, message, true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -294,17 +252,13 @@ public class AdminController {
         description = "관리자는 보드의 우선순위를 변경할 수 있다")
     public ResponseEntity<?> changeBoardPriorities(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody List<BoardPriorityDto> boardPriorityDtoList){
         String managerId = jwtProvider.getUserPk(token);
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             String message = adminService.changeBoardPriorities(managerId, boardPriorityDtoList);
-            resMap.put("res", true);
-            resMap.put("statusCode", 201);
-            resMap.put("msg", message);
+            resMap = commonService.makeReturnData(true, 201, message, true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }

@@ -4,6 +4,7 @@ import com.project.LimeRMS.dto.BoardListDto;
 import com.project.LimeRMS.dto.ContentInfoDto;
 import com.project.LimeRMS.security.JwtProvider;
 import com.project.LimeRMS.service.BoardService;
+import com.project.LimeRMS.service.CommonService;
 import com.project.LimeRMS.service.ContentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -39,6 +40,7 @@ public class BoardController {
     private final BoardService boardService;
     private final ContentService contentService;
     private final JwtProvider jwtProvider;
+    private final CommonService commonService;
 
     // board 리스트 반환
     @GetMapping("/list")
@@ -52,14 +54,10 @@ public class BoardController {
             String userId = jwtProvider.getUserPk(token);
             List<BoardListDto> boardList = boardService.findAllBoardList(userId);
             data.put("boardList", boardList);
-            resMap.put("res", true);
-            resMap.put("statusCode", 200);
-            resMap.put("data", data);
+            resMap = commonService.makeReturnData(true, 200, "완료", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("msg", e.getMessage());
-            resMap.put("statusCode", 204);
+            resMap = commonService.makeReturnData(false, 204, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -71,7 +69,7 @@ public class BoardController {
         @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
         @PathVariable("boardId") String boardId
     ) {
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         Map<String, Object> data = new HashMap<>();
         try {
             Integer loginUserId = Integer.valueOf(jwtProvider.getUserPk(token));
@@ -81,14 +79,10 @@ public class BoardController {
             data.put("boardFreeFields", boardFreeFields);
             data.put("boardInfo", boardInfo);
             data.put("contentInfoList", contentInfoList);
-            resMap.put("res", true);
-            resMap.put("statusCode", 200);
-            resMap.put("data", data);
+            resMap = commonService.makeReturnData(true, 200, "완료", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 204);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 204, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -96,7 +90,7 @@ public class BoardController {
     // board 대표 이미지 반환
     @GetMapping("/{boardId}/img")
     public ResponseEntity<?> getBoardImg(@PathVariable("boardId") String boardId) {
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             File destFile = boardService.getBoardImg(boardId);
 
@@ -113,9 +107,7 @@ public class BoardController {
                 .contentType(MediaType.parseMediaType(mimeType))
                 .body(rs);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 404);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 404, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -130,23 +122,17 @@ public class BoardController {
         @PathVariable("boardId") Integer boardId,
         @RequestPart(value = "file") MultipartFile multipartFile
     ) {
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             String loginUserId = jwtProvider.getUserPk(token);
             boardService.saveBoardImg(loginUserId, boardId, multipartFile);
-            resMap.put("res", true);
-            resMap.put("statusCode", 201);
-            resMap.put("msg", "Registered a new board image successfully");
+            resMap = commonService.makeReturnData(true, 201, "Registered a new board image successfully", true);
             return ResponseEntity.ok().body(resMap);
         } catch (IllegalAccessException e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 403);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 403, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         } catch (IOException e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }

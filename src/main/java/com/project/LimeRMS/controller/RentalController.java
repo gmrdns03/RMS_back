@@ -1,6 +1,7 @@
 package com.project.LimeRMS.controller;
 
 import com.project.LimeRMS.security.JwtProvider;
+import com.project.LimeRMS.service.CommonService;
 import com.project.LimeRMS.service.RentalService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class RentalController {
     private final JwtProvider jwtProvider;
     private final RentalService rentalService;
+    private final CommonService commonService;
 
     @PostMapping
     @Operation(summary = "컨텐츠 대여",
@@ -43,14 +45,10 @@ public class RentalController {
             Integer userId = Integer.valueOf(body.get("userId"));
             Integer contentId = Integer.valueOf(body.get("contentId"));
             rentalService.rental(loginUserId, userId, contentId);
-            resMap.put("res", true);
-            resMap.put("statusCode", 201);
-            resMap.put("msg", "대여가 완료되었습니다.");
+            resMap = commonService.makeReturnData(true, 201, "대여가 완료되었습니다.", true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -67,20 +65,16 @@ public class RentalController {
         @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
         @RequestBody Map<String, String> body
     ) {
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             Integer loginUserId = Integer.valueOf(jwtProvider.getUserPk(token));
             Integer userId = Integer.valueOf(body.get("userId"));
             Integer contentId = Integer.valueOf(body.get("contentId"));
             rentalService.rentalContentReturn(loginUserId, userId, contentId);
-            resMap.put("res", true);
-            resMap.put("statusCode", 201);
-            resMap.put("msg", "반납이 완료되었습니다.");
+            resMap = commonService.makeReturnData(true, 201, "반납이 완료되었습니다.", true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statuscode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -90,18 +84,13 @@ public class RentalController {
         summary = "모든 대여 예정일이 지난 컨텐츠의 상태를 '대여'->'연체'로 변경",
         description = "모든 대여 예정일이 지난 컨텐츠의 상태를 '대여'->'연체'로 변경할 수 있다")
     public ResponseEntity<?> changeContentRentalStat(){
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
             String message = rentalService.changeContentRentalStat();
-            resMap.put("res", true);
-            resMap.put("statusCode", 201);
-            resMap.put("msg", message);
-            resMap.put("data", true);
+            resMap = commonService.makeReturnData(true, 201, message, true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
@@ -120,21 +109,17 @@ public class RentalController {
         @Parameter(hidden = true) @RequestHeader("AccessToken") String token ,
         @RequestBody Map<String, String> content)
     {
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         try {
 
             String loginUserId = jwtProvider.getUserPk(token);
             String userId = String.valueOf(content.get("userId"));
             String contentId = content.get("contentId");
             String message = rentalService.contentRentalExtension(loginUserId,userId,contentId);
-            resMap.put("res", true);
-            resMap.put("statusCode", 200);
-            resMap.put("msg", message);
+            resMap = commonService.makeReturnData(true, 200, message, true);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }

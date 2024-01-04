@@ -2,6 +2,7 @@ package com.project.LimeRMS.controller;
 
 import com.project.LimeRMS.dto.SearchResListDto;
 import com.project.LimeRMS.security.JwtProvider;
+import com.project.LimeRMS.service.CommonService;
 import com.project.LimeRMS.service.SearchService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -24,6 +25,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class SearchController {
     private final JwtProvider jwtProvider;
     private final SearchService searchService;
+    private final CommonService commonService;
+
     @GetMapping
     @Operation(summary = "전체 검색")
     public ResponseEntity<?> getSearchResultAll(
@@ -31,20 +34,16 @@ public class SearchController {
         @RequestParam(required = true) String keyword,
         @RequestParam(required = false) Integer boardId
     ) {
-        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> resMap ;
         Map<String, Object> data = new HashMap<>();
         try {
             String userId = jwtProvider.getUserPk(token);
             List<SearchResListDto> searchRes = searchService.getSearchResultList(keyword, userId, boardId);
             data.put("searchResult", searchRes);
-            resMap.put("res", true);
-            resMap.put("statusCode", 200);
-            resMap.put("data", data);
+            resMap = commonService.makeReturnData(true, 200, "완료", data);
             return ResponseEntity.ok().body(resMap);
         } catch (Exception e) {
-            resMap.put("res", false);
-            resMap.put("statusCode", 400);
-            resMap.put("msg", e.getMessage());
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }
