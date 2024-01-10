@@ -14,6 +14,7 @@ x-rms-common:
     DB_PASSWORD: ${DB_PASSWORD}
     JWT_SECRET: ${JWT_SECRET}
     DEFAULT_PW: ${DEFAULT_PW}
+    FILE_PATH: ${FILE_PATH}
   volumes:
     - ./files:/app/RMS_back/build/libs/resources/main/files
   networks:
