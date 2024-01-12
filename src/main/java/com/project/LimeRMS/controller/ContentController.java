@@ -20,9 +20,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "ContentController", description = "ContentController API")
 @RestController
@@ -79,6 +82,28 @@ public class ContentController {
                 .body(rs);
         } catch (Exception e) {
             resMap = commonService.makeReturnData(false, 404, e.getMessage(), false);
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
+
+    @PostMapping(value = "/{contentId}/save-img")
+    @Operation(summary = "컨텐츠 대표 이미지 등록")
+    public ResponseEntity<?> saveContentImg(
+        @RequestPart(value = "file")MultipartFile multipartFile,
+        @PathVariable("contentId") Integer contentId,
+        @Parameter(hidden = true) @RequestHeader("AccessToken") String token
+    ) {
+        Map<String, Object> resMap;
+        try {
+            // 토큰에서 userId 추출
+            String loginUserId = jwtProvider.getUserPk(token);
+            // 이미지 저장
+            contentService.saveContentImg(loginUserId, contentId, multipartFile);
+            String msg = "Registered a new profile image successfully";
+            resMap = commonService.makeReturnData(true, 201, msg, true);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
     }

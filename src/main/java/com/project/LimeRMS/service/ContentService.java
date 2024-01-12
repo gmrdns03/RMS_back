@@ -13,13 +13,17 @@ import com.project.LimeRMS.mapper.RentalMapper;
 import com.project.LimeRMS.mapper.ReservationMapper;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +36,9 @@ public class ContentService {
     private final LikeMapper likeMapper;
     private final UserService userService;
     private final CommonService commonService;
+
+    @Value("${filesPath.content}")
+    private String DtlContentPath;
 
     public List<ContentInfoDto> getContentsByBoardId(String boardId) {
         List<Content> contentList = contentMapper.findContentsByBoardId(boardId);
@@ -164,6 +171,52 @@ public class ContentService {
             return destFile;
         } else {
             throw  new FileNotFoundException("cannot be resolved in the file system for checking its content length");
+        }
+    }
+
+    public void saveContentImg(String loginUserId, Integer contentId, MultipartFile multipartFile) throws Exception {
+        // multipartFile이 비어있지 않으면 진행
+        if (multipartFile != null && !multipartFile.isEmpty()) {
+            // loginUserId가 contents 수정 권한이 있는지 확인
+            Integer userAuthPriority = userService.getUserAuthPriority(loginUserId);
+            Integer boardModfAuth = boardMapper.findBoardModfAuthByContentId(contentId);
+            if (boardModfAuth == null) {
+                throw new NullPointerException("요청에 대한 컨텐츠가 존재하지 않습니다. url을 확인해주세요");
+            }
+
+            if (userAuthPriority > boardModfAuth) {
+                throw new IllegalAccessException("해당 컨텐츠에 대한 수정 권한이 없습니다.");
+            }
+
+            // 폴더가 없는 경우 폴더 생성
+            String contentFolderPath = System.getProperty("user.dir") + DtlContentPath;
+
+            // 보내온 파일 저장
+            UUID uuid = UUID.randomUUID();
+            String fileNm = uuid + "_" + multipartFile.getOriginalFilename();
+            File file = new File(contentFolderPath, fileNm);
+            multipartFile.transferTo(file);
+
+            // 기존 contentImg가 있는지 확인 후 있다면 해당 파일 삭제
+            String contentImgPath = contentMapper.findOneContentImgByContentId(contentId);
+            if (contentImgPath != null && !contentImgPath.isEmpty()) {
+                deleteContentImg(contentImgPath);
+            }
+
+            // Content 테이블에 contentImg 경로 업데이트
+            String newContentImgPath = contentFolderPath + "/" + fileNm;
+            contentMapper.updateContentImgByContentId(contentId, newContentImgPath);
+        } else {
+            throw new IOException("Not enough elements. Plz check your data");
+        }
+    }
+
+    public boolean deleteContentImg(String filePath) throws Exception {
+        File file = new File(filePath);
+        if (file.exists()) {
+            return file.delete();
+        } else {
+            return true;
         }
     }
 }

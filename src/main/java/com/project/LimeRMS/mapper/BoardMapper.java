@@ -24,6 +24,8 @@ public interface BoardMapper {
 
     List<String> findAllBoardManagerByBoardId(@Param("boardId") Integer boardId);
 
+    Integer findBoardModfAuthByContentId(@Param("contentId") Integer contentId);
+
     String findBoardImgPathByBoardId(@Param("boardId") Integer boardId);
 
     void updateBoardImgByBoardId(@Param("boardId") Integer boardId, @Param("boardImgPath") String boardImgPath, @Param("modfUserId") String modfUserId);

@@ -101,4 +101,10 @@
     SET boardImg = #{boardImgPath}, modfUserId = #{modfUserId}
     WHERE boardId = #{boardId}
   </update>
+
+  <select id="findBoardModfAuthByContentId">
+    SELECT modifyAuth
+    FROM Board
+    WHERE boardId = (SELECT boardId FROM Content WHERE contentId = #{contentId});
+  </select>
 </mapper>

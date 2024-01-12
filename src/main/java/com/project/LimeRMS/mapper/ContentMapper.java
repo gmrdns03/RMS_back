@@ -5,6 +5,7 @@ import com.project.LimeRMS.entity.Content;
 import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
 
 @Mapper
 public interface ContentMapper {
@@ -15,4 +16,6 @@ public interface ContentMapper {
     Content findOneByContentId(@Param("contentId")Integer contentId);
 
     String findOneContentImgByContentId(@Param("contentId") Integer contentId);
+
+    void updateContentImgByContentId(@Param("contentId") Integer contentId, @Param("contentImgPath") String contentImgPath);
 }

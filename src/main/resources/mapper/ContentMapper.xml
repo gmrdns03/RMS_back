@@ -73,4 +73,10 @@
   <select id="findOneContentImgByContentId">
     SELECT contentImg FROM Content WHERE contentid = ${contentId}
   </select>
+
+  <update id="updateContentImgByContentId">
+    UPDATE Content
+    SET contentImg = #{contentImgPath}
+    WHERE contentId = #{contentId}
+  </update>
 </mapper>
