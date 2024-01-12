@@ -122,19 +122,38 @@ public class ContentService {
             rentalStat = "CD001002";
         }
         String rentalStatNm = commCdMapper.findCdNmByCd(rentalStat);
+        String rentalYn; // N이면 반납중 Y이면 대여중이거나 연체중
+        if (rentalStat.equals("CD001002")) {
+            rentalYn = "N";
+        } else {
+            rentalYn = "Y";
+        }
 
         // 컨텐츠 예약 상태 조회
         String reservedYn = reservationMapper.findReserveYnByContentId(contentId);
+        if (reservedYn == null || reservedYn.isEmpty()) {
+            reservedYn = "N";
+        }
 
         // 컨텐츠 좋아요 개수 조회
         Integer likeCnt = likeMapper.countLikeByContentId(contentId);
+
+        // 유저 좋아요 여부
+        Integer likeId = likeMapper.findUserLikeIdByUserId(loginUserId);
+        String likeYn; // N이면 좋아요 안함 Y이면 좋아요 함
+        if (likeId == null) {
+            likeYn = "N";
+        } else {
+            likeYn = "Y";
+        }
 
         // 컨텐츠 카테고리 조회
         Map<String, Object> cateHigherachy = commonService.getContentHigherachy(cateId);
 
         ContentDtlDto contentDtlDto = new ContentDtlDto(
             contentDtlId, cateId, boardId, contentNm, contentDesc, contentHtml, noticeYn, secretYn,
-            location, rentalMessage, regDt, regUserId, modfDt, modfUserId, rentalStat, rentalStatNm, reservedYn, likeCnt,
+            location, rentalMessage, regDt, regUserId, modfDt, modfUserId, rentalStat, rentalStatNm,
+            rentalYn, reservedYn, likeCnt, likeYn,
             (String) cateHigherachy.get("smallCateNm"),
             (String) cateHigherachy.get("middleCateNm"),
             (String) cateHigherachy.get("majorCateNm"),

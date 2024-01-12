@@ -26,7 +26,7 @@
 
   <select id="findReserveYnByContentId">
     SELECT
-      IF(delYn != 'N', 'Y', 'N')
+      IF(delYn = 'N', 'Y', 'N')
     FROM Reservation
     WHERE contentId = ${contentId}
     ORDER BY modfDt DESC

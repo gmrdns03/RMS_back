@@ -39,4 +39,8 @@
   <select id="countLikeByContentId">
     SELECT COUNT(*) FROM `Like` l WHERE l.contentId = ${contentId}
   </select>
+
+  <select id="findUserLikeIdByUserId">
+    SELECT likeId FROM `Like` WHERE likeUserId = #{userId} and delYn = 'N'
+  </select>
 </mapper>

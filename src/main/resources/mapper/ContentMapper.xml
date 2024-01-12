@@ -27,6 +27,7 @@
     <result property="noticeYn" column="noticeYn" />
     <result property="secretYn" column="secretYn" />
     <result property="location" column="location" />
+    <result property="contentHtml" column="contentHtml" />
     <result property="rentalMessage" column="rentalMessage" />
     <result property="regDt" column="regDt" />
     <result property="regUserId" column="regUserId" />

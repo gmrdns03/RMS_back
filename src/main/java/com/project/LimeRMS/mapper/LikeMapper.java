@@ -15,4 +15,6 @@ public interface LikeMapper {
 
     Integer countLikeByContentId(@Param("contentId") Integer contentId);
 
+    Integer findUserLikeIdByUserId(@Param("userId") String userId);
+
 }

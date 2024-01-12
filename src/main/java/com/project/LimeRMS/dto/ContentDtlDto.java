@@ -31,12 +31,14 @@ public class ContentDtlDto {
     // 컨텐츠 대여 상태
     private String rentalStat;
     private String rentalStatNm;
+    private String rentalYn;
 
     // 컨텐츠 예약 상태
     private String reservedYn;
 
     // 컨텐츠 좋아요 개수
     private Integer likeCnt;
+    private String likeYn;
 
     // 컨텐츠 카테고리
     private String smallCateNm;
