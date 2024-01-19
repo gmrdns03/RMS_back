@@ -11,6 +11,8 @@ public interface LikeMapper {
 
     void unLike(@Param("likeUserId")String likeUserId,@Param("contentId") Integer contentId);
 
+    Integer findLikeByContentUserId(@Param("likeUserId")String likeUserId,@Param("contentId") Integer contentId);
+
     List<LikeListDto> findLikeListByUserId(String userId);
 
     Integer countLikeByContentId(@Param("contentId") Integer contentId);

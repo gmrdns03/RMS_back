@@ -43,4 +43,8 @@
   <select id="findUserLikeIdByUserId">
     SELECT likeId FROM `Like` WHERE likeUserId = #{userId} and delYn = 'N'
   </select>
+
+  <select id="findLikeByContentUserId">
+    SELECT likeId FROM `Like` WHERE likeUserId = #{likeUserId} and contentId = #{contentId} and delYn = 'N';
+  </select>
 </mapper>

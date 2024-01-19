@@ -19,8 +19,14 @@ public class LikeService {
     private final CommCdMapper commCdMapper;
 
 
-    public String likes(String likeUserId, Map<String, Integer> content) {
+    public String likes(String likeUserId, Map<String, Integer> content) throws Exception{
         Integer contentId = content.get("contentId");
+        // 이미 좋아요를 한 컨텐츠인지 확인
+        Integer likeId = likeMapper.findLikeByContentUserId(likeUserId, contentId);
+        if (likeId == null) {
+            throw new Exception("이미 좋아요를 한 컨텐츠입니다.");
+        }
+
         likeMapper.likeContent(Integer.valueOf(likeUserId), contentId);
         return "좋아요가 등록되었습니다.";
     }
