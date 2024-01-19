@@ -33,6 +33,9 @@ public class ContentDtlDto {
     private String rentalStatNm;
     private String rentalYn;
 
+    // 로그인 유저의 컨텐츠 대여 여부
+    private String rentalUserYn;
+
     // 컨텐츠 예약 상태
     private String reservedYn;
 

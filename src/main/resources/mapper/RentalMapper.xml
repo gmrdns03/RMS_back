@@ -77,7 +77,7 @@
 
     <select id="findLatestStatByContentId">
         SELECT
-            rentalStat
+            rentalStat, rentalUserId
         FROM Rental
         WHERE contentId = ${contentId}
         ORDER BY modfDt DESC

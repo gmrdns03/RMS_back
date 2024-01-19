@@ -46,7 +46,7 @@ public class ContentController {
         Map<String, Object> data = new HashMap<>();
         try {
             String loginUserId = jwtProvider.getUserPk(token);
-            Map<String, Object> contentDtlRes = contentService.getContentDtail(loginUserId, contentId);
+            Map<String, Object> contentDtlRes = contentService.getContentDetail(loginUserId, contentId);
             data.putAll(contentDtlRes);
             resMap = commonService.makeReturnData(true, 200, "완료", data);
             return ResponseEntity.ok().body(resMap);

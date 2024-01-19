@@ -49,7 +49,8 @@ public class RentalService {
         }
 
         // 2. 현재 컨텐츠의 상태 확인
-        String rentalStat = rentalMapper.findLatestStatByContentId(contentId);
+        Map<String, Object> rentalInfo = rentalMapper.findLatestStatByContentId(contentId);
+        String rentalStat = (String) rentalInfo.get("rentalStat");
         if (rentalStat == null || rentalStat.isEmpty()) {
             rentalStat = "CD001002";
         }

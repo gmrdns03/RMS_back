@@ -20,7 +20,7 @@ public interface RentalMapper {
 
     List<ContentListDto> findReturnRentalByUserId(String userId);
 
-    String findLatestStatByContentId(Integer contentId);
+    Map<String, Object> findLatestStatByContentId(Integer contentId);
 
     void rentalContentByContentId(@Param("rentalMap")Map<String, Object> rentalMap);
 

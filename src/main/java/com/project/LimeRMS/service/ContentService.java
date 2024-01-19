@@ -66,7 +66,7 @@ public class ContentService {
         return  contentInfoDtoList;
     }
 
-    public Map<String, Object> getContentDtail(String loginUserId, Integer contentId) throws NullPointerException, IllegalAccessException, Exception {
+    public Map<String, Object> getContentDetail(String loginUserId, Integer contentId) throws NullPointerException, IllegalAccessException, Exception {
         Map<String, Object> data = new HashMap<>();
 
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy.MM.dd");
@@ -117,7 +117,9 @@ public class ContentService {
         }
 
         // 컨텐츠 대여 상태 조회
-        String rentalStat = rentalMapper.findLatestStatByContentId(contentId);
+        Map<String, Object> rentalInfo = rentalMapper.findLatestStatByContentId(contentId);
+        String rentalStat = (String) rentalInfo.get("rentalStat");
+        Integer rentalUserId = (Integer) rentalInfo.get("rentalUserId");
         if (rentalStat == null || rentalStat.isEmpty()) {
             rentalStat = "CD001002";
         }
@@ -127,6 +129,11 @@ public class ContentService {
             rentalYn = "N";
         } else {
             rentalYn = "Y";
+        }
+        // 로그인 유저의 컨텐츠 대여 여부
+        String rentalUserYn = "N";
+        if (loginUserId.equals(rentalUserId.toString())) {
+            rentalUserYn = "Y";
         }
 
         // 컨텐츠 예약 상태 조회
@@ -153,7 +160,7 @@ public class ContentService {
         ContentDtlDto contentDtlDto = new ContentDtlDto(
             contentDtlId, cateId, boardId, contentNm, contentDesc, contentHtml, noticeYn, secretYn,
             location, rentalMessage, regDt, regUserId, modfDt, modfUserId, rentalStat, rentalStatNm,
-            rentalYn, reservedYn, likeCnt, likeYn,
+            rentalYn, rentalUserYn, reservedYn, likeCnt, likeYn,
             (String) cateHigherachy.get("smallCateNm"),
             (String) cateHigherachy.get("middleCateNm"),
             (String) cateHigherachy.get("majorCateNm"),
