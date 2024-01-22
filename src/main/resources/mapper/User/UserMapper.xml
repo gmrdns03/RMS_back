@@ -1,0 +1,77 @@
+<!-- UserMapper.xml -->
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.project.LimeRMS.User.mapper.UserMapper">
+    <select id="findByUserEmail" parameterType="java.lang.String" resultMap="userResultMap">
+        SELECT u.*, a.*
+        FROM User u
+        LEFT JOIN Authentication a ON u.authId = a.authId
+        WHERE userEmail = #{userEmail}
+    </select>
+
+    <select id="findAllUser" resultMap="userResultMap">
+        SELECT u.*, a.* FROM User u
+        LEFT JOIN Authentication a ON u.authId = a.authId
+    </select>
+
+    <select id="findByUserId" parameterType="java.lang.String" resultMap="userResultMap">
+        SELECT * FROM User u
+        LEFT JOIN Authentication a ON u.authId = a.authId
+        WHERE userId = #{userId}
+    </select>
+
+    <resultMap id="userResultMap" type="com.project.LimeRMS.entity.User">
+        <id property="userId" column="userId" />
+        <result property="userEmail" column="userEmail" />
+        <result property="profileImg" column="profileImg" />
+        <result property="userNm" column="userNm" />
+        <result property="password" column="password" />
+        <result property="isSuperUser" column="isSuperUser" />
+        <result property="phoneNumber" column="phoneNumber" />
+        <result property="delYn" column="delYn" />
+        <result property="joinDt" column="joinDt" />
+        <result property="userStat" column="userStat" />
+        <association property="authentication" javaType="com.project.LimeRMS.entity.Authentication">
+            <id property="authId" column="authId" />
+            <result property="authNm" column="authNm" />
+            <result property="authDesc" column="authDesc" />
+            <result property="priority" column="priority" />
+        </association>
+    </resultMap>
+
+    <insert id="addUser">
+        INSERT INTO User (userEmail, userNm, password, phoneNumber, authId, regUserId)
+        VALUES (#{userEmail}, #{userNm}, #{password}, #{phoneNumber}, #{authId}, #{regUserId})
+    </insert>
+
+    <update id="updateProfileImgByUserId">
+        UPDATE User
+        SET profileImg = #{profileImg}, modfUserId = #{userId}
+        WHERE userId = #{userId}
+    </update>
+
+    <update id="updateProfileImgByManagerId">
+        UPDATE User
+        SET modfUserId = #{managerId}, profileImg = #{profileImg}
+        WHERE userId = #{userId}
+    </update>
+
+    <update id="updatePwByUserId">
+        UPDATE User
+        SET password = #{password}, modfUserId = #{modfUserId}
+        WHERE userId = #{userId}
+    </update>
+
+    <update id="updateUserByUserId">
+        UPDATE User
+        SET userNm = #{userNm}, authId = #{authId}, userStat = #{userStat}, phoneNumber = #{phoneNumber}, modfUserId = #{modfUserId}
+        WHERE userId = #{userId}
+    </update>
+
+    <select id="findProfileImgByUserId" parameterType="java.lang.Integer" resultType="java.lang.String">
+        SELECT profileImg
+        FROM User
+        WHERE userId = #{userId}
+    </select>
+</mapper>

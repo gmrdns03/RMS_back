@@ -1,0 +1,15 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.LimeRMS.Common.mapper.CommonMapper">
+  <select id="findContentCateHigerachyByCateId" resultType="com.project.LimeRMS.Common.dto.CateHigherachyDto">
+    with recursive category_higheracy as (
+      SELECT cateId, highCate, cateNm, 0 as depth
+      FROM ContentCategory
+      WHERE cateId = #{cateId}
+    UNION ALL
+      SELECT c.cateId, c.highCate, c.cateNm, ch.depth + 1
+      FROM category_higheracy ch
+      JOIN ContentCategory c ON ch.highCate = c.cateId
+    )
+    SELECT * FROM category_higheracy ORDER BY depth ASC
+  </select>
+</mapper>
