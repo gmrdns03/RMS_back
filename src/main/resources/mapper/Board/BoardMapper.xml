@@ -107,4 +107,9 @@
     FROM Board
     WHERE boardId = (SELECT boardId FROM Content WHERE contentId = #{contentId});
   </select>
+
+  <insert id="insertBoard">
+    INSERT INTO Board (boardNm, boardDesc, viewAuth, writeAuth, boardTypeId, modfUserId)
+    VALUES (#{boardNm}, #{boardDesc}, #{viewAuth}, #{writeAuth}, #{boardTypeId}, #{modfUserId})
+  </insert>
 </mapper>

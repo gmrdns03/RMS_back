@@ -27,4 +27,6 @@ public interface BoardMapper {
     String findBoardImgPathByBoardId(@Param("boardId") Integer boardId);
 
     void updateBoardImgByBoardId(@Param("boardId") Integer boardId, @Param("boardImgPath") String boardImgPath, @Param("modfUserId") String modfUserId);
+
+    void insertBoard(String boardNm, String boardDesc, Integer viewAuth, Integer writeAuth, Integer boardTypeId, String contentViewType, @Param("modfUserId") String modfUserId);
 }

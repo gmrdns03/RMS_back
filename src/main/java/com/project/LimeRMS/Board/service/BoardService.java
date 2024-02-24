@@ -7,6 +7,7 @@ import com.project.LimeRMS.Board.mapper.BoardMapper;
 import com.project.LimeRMS.Common.mapper.CommCdMapper;
 import com.project.LimeRMS.Content.mapper.ContentMapper;
 import com.project.LimeRMS.User.service.UserService;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -18,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -52,7 +54,7 @@ public class BoardService {
         Integer extensionLimit = board.getExtensionLimit();
         Integer rentalLimit = board.getRentalLimit();
         return new BoardListDto(boardId, boardTypeNm, boardViewType, contentViewType, boardNm, boardStat, boardStatNm,
-            boardDesc, boardSn, viewAuth, writeAuth, commentAuth, modifyAuth, rentalPeriod, extensionLimit, rentalLimit);
+                boardDesc, boardSn, viewAuth, writeAuth, commentAuth, modifyAuth, rentalPeriod, extensionLimit, rentalLimit);
     }
 
     public BoardListDto getBoardInfo(Integer loginUserId, String boardId) throws Exception {
@@ -73,7 +75,7 @@ public class BoardService {
 
         for (Board board : boardList) {
             BoardListDto boardListDto = getBoardListDto(board);
-            String boardStat =  boardListDto.getBoardStat();
+            String boardStat = boardListDto.getBoardStat();
             if (boardStat.equals("CD003002")) {
                 continue;
             }
@@ -98,7 +100,7 @@ public class BoardService {
         if (destFile.exists()) {
             return destFile;
         } else {
-            throw  new FileNotFoundException("cannot be resolved in the file system for checking its content length");
+            throw new FileNotFoundException("cannot be resolved in the file system for checking its content length");
         }
     }
 
@@ -146,7 +148,9 @@ public class BoardService {
 
     public void deleteFile(String filePath) {
         File file = new File(filePath);
-        if (file.exists()) {file.delete();}
+        if (file.exists()) {
+            file.delete();
+        }
     }
 
     public Map<String, Object> getBoardFreeField(String boardId) {
@@ -164,5 +168,17 @@ public class BoardService {
             freeFieldMap.put(dto.getAttrOrder(), freeField);
         }
         return freeFieldMap;
+    }
+
+    public String saveBoard(String loginUserId, Map<String, String> boardInfo) {
+        String boardNm = boardInfo.get("boardNm");
+        String boardDesc = boardInfo.get("boardDesc");
+        Integer viewAuth = Integer.valueOf(boardInfo.get("viewAuth"));
+        Integer writeAuth = Integer.valueOf(boardInfo.get("writeAuth"));
+        Integer boardTypeId = Integer.valueOf(boardInfo.get("boardTypeId"));
+        String contentViewType = boardInfo.get("contentViewType");
+
+        boardMapper.insertBoard(boardNm, boardDesc, viewAuth, writeAuth, boardTypeId, contentViewType, loginUserId);
+        return boardNm + " 게시판이 개설되었습니다.";
     }
 }

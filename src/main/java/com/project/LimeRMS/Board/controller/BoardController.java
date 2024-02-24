@@ -8,6 +8,7 @@ import com.project.LimeRMS.Common.service.CommonService;
 import com.project.LimeRMS.Content.service.ContentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.io.File;
 import java.io.IOException;
@@ -23,13 +24,7 @@ import org.springframework.http.CacheControl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 @Tag(name = "BoardController", description = "BoardController API")
@@ -41,6 +36,28 @@ public class BoardController {
     private final ContentService contentService;
     private final JwtProvider jwtProvider;
     private final CommonService commonService;
+
+    @PostMapping("/add")
+    @Operation(
+            summary = "보드 생성",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            examples = @ExampleObject(value = "{\"boardNm\":\"보드 이름\",\"boardDesc\":\"보드 설명\",\"viewAuth\":\"9\",\"writeAuth\":\"9\",\"boardTypeId\":\"1\",\"contentViewType\":\"rental\"}"))))
+    public ResponseEntity<?> addBoard(
+            @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
+            @RequestBody Map<String, String> boardInfo
+    ) {
+        Map<String, Object> resMap = new HashMap<>();
+        Map<String, Object> data = new HashMap<>();
+        try{
+            String loginUserId = jwtProvider.getUserPk(token);
+            String message = boardService.saveBoard(loginUserId, boardInfo);
+            resMap = commonService.makeReturnData(true, 200, message, true);
+        } catch(Exception e){
+            resMap = commonService.makeReturnData(false, 500, e.getMessage(), false);
+        }
+        return ResponseEntity.ok().body(resMap);
+    }
 
     // board 리스트 반환
     @GetMapping("/list")
