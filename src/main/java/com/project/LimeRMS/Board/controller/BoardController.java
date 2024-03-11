@@ -49,11 +49,11 @@ public class BoardController {
     ) {
         Map<String, Object> resMap = new HashMap<>();
         Map<String, Object> data = new HashMap<>();
-        try{
+        try {
             String loginUserId = jwtProvider.getUserPk(token);
             String message = boardService.saveBoard(loginUserId, boardInfo);
             resMap = commonService.makeReturnData(true, 200, message, true);
-        } catch(Exception e){
+        } catch (Exception e) {
             resMap = commonService.makeReturnData(false, 500, e.getMessage(), false);
         }
         return ResponseEntity.ok().body(resMap);
@@ -63,7 +63,7 @@ public class BoardController {
     @GetMapping("/list")
     @Operation(summary = "보드 목록 반환")
     public ResponseEntity<?> getBoardInfoList(
-        @Parameter(hidden = true) @RequestHeader("AccessToken") String token
+            @Parameter(hidden = true) @RequestHeader("AccessToken") String token
     ) {
         Map<String, Object> resMap = new HashMap<>();
         Map<String, Object> data = new HashMap<>();
@@ -83,10 +83,10 @@ public class BoardController {
     @GetMapping("/{boardId}")
     @Operation(summary = "보드의 컨텐츠 리스트 반환")
     public ResponseEntity<Map<String, Object>> getContentInfoList(
-        @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
-        @PathVariable("boardId") String boardId
+            @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
+            @PathVariable("boardId") String boardId
     ) {
-        Map<String, Object> resMap ;
+        Map<String, Object> resMap;
         Map<String, Object> data = new HashMap<>();
         try {
             Integer loginUserId = Integer.valueOf(jwtProvider.getUserPk(token));
@@ -107,7 +107,7 @@ public class BoardController {
     // board 대표 이미지 반환
     @GetMapping("/{boardId}/img")
     public ResponseEntity<?> getBoardImg(@PathVariable("boardId") String boardId) {
-        Map<String, Object> resMap ;
+        Map<String, Object> resMap;
         try {
             File destFile = boardService.getBoardImg(boardId);
 
@@ -118,11 +118,11 @@ public class BoardController {
             }
             Resource rs = new UrlResource(destFile.toURI());
             return ResponseEntity
-                .ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "inline; \"")
-                .cacheControl(CacheControl.noCache())
-                .contentType(MediaType.parseMediaType(mimeType))
-                .body(rs);
+                    .ok()
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "inline; \"")
+                    .cacheControl(CacheControl.noCache())
+                    .contentType(MediaType.parseMediaType(mimeType))
+                    .body(rs);
         } catch (Exception e) {
             resMap = commonService.makeReturnData(false, 404, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
@@ -131,15 +131,15 @@ public class BoardController {
 
     @PostMapping("/{boardId}/save-img")
     @Operation(
-        summary = "보드 대표 이미지 저장",
-        description = "게시판 수정권한이 있으면서, 게시판 관리자여야 게시판 이미지 수정 가능"
+            summary = "보드 대표 이미지 저장",
+            description = "게시판 수정권한이 있으면서, 게시판 관리자여야 게시판 이미지 수정 가능"
     )
     public ResponseEntity<?> saveBoardImg(
-        @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
-        @PathVariable("boardId") Integer boardId,
-        @RequestPart(value = "file") MultipartFile multipartFile
+            @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
+            @PathVariable("boardId") Integer boardId,
+            @RequestPart(value = "file") MultipartFile multipartFile
     ) {
-        Map<String, Object> resMap ;
+        Map<String, Object> resMap;
         try {
             String loginUserId = jwtProvider.getUserPk(token);
             boardService.saveBoardImg(loginUserId, boardId, multipartFile);
