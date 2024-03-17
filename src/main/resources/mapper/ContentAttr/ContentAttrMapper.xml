@@ -1,0 +1,7 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.LimeRMS.ContentAttr.mapper.ContentAttrMapper">
+  <insert id="insertContentAttr">
+    INSERT INTO ContentAttr (boardId, logicalAttr, physicalAttr, mustYn, attrOrder, attrType, modfUserId)
+    VALUES (#{boardId}, #{logicalAttr}, #{physicalAttr}, #{mustYn}, #{attrOrder}, #{attrType}, #{modfUserId})
+  </insert>
+</mapper>

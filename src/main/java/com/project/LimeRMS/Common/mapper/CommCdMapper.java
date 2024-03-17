@@ -1,7 +1,7 @@
 package com.project.LimeRMS.Common.mapper;
 
 import com.project.LimeRMS.User.dto.CommCdDto;
-import com.project.LimeRMS.Content.dto.ContentAttrDto;
+import com.project.LimeRMS.ContentAttr.dto.ContentAttrDto;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;

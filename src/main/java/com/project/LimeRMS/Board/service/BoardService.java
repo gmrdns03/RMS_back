@@ -1,7 +1,7 @@
 package com.project.LimeRMS.Board.service;
 
 import com.project.LimeRMS.Board.dto.BoardListDto;
-import com.project.LimeRMS.Content.dto.ContentAttrDto;
+import com.project.LimeRMS.ContentAttr.dto.ContentAttrDto;
 import com.project.LimeRMS.entity.Board;
 import com.project.LimeRMS.Board.mapper.BoardMapper;
 import com.project.LimeRMS.Common.mapper.CommCdMapper;

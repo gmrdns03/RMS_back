@@ -64,7 +64,7 @@
     </association>
   </resultMap>
 
-  <select id="findContentAttrByBoardId" resultType="com.project.LimeRMS.Content.dto.ContentAttrDto">
+  <select id="findContentAttrByBoardId" resultType="com.project.LimeRMS.ContentAttr.dto.ContentAttrDto">
     SELECT ca.logicalAttr, ca.physicalAttr, ca.attrType, ca.mustYn, ca.attrOrder
     FROM ContentAttr ca
     WHERE ca.boardId = ${boardId}

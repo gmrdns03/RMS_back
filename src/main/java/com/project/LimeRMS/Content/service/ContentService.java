@@ -2,7 +2,7 @@ package com.project.LimeRMS.Content.service;
 
 import com.project.LimeRMS.Board.dto.BoardListDto;
 import com.project.LimeRMS.Common.service.CommonService;
-import com.project.LimeRMS.Content.dto.ContentAttrDto;
+import com.project.LimeRMS.ContentAttr.dto.ContentAttrDto;
 import com.project.LimeRMS.Content.dto.ContentDtlDto;
 import com.project.LimeRMS.Content.dto.ContentInfoDto;
 import com.project.LimeRMS.entity.Content;

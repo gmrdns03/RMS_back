@@ -1,4 +1,4 @@
-package com.project.LimeRMS.Content.dto;
+package com.project.LimeRMS.ContentAttr.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
