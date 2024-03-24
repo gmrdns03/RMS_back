@@ -2,7 +2,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.project.LimeRMS.User.mapper.UserMapper">
+<mapper namespace="com.project.LimeRMS.mapper.UserMapper">
     <select id="findByUserEmail" parameterType="java.lang.String" resultMap="userResultMap">
         SELECT u.*, a.*
         FROM User u

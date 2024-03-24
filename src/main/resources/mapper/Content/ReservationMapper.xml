@@ -1,6 +1,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.project.LimeRMS.Content.mapper.ReservationMapper">
-  <select id="findReservationListByUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.Content.dto.ReservationListDto">
+<mapper namespace="com.project.LimeRMS.mapper.ReservationMapper">
+  <select id="findReservationListByUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.dto.ReservationListDto">
     SELECT
       rvs.reserveId as reserveId,
       b.boardNm as boardNm,

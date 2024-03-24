@@ -1,7 +1,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.project.LimeRMS.Content.mapper.SearchMapper">
-  <select id="findAllByKeyword" resultType="com.project.LimeRMS.Content.dto.SearchResListDto">
+<mapper namespace="com.project.LimeRMS.mapper.SearchMapper">
+  <select id="findAllByKeyword" resultType="com.project.LimeRMS.dto.SearchResListDto">
     SELECT
       cb.contentId as contentId,
       cb.contentNm as contentNm,
@@ -43,7 +43,7 @@
     LEFT JOIN Rental r ON r.contentId = cb.contentId
     LEFT JOIN Reservation rv ON rv.contentId = cb.contentId
   </select>
-  <select id="findAllBykeywordBoardId" resultType="com.project.LimeRMS.Content.dto.SearchResListDto">
+  <select id="findAllBykeywordBoardId" resultType="com.project.LimeRMS.dto.SearchResListDto">
     SELECT
       cb.contentId as contentId,
       cb.contentNm as contentNm,

@@ -1,6 +1,6 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.project.LimeRMS.Content.mapper.LikeMapper">
+<mapper namespace="com.project.LimeRMS.mapper.LikeMapper">
   <insert id="likeContent">
     INSERT INTO `Like` (likeUserId, contentId)
     VALUES (#{likeUserId},#{contentId})
@@ -12,7 +12,7 @@
     WHERE likeUserId=#{likeUserId} AND contentId=#{contentId}
   </update>
 
-  <select id="findLikeListByUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.Content.dto.LikeListDto">
+  <select id="findLikeListByUserId" parameterType="java.lang.String" resultType="com.project.LimeRMS.dto.LikeListDto">
     SELECT
       lk.likeId as likeId,
       b.boardNm as boardNm,

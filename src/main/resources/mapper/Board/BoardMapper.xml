@@ -1,7 +1,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.project.LimeRMS.Board.mapper.BoardMapper">
+<mapper namespace="com.project.LimeRMS.mapper.BoardMapper">
   <select id="findOneByBoardId" parameterType="java.lang.String" resultMap="boardResultMap">
     SELECT
       b.*,
@@ -44,7 +44,7 @@
   <select id="findByBoardId" parameterType="java.lang.String" resultType="com.project.LimeRMS.entity.Board">
     SELECT * FROM Board WHERE boardId = #{boardId}
   </select>
-  <select id="findAllBoardInfoList" resultType="com.project.LimeRMS.Board.dto.BoardInfoDto">
+  <select id="findAllBoardInfoList" resultType="com.project.LimeRMS.dto.BoardInfoDto">
       SELECT b.boardId, b.boardNm, b.regDt, b.boardStat, b.boardSn, COUNT(c.cateId) AS contentNum FROM Board b
       LEFT JOIN ContentCategory cc ON b.boardId = cc.boardId
       LEFT JOIN Content c ON cc.cateId = c.cateId
@@ -57,7 +57,7 @@
     WHERE boardId = #{boardId}
   </update>
 
-  <select id="findOneByContentId" resultType="com.project.LimeRMS.Board.dto.BoardListDto">
+  <select id="findOneByContentId" resultType="com.project.LimeRMS.dto.BoardListDto">
     SELECT *
     FROM (
         SELECT

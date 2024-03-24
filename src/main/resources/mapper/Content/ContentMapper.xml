@@ -1,5 +1,5 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.project.LimeRMS.Content.mapper.ContentMapper">
+<mapper namespace="com.project.LimeRMS.mapper.ContentMapper">
   <select id="findContentsByBoardId" parameterType="java.lang.String" resultMap="ContentList">
     SELECT
       ct.contentId, cc.cateId, cc.cateNm, ct.contentNm, ct.contentDesc, ct.noticeYn, ct.secretYn, ct.location, ct.regDt, ct.regUserId, ct.modfDt, ct.modfUserId
@@ -64,7 +64,7 @@
     </association>
   </resultMap>
 
-  <select id="findContentAttrByBoardId" resultType="com.project.LimeRMS.ContentAttr.dto.ContentAttrDto">
+  <select id="findContentAttrByBoardId" resultType="com.project.LimeRMS.dto.ContentAttrDto">
     SELECT ca.logicalAttr, ca.physicalAttr, ca.attrType, ca.mustYn, ca.attrOrder
     FROM ContentAttr ca
     WHERE ca.boardId = ${boardId}

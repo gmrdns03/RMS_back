@@ -1,7 +1,7 @@
 package com.project.LimeRMS.Config.security;
 
 import com.project.LimeRMS.entity.User;
-import com.project.LimeRMS.User.mapper.UserMapper;
+import com.project.LimeRMS.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

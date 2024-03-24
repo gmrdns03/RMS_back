@@ -2,12 +2,12 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.project.LimeRMS.Admin.mapper.AuthenticationMapper">
-  <select id="findAllAuth" resultType="com.project.LimeRMS.Admin.dto.AuthListDto">
+<mapper namespace="com.project.LimeRMS.mapper.AuthenticationMapper">
+  <select id="findAllAuth" resultType="com.project.LimeRMS.dto.AuthListDto">
     SELECT authId, authNm FROM Authentication
   </select>
 
-  <select id="findOneAuthByUserId" resultType="com.project.LimeRMS.User.dto.UserAuthPriorityDto">
+  <select id="findOneAuthByUserId" resultType="com.project.LimeRMS.dto.UserAuthPriorityDto">
     SELECT
       a.priority
     FROM (

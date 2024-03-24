@@ -2,15 +2,15 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.project.LimeRMS.Rental.mapper.RentalMapper">
-    <select id="findRentalByRentalStat" resultType="com.project.LimeRMS.Admin.dto.ContentListDto">
+<mapper namespace="com.project.LimeRMS.mapper.RentalMapper">
+    <select id="findRentalByRentalStat" resultType="com.project.LimeRMS.dto.ContentListDto">
         SELECT r.rentalId, r.rentalDt, r.predReturnDt, r.rentalStat, u.userId, u.userNm, c.contentId, c.contentNm FROM Rental r
         LEFT JOIN User u ON r.rentalUserId = u.userId
         LEFT JOIN Content c ON r.contentId = c.contentId
         WHERE rentalStat = #{rentalStat}
     </select>
 
-    <select id="findRentalListByUserId" resultType="com.project.LimeRMS.Rental.dto.RentalListDto">
+    <select id="findRentalListByUserId" resultType="com.project.LimeRMS.dto.RentalListDto">
         SELECT
             rt.rentalId,
             b.boardNm,
@@ -44,7 +44,7 @@
         WHERE <![CDATA[predReturnDt < NOW()]]> AND rentalStat = 'CD001001'
     </update>
 
-    <select id="findOverdueRentalByUserId" resultType="com.project.LimeRMS.Admin.dto.ContentListDto">
+    <select id="findOverdueRentalByUserId" resultType="com.project.LimeRMS.dto.ContentListDto">
         SELECT *
             FROM (
             SELECT r.rentalId, r.rentalDt, r.predReturnDt, r.rentalStat, u.userId, u.userNm, c.contentId, c.contentNm FROM Rental r
@@ -55,7 +55,7 @@
         WHERE (trg.contentId, trg.userId) not in (SELECT contentId, receiverId FROM Notification WHERE DATE(joinDt) = CURDATE());
     </select>
 
-    <select id="findReturnRentalByUserId" resultType="com.project.LimeRMS.Admin.dto.ContentListDto">
+    <select id="findReturnRentalByUserId" resultType="com.project.LimeRMS.dto.ContentListDto">
         SELECT *
             FROM (
             SELECT r.rentalId, r.rentalDt, r.predReturnDt, r.rentalStat, u.userId, u.userNm, c.contentId, c.contentNm FROM Rental r
@@ -66,7 +66,7 @@
         WHERE (trg.contentId, trg.userId) not in (SELECT contentId, receiverId FROM Notification WHERE DATE(joinDt) = CURDATE());
     </select>
 
-    <select id="findCanceledRentalByUserId" resultType="com.project.LimeRMS.Admin.dto.ContentListDto">
+    <select id="findCanceledRentalByUserId" resultType="com.project.LimeRMS.dto.ContentListDto">
         SELECT r.rentalId, r.rentalDt, r.predReturnDt, r.rentalStat, u.userId, u.userNm, c.contentId, c.contentNm FROM Rental r
         LEFT JOIN User u ON r.rentalUserId = u.userId
         LEFT JOIN Content c ON r.contentId = c.contentId
