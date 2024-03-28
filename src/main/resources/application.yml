@@ -33,7 +33,7 @@ spring:
 #        show_sql: true #show sql
 
 springdoc:
-  packages-to-scan: com.project.LimeRMS.Admin.controller,com.project.LimeRMS.Board.controller,com.project.LimeRMS.Common.controller,com.project.LimeRMS.Content.controller,com.project.LimeRMS.Notification.controller,com.project.LimeRMS.Rental.controller,com.project.LimeRMS.User.controller
+  packages-to-scan: com.project.LimeRMS.controller
   default-consumes-media-type: application/json;charset=UTF-8
   default-produces-media-type: application/json;charset=UTF-8
   api-docs:
