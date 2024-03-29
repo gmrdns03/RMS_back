@@ -23,7 +23,7 @@ public class LikeService {
         Integer contentId = content.get("contentId");
         // 이미 좋아요를 한 컨텐츠인지 확인
         Integer likeId = likeMapper.findLikeByContentUserId(likeUserId, contentId);
-        if (likeId == null) {
+        if (likeId != null) {
             throw new Exception("이미 좋아요를 한 컨텐츠입니다.");
         }
 
