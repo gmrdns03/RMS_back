@@ -4,4 +4,9 @@
     INSERT INTO Comment (userId, contentId, comment, score)
     VALUES (#{userId}, #{contentId}, #{comment}, #{score})
   </insert>
+  <update id="modifyComment">
+    UPDATE Comment
+    SET comment =#{comment}, score=#{score}, modfUserId=#{userId}
+    WHERE userId=#{userId} AND commentId=#{commentId}
+  </update>
 </mapper>

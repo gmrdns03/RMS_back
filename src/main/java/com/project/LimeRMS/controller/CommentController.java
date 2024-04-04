@@ -33,7 +33,7 @@ public class CommentController {
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
             content = @io.swagger.v3.oas.annotations.media.Content(
                 examples = @ExampleObject(value = "{\"contentId\":\"10\", \"comment\":\"I love this book\", \"score\":\"10\"}"))))
-    public ResponseEntity<?> getUserInformation(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, String> commentInfo){
+    public ResponseEntity<?> getCommentInformation(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, String> commentInfo){
         Map<String, Object> resMap;
         try {
             String userId = jwtProvider.getUserPk(token);
@@ -50,4 +50,27 @@ public class CommentController {
         }
     }
 
+    @PostMapping(value = "/modify")
+    @Operation(
+        summary = "댓글 수정",
+        description = "사용자는 댓글을 수정할 수 있다",
+        requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            content = @io.swagger.v3.oas.annotations.media.Content(
+                examples = @ExampleObject(value = "{\"commentId\":\"28\", \"comment\":\"I want to change my comment\", \"score\":\"10\"}"))))
+    public ResponseEntity<?> getModifiedComment(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, String> commentInfo){
+        Map<String, Object> resMap;
+        try {
+            String userId = jwtProvider.getUserPk(token);
+            Integer commentId = Integer.valueOf(commentInfo.get("commentId"));
+            String comment = commentInfo.get("comment");
+            Integer score = Integer.valueOf(commentInfo.get("score"));
+            commentService.modifyComment(userId, commentId, comment, score);
+            String msg = "Modified given comment successfully";
+            resMap = commonService.makeReturnData(true, 201, msg, true);
+            return ResponseEntity.ok().body(resMap);
+        } catch (Exception e) {
+            resMap = commonService.makeReturnData(false, 400, e.getMessage(), false);
+            return ResponseEntity.ok().body(resMap);
+        }
+    }
 }
