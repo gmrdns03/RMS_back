@@ -17,4 +17,8 @@ public class CommentService {
     public void modifyComment(String userId, Integer commentId, String comment, Integer score) {
         commentMapper.modifyComment(userId, commentId, comment, score);
     }
+
+    public void deleteComment(String userId, Integer commentId) {
+        commentMapper.deleteComment(userId, commentId);
+    }
 }

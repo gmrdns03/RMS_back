@@ -9,4 +9,9 @@
     SET comment =#{comment}, score=#{score}, modfUserId=#{userId}
     WHERE userId=#{userId} AND commentId=#{commentId}
   </update>
+  <update id="deleteComment">
+    UPDATE Comment
+    SET delYn ='Y', modfUserId=#{userId}
+    WHERE commentId=#{commentId}
+  </update>
 </mapper>
