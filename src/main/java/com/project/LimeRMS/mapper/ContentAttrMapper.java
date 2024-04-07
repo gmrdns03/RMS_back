@@ -9,4 +9,6 @@ public interface ContentAttrMapper {
     void insertContentAttr(@Param("contentAttrId") String contentAttrId, @Param("boardId") Integer boardId, @Param("logicalAttr") String logicalAttr, @Param("physicalAttr") String physicalAttr, @Param("mustYn") String mustYn, @Param("attrOrder") Integer attrOrder, @Param("attrType") String attrType, @Param("modfUserId") String modfUserId);
 
     void deleteContentAttr(@Param("contentAttrId") String ContentAttrId);
+
+    void updateContentAttr(@Param("contentAttrId") String contentAttrId, @Param("logicalAttr") String logicalAttr, @Param("physicalAttr") String physicalAttr, @Param("attrOrder") String attrOrder, @Param("modfUserId") String loginUserId);
 }

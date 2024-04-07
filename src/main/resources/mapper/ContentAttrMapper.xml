@@ -5,6 +5,12 @@
     VALUES (#{contentAttrId}, #{boardId}, #{logicalAttr}, #{physicalAttr}, #{mustYn}, #{attrOrder}, #{attrType}, #{modfUserId})
   </insert>
 
+  <update id="updateContentAttr">
+    UPDATE ContentAttr
+    SET logicalAttr = #{logicalAttr}, physicalAttr = #{physicalAttr}, attrOrder = #{attrOrder}
+    WHERE contentAttrId = #{contentAttrId}
+  </update>
+
   <delete id="deleteContentAttr">
     DELETE FROM ContentAttr
     WHERE contentAttrId = #{contentAttrId}

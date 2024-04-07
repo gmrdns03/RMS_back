@@ -27,4 +27,9 @@ public class ContentAttrService {
         contentAttrMapper.deleteContentAttr(contentAttrId);
         return contentAttrId + " 컨텐츠 속성이 삭제되었습니다.";
     }
+
+    public String updateContentAttr(String loginUserId, String contentAttrId, String logicalAttr, String physicalAttr, String attrOrder) {
+        contentAttrMapper.updateContentAttr(contentAttrId, logicalAttr, physicalAttr, attrOrder, loginUserId);
+        return contentAttrId + " 컨텐츠 속성이 수정되었습니다.";
+    }
 }
