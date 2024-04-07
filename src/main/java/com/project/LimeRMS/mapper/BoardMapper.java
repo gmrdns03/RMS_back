@@ -29,4 +29,6 @@ public interface BoardMapper {
     void updateBoardImgByBoardId(@Param("boardId") Integer boardId, @Param("boardImgPath") String boardImgPath, @Param("modfUserId") String modfUserId);
 
     void insertBoard(@Param("boardNm") String boardNm, @Param("boardDesc") String boardDesc, @Param("viewAuth") Integer viewAuth, @Param("writeAuth") Integer writeAuth, @Param("boardTypeId") Integer boardTypeId, @Param("contentViewType") String contentViewType, @Param("modfUserId") String modfUserId);
+
+    void deleteBoard(@Param("boardId") String boardId);
 }

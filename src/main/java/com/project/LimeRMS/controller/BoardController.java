@@ -48,7 +48,6 @@ public class BoardController {
             @RequestBody Map<String, String> boardInfo
     ) {
         Map<String, Object> resMap = new HashMap<>();
-        Map<String, Object> data = new HashMap<>();
         try {
             String loginUserId = jwtProvider.getUserPk(token);
             String message = boardService.saveBoard(loginUserId, boardInfo);
@@ -77,6 +76,28 @@ public class BoardController {
             resMap = commonService.makeReturnData(false, 204, e.getMessage(), false);
             return ResponseEntity.ok().body(resMap);
         }
+    }
+
+    @DeleteMapping("/remove")
+    @Operation(
+            summary = "보드 삭제",
+            requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+                    content = @io.swagger.v3.oas.annotations.media.Content(
+                            examples = @ExampleObject(value = "{\"boardId\":\"100\"}"))))
+    public ResponseEntity<?> deleteBoard(
+            @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
+            @RequestBody Map<String, String> boardInfo
+    ) {
+        Map<String, Object> resMap = new HashMap<>();
+        try {
+            String loginUserId = jwtProvider.getUserPk(token);
+            String boardId = String.valueOf(boardInfo.get("boardId"));
+            String message = boardService.deleteBoard(loginUserId, boardId);
+            resMap = commonService.makeReturnData(true, 200, message, true);
+        } catch (Exception e) {
+            resMap = commonService.makeReturnData(false, 500, e.getMessage(), false);
+        }
+        return ResponseEntity.ok().body(resMap);
     }
 
     // board에 해당하는 컨텐츠 리스트 반환
