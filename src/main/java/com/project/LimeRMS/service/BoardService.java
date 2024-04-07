@@ -180,4 +180,9 @@ public class BoardService {
         boardMapper.insertBoard(boardNm, boardDesc, viewAuth, writeAuth, boardTypeId, contentViewType, loginUserId);
         return boardNm + " 게시판이 개설되었습니다.";
     }
+
+    public String deleteBoard(String loginUserId, String boardId){
+        boardMapper.deleteBoard(boardId);
+        return boardId + " 게시판이 삭제되었습니다.";
+    }
 }
