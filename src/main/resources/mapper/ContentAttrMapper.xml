@@ -1,7 +1,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.LimeRMS.mapper.ContentAttrMapper">
   <insert id="insertContentAttr">
-    INSERT INTO ContentAttr (boardId, logicalAttr, physicalAttr, mustYn, attrOrder, attrType, modfUserId)
-    VALUES (#{boardId}, #{logicalAttr}, #{physicalAttr}, #{mustYn}, #{attrOrder}, #{attrType}, #{modfUserId})
+    INSERT INTO ContentAttr (contentAttrId, boardId, logicalAttr, physicalAttr, mustYn, attrOrder, attrType, modfUserId)
+    VALUES (#{contentAttrId}, #{boardId}, #{logicalAttr}, #{physicalAttr}, #{mustYn}, #{attrOrder}, #{attrType}, #{modfUserId})
   </insert>
+
+  <update id="updateContentAttr">
+    UPDATE ContentAttr
+    SET logicalAttr = #{logicalAttr}, physicalAttr = #{physicalAttr}, attrOrder = #{attrOrder}
+    WHERE contentAttrId = #{contentAttrId}
+  </update>
+
+  <delete id="deleteContentAttr">
+    DELETE FROM ContentAttr
+    WHERE contentAttrId = #{contentAttrId}
+  </delete>
 </mapper>

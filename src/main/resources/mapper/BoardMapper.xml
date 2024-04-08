@@ -112,4 +112,9 @@
     INSERT INTO Board (boardNm, boardDesc, viewAuth, writeAuth, boardTypeId, modfUserId)
     VALUES (#{boardNm}, #{boardDesc}, #{viewAuth}, #{writeAuth}, #{boardTypeId}, #{modfUserId})
   </insert>
+
+  <delete id="deleteBoard">
+    DELETE FROM Board
+    WHERE boardId = #{boardId}
+  </delete>
 </mapper>
