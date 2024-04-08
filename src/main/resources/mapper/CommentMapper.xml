@@ -14,4 +14,10 @@
     SET delYn ='Y', modfUserId=#{userId}
     WHERE commentId=#{commentId}
   </update>
+  <select id="listComment">
+    SELECT c.commentId, c.parentCommentId, c.comment, c.score, c.modfDt, c.delYn, u.userNm, u.profileImg
+    FROM Comment c
+    LEFT JOIN User u ON c.userId = u.userId
+    WHERE c.contentId = #{contentId}
+  </select>
 </mapper>

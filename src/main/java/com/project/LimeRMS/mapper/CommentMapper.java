@@ -1,5 +1,7 @@
 package com.project.LimeRMS.mapper;
 
+import com.project.LimeRMS.dto.CommentDto;
+import java.util.List;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -11,4 +13,6 @@ public interface CommentMapper {
     void modifyComment(@Param("userId")String userId, @Param("commentId")Integer commentId, @Param("comment")String comment, @Param("score")Integer score);
 
     void deleteComment(@Param("userId")String userId, @Param("commentId")Integer commentId);
+
+    List<CommentDto> listComment(@Param("contentId")Integer contentId);
 }

@@ -1,6 +1,8 @@
 package com.project.LimeRMS.service;
 
+import com.project.LimeRMS.dto.CommentDto;
 import com.project.LimeRMS.mapper.CommentMapper;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,5 +22,9 @@ public class CommentService {
 
     public void deleteComment(String userId, Integer commentId) {
         commentMapper.deleteComment(userId, commentId);
+    }
+
+    public List<CommentDto> getCommentList(Integer contentId) {
+        return commentMapper.listComment(contentId);
     }
 }
