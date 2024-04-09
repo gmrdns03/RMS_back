@@ -25,7 +25,7 @@ public class CommentDto {
 
     private String profileImg;
 
-    private String modifiedDt;
+    private String modfDt;
 
     private String delYn;
 
