@@ -8,7 +8,7 @@
       bt.*
     FROM Board b
     LEFT JOIN BoardType bt ON b.boardTypeId = bt.boardTypeId
-    WHERE boardId = #{boardId}
+    WHERE boardId = #{boardId} AND delYn = 'N'
   </select>
   <select id="findAllBoardList" parameterType="java.lang.String" resultMap="boardResultMap">
     SELECT
@@ -17,7 +17,7 @@
     FROM Board b
     LEFT JOIN
       BoardType bt ON b.boardTypeId = bt.boardTypeId
-    WHERE b.viewAuth >= ${authPriority}
+    WHERE b.viewAuth >= ${authPriority} AND delYn = 'N'
     ORDER BY b.boardSn
   </select>
   <resultMap id="boardResultMap" type="com.project.LimeRMS.entity.Board">
@@ -42,12 +42,13 @@
   </resultMap>
 
   <select id="findByBoardId" parameterType="java.lang.String" resultType="com.project.LimeRMS.entity.Board">
-    SELECT * FROM Board WHERE boardId = #{boardId}
+    SELECT * FROM Board WHERE boardId = #{boardId} AND delYn = 'N'
   </select>
   <select id="findAllBoardInfoList" resultType="com.project.LimeRMS.dto.BoardInfoDto">
       SELECT b.boardId, b.boardNm, b.regDt, b.boardStat, b.boardSn, COUNT(c.cateId) AS contentNum FROM Board b
       LEFT JOIN ContentCategory cc ON b.boardId = cc.boardId
       LEFT JOIN Content c ON cc.cateId = c.cateId
+      WHERE b.delYn = 'N'
       GROUP BY b.boardId
       ORDER BY b.boardSn ASC
   </select>
@@ -75,7 +76,7 @@
             b.extensionLimit,
             b.rentalLimit
         FROM Board b
-        WHERE b.boardId = (SELECT c.boardId FROM Content c WHERE c.contentId = ${contentId})) bb
+        WHERE b.boardId = (SELECT c.boardId FROM Content c WHERE c.contentId = ${contentId}) AND b.delYn = 'N') bb
     LEFT JOIN (
         SELECT
             bt.boardTypeId,
@@ -109,12 +110,24 @@
   </select>
 
   <insert id="insertBoard">
-    INSERT INTO Board (boardNm, boardDesc, viewAuth, writeAuth, boardTypeId, modfUserId)
-    VALUES (#{boardNm}, #{boardDesc}, #{viewAuth}, #{writeAuth}, #{boardTypeId}, #{modfUserId})
+    INSERT INTO Board (boardTypeId, boardNm, boardDesc, boardStat, boardSn, rentalPeriod, extensionLimit, rentalLimit, viewAuth, writeAuth, commentAuth, modifyAuth, scoreYn, commentYn, listNumLimit, commentImgYn, modfUserId, regUserId)
+    VALUES (#{boardTypeId}, #{boardNm}, #{boardDesc}, #{boardStat}, #{boardSn}, #{rentalPeriod}, #{extensionLimit}, #{rentalLimit}, #{viewAuth}, #{writeAuth}, #{commentAuth}, #{modifyAuth}, #{scoreYn}, #{commentYn}, #{listNumLimit}, #{commentImgYn}, #{regUserId}, #{regUserId})
   </insert>
 
-  <delete id="deleteBoard">
-    DELETE FROM Board
+  <update id="updateBoard">
+    UPDATE Board
+    SET boardNm = #{boardNm}, boardDesc = #{boardDesc}, boardStat = #{boardStat}, boardSn = #{boardSn}, rentalPeriod = #{rentalPeriod}, extensionLimit = #{extensionLimit}, rentalLimit = #{rentalLimit}, viewAuth = #{viewAuth}, writeAuth = #{writeAuth}, commentAuth = #{commentAuth}, modifyAuth = #{modifyAuth}, scoreYn = #{scoreYn}, commentYn = #{commentYn}, listNumLimit = #{listNumLimit}, commentImgYn = #{commentImgYn}, modfUserId = #{modfUserId}
     WHERE boardId = #{boardId}
-  </delete>
+  </update>
+
+  <update id="deleteBoard">
+    UPDATE Board
+    SET delYn = 'Y', modfUserId = #{modfUserId}
+    WHERE boardId = #{boardId}
+  </update>
+
+  <select id="findLastBoardId">
+    SELECT MAX(boardId)
+    FROM Board
+  </select>
 </mapper>

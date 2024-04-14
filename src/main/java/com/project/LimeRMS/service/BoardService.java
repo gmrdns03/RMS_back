@@ -170,14 +170,24 @@ public class BoardService {
     }
 
     public String saveBoard(String loginUserId, Map<String, String> boardInfo) {
+        Integer boardTypeId = Integer.valueOf(boardInfo.get("boardTypeId"));
         String boardNm = boardInfo.get("boardNm");
         String boardDesc = boardInfo.get("boardDesc");
+        String boardStat = boardInfo.get("boardStat");
+        Integer boardSn = boardMapper.findLastBoardId() + 1;
+        String rentalPeriod = boardInfo.getOrDefault("rentalPeriod", null);
+        String extensionLimit = boardInfo.getOrDefault("extensionLimit", null);
+        String rentalLimit = boardInfo.getOrDefault("rentalLimit", null);
         Integer viewAuth = Integer.valueOf(boardInfo.get("viewAuth"));
         Integer writeAuth = Integer.valueOf(boardInfo.get("writeAuth"));
-        Integer boardTypeId = Integer.valueOf(boardInfo.get("boardTypeId"));
-        String contentViewType = boardInfo.get("contentViewType");
+        Integer commentAuth = Integer.valueOf(boardInfo.get("commentAuth"));
+        Integer modifyAuth = Integer.valueOf(boardInfo.get("modifyAuth"));
+        String scoreYn = boardInfo.get("scoreYn");
+        String commentYn = boardInfo.get("commentYn");
+        Integer listNumLimit = Integer.valueOf(boardInfo.get("listNumLimit"));
+        String commentImgYn = boardInfo.get("commentImgYn");
 
-        boardMapper.insertBoard(boardNm, boardDesc, viewAuth, writeAuth, boardTypeId, contentViewType, loginUserId);
+        boardMapper.insertBoard(boardTypeId, boardNm, boardDesc, boardStat, boardSn, rentalPeriod, extensionLimit, rentalLimit, viewAuth, writeAuth, commentAuth, modifyAuth, scoreYn, commentYn, listNumLimit, commentImgYn, loginUserId);
         return boardNm + " 게시판이 개설되었습니다.";
     }
 
