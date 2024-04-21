@@ -42,7 +42,7 @@ public class BoardController {
             summary = "보드 생성",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
-                            examples = @ExampleObject(value = "{\"boardNm\":\"보드 이름\",\"boardDesc\":\"보드 설명\",\"viewAuth\":\"9\",\"writeAuth\":\"9\",\"boardTypeId\":\"1\",\"contentViewType\":\"rental\"}"))))
+                            examples = @ExampleObject(value = "{\"boardTypeId\":\"1\",\"boardNm\":\"보드 이름\",\"boardDesc\":\"보드 설명\",\"boardStat\":\"CD003001\",\"viewAuth\":9,\"writeAuth\":9,\"commentAuth\":9,\"modifyAuth\":9,\"scoreYn\":\"Y\",\"commentYn\":\"Y\",\"listNumLimit\":100,\"commentImgYn\":\"N\"}"))))
     public ResponseEntity<?> addBoard(
             @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
             @RequestBody Map<String, String> boardInfo
@@ -78,7 +78,7 @@ public class BoardController {
         }
     }
 
-    @DeleteMapping("/remove")
+    @PutMapping("/remove")
     @Operation(
             summary = "보드 삭제",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
