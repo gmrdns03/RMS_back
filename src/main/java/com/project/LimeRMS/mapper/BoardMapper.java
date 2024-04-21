@@ -32,7 +32,7 @@ public interface BoardMapper {
 
 //    void updateBoard()
 
-    void deleteBoard(@Param("boardId") String boardId);
+    void deleteBoard(@Param("boardId") String boardId, @Param("modfUserId") String modfUserId);
 
-    Integer findLastBoardId();
+    Integer findLastBoardSn();
 }

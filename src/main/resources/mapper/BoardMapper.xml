@@ -126,8 +126,8 @@
     WHERE boardId = #{boardId}
   </update>
 
-  <select id="findLastBoardId">
-    SELECT MAX(boardId)
+  <select id="findLastBoardSn">
+    SELECT MAX(boardSn)
     FROM Board
   </select>
 </mapper>

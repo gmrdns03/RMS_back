@@ -174,7 +174,7 @@ public class BoardService {
         String boardNm = boardInfo.get("boardNm");
         String boardDesc = boardInfo.get("boardDesc");
         String boardStat = boardInfo.get("boardStat");
-        Integer boardSn = boardMapper.findLastBoardId() + 1;
+        Integer boardSn = boardMapper.findLastBoardSn() + 1;
         String rentalPeriod = boardInfo.getOrDefault("rentalPeriod", null);
         String extensionLimit = boardInfo.getOrDefault("extensionLimit", null);
         String rentalLimit = boardInfo.getOrDefault("rentalLimit", null);
@@ -192,7 +192,7 @@ public class BoardService {
     }
 
     public String deleteBoard(String loginUserId, String boardId){
-        boardMapper.deleteBoard(boardId);
+        boardMapper.deleteBoard(boardId, loginUserId);
         return boardId + " 게시판이 삭제되었습니다.";
     }
 }
