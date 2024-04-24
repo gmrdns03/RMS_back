@@ -111,7 +111,10 @@
 
   <insert id="insertBoard">
     INSERT INTO Board (boardTypeId, boardNm, boardDesc, boardStat, boardSn, rentalPeriod, extensionLimit, rentalLimit, viewAuth, writeAuth, commentAuth, modifyAuth, scoreYn, commentYn, listNumLimit, commentImgYn, modfUserId, regUserId)
-    VALUES (#{boardTypeId}, #{boardNm}, #{boardDesc}, #{boardStat}, #{boardSn}, #{rentalPeriod}, #{extensionLimit}, #{rentalLimit}, #{viewAuth}, #{writeAuth}, #{commentAuth}, #{modifyAuth}, #{scoreYn}, #{commentYn}, #{listNumLimit}, #{commentImgYn}, #{regUserId}, #{regUserId})
+    VALUES (#{boardTypeId}, #{boardNm}, #{boardDesc}, #{boardStat}, #{boardSn}, #{rentalPeriod}, #{extensionLimit}, #{rentalLimit}, #{viewAuth}, #{writeAuth}, #{commentAuth}, #{modifyAuth}, #{scoreYn}, #{commentYn}, #{listNumLimit}, #{commentImgYn}, #{modfUserId}, #{regUserId})
+    <selectKey keyProperty="boardId" resultType="int" order="AFTER">
+      SELECT LAST_INSERT_ID()
+    </selectKey>
   </insert>
 
   <update id="updateBoard">

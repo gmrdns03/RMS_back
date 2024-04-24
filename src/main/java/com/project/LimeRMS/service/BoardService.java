@@ -1,10 +1,12 @@
 package com.project.LimeRMS.service;
 
+import com.project.LimeRMS.dto.BoardAndContentAttrDto;
 import com.project.LimeRMS.dto.BoardListDto;
 import com.project.LimeRMS.dto.ContentAttrDto;
 import com.project.LimeRMS.entity.Board;
 import com.project.LimeRMS.mapper.BoardMapper;
 import com.project.LimeRMS.mapper.CommCdMapper;
+import com.project.LimeRMS.mapper.ContentAttrMapper;
 import com.project.LimeRMS.mapper.ContentMapper;
 
 import java.io.File;
@@ -22,6 +24,7 @@ import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 @Service
@@ -31,6 +34,7 @@ public class BoardService {
     private final UserService userService;
     private final CommCdMapper commCdMapper;
     private final ContentMapper contentMapper;
+    private final ContentAttrMapper contentAttrMapper;
 
     @Value("${filesPath.board}")
     private String DtlBoardPath;
@@ -164,31 +168,52 @@ public class BoardService {
             String type = commCdMapper.findCdNmByCd(dto.getAttrType());
             freeField.put("type", type);
             freeField.put("required", dto.getMustYn());
-            freeFieldMap.put(dto.getAttrOrder(), freeField);
+            freeFieldMap.put(String.valueOf(dto.getAttrOrder()), freeField);
         }
         return freeFieldMap;
     }
 
-    public String saveBoard(String loginUserId, Map<String, String> boardInfo) {
-        Integer boardTypeId = Integer.valueOf(boardInfo.get("boardTypeId"));
-        String boardNm = boardInfo.get("boardNm");
-        String boardDesc = boardInfo.get("boardDesc");
-        String boardStat = boardInfo.get("boardStat");
-        Integer boardSn = boardMapper.findLastBoardSn() + 1;
-        String rentalPeriod = boardInfo.getOrDefault("rentalPeriod", null);
-        String extensionLimit = boardInfo.getOrDefault("extensionLimit", null);
-        String rentalLimit = boardInfo.getOrDefault("rentalLimit", null);
-        Integer viewAuth = Integer.valueOf(boardInfo.get("viewAuth"));
-        Integer writeAuth = Integer.valueOf(boardInfo.get("writeAuth"));
-        Integer commentAuth = Integer.valueOf(boardInfo.get("commentAuth"));
-        Integer modifyAuth = Integer.valueOf(boardInfo.get("modifyAuth"));
-        String scoreYn = boardInfo.get("scoreYn");
-        String commentYn = boardInfo.get("commentYn");
-        Integer listNumLimit = Integer.valueOf(boardInfo.get("listNumLimit"));
-        String commentImgYn = boardInfo.get("commentImgYn");
+    @Transactional
+    public String saveBoard(String loginUserId, BoardAndContentAttrDto bcaDto) {
+        bcaDto.setRegUserId(loginUserId);
+        bcaDto.setModfUserId(loginUserId);
+        boardMapper.insertBoard(bcaDto);
+        if (bcaDto.getContentAttrLogicalAttr().getText1() != null && bcaDto.getContentAttrType().getText1() != null && bcaDto.getContentAttrMustYn().getText1() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text1", bcaDto.getContentAttrLogicalAttr().getText1(), bcaDto.getContentAttrType().getText1(), bcaDto.getContentAttrMustYn().getText1(), 1, loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getText2() != null && bcaDto.getContentAttrType().getText2() != null && bcaDto.getContentAttrMustYn().getText2() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text2", bcaDto.getContentAttrLogicalAttr().getText2(), bcaDto.getContentAttrType().getText2(), bcaDto.getContentAttrMustYn().getText2(), 2, loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getText3() != null && bcaDto.getContentAttrType().getText3() != null && bcaDto.getContentAttrMustYn().getText3() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text3", bcaDto.getContentAttrLogicalAttr().getText3(), bcaDto.getContentAttrType().getText3(), bcaDto.getContentAttrMustYn().getText3(), 3, loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getText4() != null && bcaDto.getContentAttrType().getText4() != null && bcaDto.getContentAttrMustYn().getText4() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text4", bcaDto.getContentAttrLogicalAttr().getText4(), bcaDto.getContentAttrType().getText4(), bcaDto.getContentAttrMustYn().getText4(), 4, loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getText5() != null && bcaDto.getContentAttrType().getText5() != null && bcaDto.getContentAttrMustYn().getText5() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text5", bcaDto.getContentAttrLogicalAttr().getText5(), bcaDto.getContentAttrType().getText5(), bcaDto.getContentAttrMustYn().getText5(), 5, loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
 
-        boardMapper.insertBoard(boardTypeId, boardNm, boardDesc, boardStat, boardSn, rentalPeriod, extensionLimit, rentalLimit, viewAuth, writeAuth, commentAuth, modifyAuth, scoreYn, commentYn, listNumLimit, commentImgYn, loginUserId);
-        return boardNm + " 게시판이 개설되었습니다.";
+
+        return bcaDto.getBoardNm() + " 게시판이 개설되었습니다.";
+    }
+
+    private ContentAttrDto getContentAttrDtoByBoardAndContentAttrDto(Integer boardId, String physicalAttr, String logicalAttr, String attrType, String mustYn, Integer attrOrder, String loginUserId) {
+        ContentAttrDto contentAttrDto = new ContentAttrDto();
+        contentAttrDto.setBoardId(boardId);
+        contentAttrDto.setLogicalAttr(logicalAttr);
+        contentAttrDto.setPhysicalAttr(physicalAttr);
+        contentAttrDto.setAttrType(attrType);
+        contentAttrDto.setMustYn(mustYn);
+        contentAttrDto.setAttrOrder(attrOrder);
+        contentAttrDto.setRegUserId(loginUserId);
+        contentAttrDto.setModfUserId(loginUserId);
+        return contentAttrDto;
     }
 
     public String deleteBoard(String loginUserId, String boardId){

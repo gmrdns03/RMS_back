@@ -12,10 +12,13 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ContentAttrDto {
+    private Integer contentAttrId;
+    private Integer boardId;
     private String logicalAttr;
     private String physicalAttr;
     private String attrType;
     private String mustYn;
-    private String attrOrder;
-
+    private Integer attrOrder;
+    private String regUserId;
+    private String modfUserId;
 }

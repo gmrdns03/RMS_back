@@ -113,7 +113,7 @@ public class ContentService {
             String type = commCdMapper.findCdNmByCd(dto.getAttrType());
             freeField.put("type", type);
             freeField.put("required", dto.getMustYn());
-            freeFieldMap.put(dto.getAttrOrder(), freeField);
+            freeFieldMap.put(String.valueOf(dto.getAttrOrder()), freeField);
         }
 
         // 컨텐츠 대여 상태 조회

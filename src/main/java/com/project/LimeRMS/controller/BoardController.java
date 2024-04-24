@@ -1,5 +1,6 @@
 package com.project.LimeRMS.controller;
 
+import com.project.LimeRMS.dto.BoardAndContentAttrDto;
 import com.project.LimeRMS.dto.BoardListDto;
 import com.project.LimeRMS.dto.ContentInfoDto;
 import com.project.LimeRMS.Config.security.JwtProvider;
@@ -42,15 +43,18 @@ public class BoardController {
             summary = "보드 생성",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
-                            examples = @ExampleObject(value = "{\"boardTypeId\":\"1\",\"boardNm\":\"보드 이름\",\"boardDesc\":\"보드 설명\",\"boardStat\":\"CD003001\",\"viewAuth\":9,\"writeAuth\":9,\"commentAuth\":9,\"modifyAuth\":9,\"scoreYn\":\"Y\",\"commentYn\":\"Y\",\"listNumLimit\":100,\"commentImgYn\":\"N\"}"))))
+                            examples = @ExampleObject(value = "{\"boardTypeId\":\"1\",\"boardNm\":\"보드 이름\",\"boardDesc\":\"보드 설명\",\"boardStat\":\"CD003001\",\"viewAuth\":9,\"writeAuth\":9,\"commentAuth\":9,\"modifyAuth\":9,\"scoreYn\":\"Y\",\"commentYn\":\"Y\",\"listNumLimit\":100,\"commentImgYn\":\"N\"," +
+                                    "\"contentAttrLogicalAttr\":{\"text1\":\"강사명\", \"text2\":\"강의 키워드\", \"text3\":\"수준\", \"text4\":\"강좌 링크\"}," +
+                                    "\"contentAttrType\":{\"text1\":\"CD007001\", \"text2\":\"CD007001\", \"text3\":\"CD007001\", \"text4\":\"CD007001\"}," +
+                                    "\"contentAttrMustYn\":{\"text1\":\"Y\", \"text2\":\"N\", \"text3\":\"Y\", \"text4\":\"N\"}}"))))
     public ResponseEntity<?> addBoard(
             @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
-            @RequestBody Map<String, String> boardInfo
+            @RequestBody BoardAndContentAttrDto boardAndContentAttrDto
     ) {
         Map<String, Object> resMap = new HashMap<>();
         try {
             String loginUserId = jwtProvider.getUserPk(token);
-            String message = boardService.saveBoard(loginUserId, boardInfo);
+            String message = boardService.saveBoard(loginUserId, boardAndContentAttrDto);
             resMap = commonService.makeReturnData(true, 200, message, true);
         } catch (Exception e) {
             resMap = commonService.makeReturnData(false, 500, e.getMessage(), false);

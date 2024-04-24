@@ -1,5 +1,6 @@
 package com.project.LimeRMS.controller;
 
+import com.project.LimeRMS.dto.ContentAttrDto;
 import com.project.LimeRMS.service.CommonService;
 import com.project.LimeRMS.Config.security.JwtProvider;
 import com.project.LimeRMS.service.ContentAttrService;
@@ -35,12 +36,14 @@ public class ContentAttrController {
     )
     public ResponseEntity<?> addContentAttr(
             @Parameter(hidden = true) @RequestHeader("AccessToken") String token,
-            @RequestBody Map<String, String> contentAttrInfo
+            @RequestBody ContentAttrDto contentAttrDto
     ){
         Map<String, Object> resMap = new HashMap<>();
         try{
             String loginUserId = jwtProvider.getUserPk(token);
-            String message = contentAttrService.saveContentAttr(loginUserId, contentAttrInfo);
+            contentAttrDto.setModfUserId(loginUserId);
+            contentAttrDto.setRegUserId(loginUserId);
+            String message = contentAttrService.saveContentAttr(contentAttrDto);
             resMap = commonService.makeReturnData(true, 200, message, true);
         } catch(Exception e){
             resMap = commonService.makeReturnData(false, 500, e.getMessage(), false);
