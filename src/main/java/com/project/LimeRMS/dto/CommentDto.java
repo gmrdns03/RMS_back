@@ -21,6 +21,8 @@ public class CommentDto {
 
     private Integer score;
 
+    private Integer userId;
+
     private String userNm;
 
     private String profileImg;
