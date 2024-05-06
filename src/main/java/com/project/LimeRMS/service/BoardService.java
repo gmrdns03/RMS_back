@@ -179,26 +179,93 @@ public class BoardService {
         bcaDto.setModfUserId(loginUserId);
         boardMapper.insertBoard(bcaDto);
         if (bcaDto.getContentAttrLogicalAttr().getText1() != null && bcaDto.getContentAttrType().getText1() != null && bcaDto.getContentAttrMustYn().getText1() != null){
-            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text1", bcaDto.getContentAttrLogicalAttr().getText1(), bcaDto.getContentAttrType().getText1(), bcaDto.getContentAttrMustYn().getText1(), 1, loginUserId);
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text1", bcaDto.getContentAttrLogicalAttr().getText1(), bcaDto.getContentAttrType().getText1(), bcaDto.getContentAttrMustYn().getText1(), bcaDto.getContentAttrOrder().getText1(), loginUserId);
             contentAttrMapper.insertContentAttr(contentAttrDto);
         }
         if (bcaDto.getContentAttrLogicalAttr().getText2() != null && bcaDto.getContentAttrType().getText2() != null && bcaDto.getContentAttrMustYn().getText2() != null){
-            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text2", bcaDto.getContentAttrLogicalAttr().getText2(), bcaDto.getContentAttrType().getText2(), bcaDto.getContentAttrMustYn().getText2(), 2, loginUserId);
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text2", bcaDto.getContentAttrLogicalAttr().getText2(), bcaDto.getContentAttrType().getText2(), bcaDto.getContentAttrMustYn().getText2(), bcaDto.getContentAttrOrder().getText2(), loginUserId);
             contentAttrMapper.insertContentAttr(contentAttrDto);
         }
         if (bcaDto.getContentAttrLogicalAttr().getText3() != null && bcaDto.getContentAttrType().getText3() != null && bcaDto.getContentAttrMustYn().getText3() != null){
-            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text3", bcaDto.getContentAttrLogicalAttr().getText3(), bcaDto.getContentAttrType().getText3(), bcaDto.getContentAttrMustYn().getText3(), 3, loginUserId);
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text3", bcaDto.getContentAttrLogicalAttr().getText3(), bcaDto.getContentAttrType().getText3(), bcaDto.getContentAttrMustYn().getText3(), bcaDto.getContentAttrOrder().getText3(), loginUserId);
             contentAttrMapper.insertContentAttr(contentAttrDto);
         }
         if (bcaDto.getContentAttrLogicalAttr().getText4() != null && bcaDto.getContentAttrType().getText4() != null && bcaDto.getContentAttrMustYn().getText4() != null){
-            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text4", bcaDto.getContentAttrLogicalAttr().getText4(), bcaDto.getContentAttrType().getText4(), bcaDto.getContentAttrMustYn().getText4(), 4, loginUserId);
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text4", bcaDto.getContentAttrLogicalAttr().getText4(), bcaDto.getContentAttrType().getText4(), bcaDto.getContentAttrMustYn().getText4(), bcaDto.getContentAttrOrder().getText4(), loginUserId);
             contentAttrMapper.insertContentAttr(contentAttrDto);
         }
         if (bcaDto.getContentAttrLogicalAttr().getText5() != null && bcaDto.getContentAttrType().getText5() != null && bcaDto.getContentAttrMustYn().getText5() != null){
-            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text5", bcaDto.getContentAttrLogicalAttr().getText5(), bcaDto.getContentAttrType().getText5(), bcaDto.getContentAttrMustYn().getText5(), 5, loginUserId);
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "text5", bcaDto.getContentAttrLogicalAttr().getText5(), bcaDto.getContentAttrType().getText5(), bcaDto.getContentAttrMustYn().getText5(), bcaDto.getContentAttrOrder().getText5(), loginUserId);
             contentAttrMapper.insertContentAttr(contentAttrDto);
         }
-
+        if (bcaDto.getContentAttrLogicalAttr().getInteger1() != null && bcaDto.getContentAttrType().getInteger1() != null && bcaDto.getContentAttrMustYn().getInteger1() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "integer1", bcaDto.getContentAttrLogicalAttr().getInteger1(), bcaDto.getContentAttrType().getInteger1(), bcaDto.getContentAttrMustYn().getInteger1(), bcaDto.getContentAttrOrder().getInteger1(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getInteger2() != null && bcaDto.getContentAttrType().getInteger2() != null && bcaDto.getContentAttrMustYn().getInteger2() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "integer2", bcaDto.getContentAttrLogicalAttr().getInteger2(), bcaDto.getContentAttrType().getInteger2(), bcaDto.getContentAttrMustYn().getInteger2(), bcaDto.getContentAttrOrder().getInteger2(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getInteger3() != null && bcaDto.getContentAttrType().getInteger3() != null && bcaDto.getContentAttrMustYn().getInteger3() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "integer3", bcaDto.getContentAttrLogicalAttr().getInteger3(), bcaDto.getContentAttrType().getInteger3(), bcaDto.getContentAttrMustYn().getInteger3(), bcaDto.getContentAttrOrder().getInteger3(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getInteger4() != null && bcaDto.getContentAttrType().getInteger4() != null && bcaDto.getContentAttrMustYn().getInteger4() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "integer4", bcaDto.getContentAttrLogicalAttr().getInteger4(), bcaDto.getContentAttrType().getInteger4(), bcaDto.getContentAttrMustYn().getInteger4(), bcaDto.getContentAttrOrder().getInteger4(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getInteger5() != null && bcaDto.getContentAttrType().getInteger5() != null && bcaDto.getContentAttrMustYn().getInteger5() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "integer5", bcaDto.getContentAttrLogicalAttr().getInteger5(), bcaDto.getContentAttrType().getInteger5(), bcaDto.getContentAttrMustYn().getInteger5(), bcaDto.getContentAttrOrder().getInteger5(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getDate1() != null && bcaDto.getContentAttrType().getDate1() != null && bcaDto.getContentAttrMustYn().getDate1() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "date1", bcaDto.getContentAttrLogicalAttr().getDate1(), bcaDto.getContentAttrType().getDate1(), bcaDto.getContentAttrMustYn().getDate1(), bcaDto.getContentAttrOrder().getDate1(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getDate2() != null && bcaDto.getContentAttrType().getDate2() != null && bcaDto.getContentAttrMustYn().getDate2() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "date2", bcaDto.getContentAttrLogicalAttr().getDate2(), bcaDto.getContentAttrType().getDate2(), bcaDto.getContentAttrMustYn().getDate2(), bcaDto.getContentAttrOrder().getDate2(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getDate3() != null && bcaDto.getContentAttrType().getDate3() != null && bcaDto.getContentAttrMustYn().getDate3() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "date3", bcaDto.getContentAttrLogicalAttr().getDate3(), bcaDto.getContentAttrType().getDate3(), bcaDto.getContentAttrMustYn().getDate3(), bcaDto.getContentAttrOrder().getDate3(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getDate4() != null && bcaDto.getContentAttrType().getDate4() != null && bcaDto.getContentAttrMustYn().getDate4() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "date4", bcaDto.getContentAttrLogicalAttr().getDate4(), bcaDto.getContentAttrType().getDate4(), bcaDto.getContentAttrMustYn().getDate4(), bcaDto.getContentAttrOrder().getDate4(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getDate5() != null && bcaDto.getContentAttrType().getDate5() != null && bcaDto.getContentAttrMustYn().getDate5() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "date5", bcaDto.getContentAttrLogicalAttr().getDate5(), bcaDto.getContentAttrType().getDate5(), bcaDto.getContentAttrMustYn().getDate5(), bcaDto.getContentAttrOrder().getDate5(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getBool1() != null && bcaDto.getContentAttrType().getBool1() != null && bcaDto.getContentAttrMustYn().getBool1() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "bool1", bcaDto.getContentAttrLogicalAttr().getBool1(), bcaDto.getContentAttrType().getBool1(), bcaDto.getContentAttrMustYn().getBool1(), bcaDto.getContentAttrOrder().getBool1(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getBool2() != null && bcaDto.getContentAttrType().getBool2() != null && bcaDto.getContentAttrMustYn().getBool2() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "bool2", bcaDto.getContentAttrLogicalAttr().getBool2(), bcaDto.getContentAttrType().getBool2(), bcaDto.getContentAttrMustYn().getBool2(), bcaDto.getContentAttrOrder().getBool2(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getBool3() != null && bcaDto.getContentAttrType().getBool3() != null && bcaDto.getContentAttrMustYn().getBool3() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "bool3", bcaDto.getContentAttrLogicalAttr().getBool3(), bcaDto.getContentAttrType().getBool3(), bcaDto.getContentAttrMustYn().getBool3(), bcaDto.getContentAttrOrder().getBool3(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getBool4() != null && bcaDto.getContentAttrType().getBool4() != null && bcaDto.getContentAttrMustYn().getBool4() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "bool4", bcaDto.getContentAttrLogicalAttr().getBool4(), bcaDto.getContentAttrType().getBool4(), bcaDto.getContentAttrMustYn().getBool4(), bcaDto.getContentAttrOrder().getBool4(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getBool5() != null && bcaDto.getContentAttrType().getBool5() != null && bcaDto.getContentAttrMustYn().getBool5() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "bool5", bcaDto.getContentAttrLogicalAttr().getBool5(), bcaDto.getContentAttrType().getBool5(), bcaDto.getContentAttrMustYn().getBool5(), bcaDto.getContentAttrOrder().getBool5(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getFloat1() != null && bcaDto.getContentAttrType().getFloat1() != null && bcaDto.getContentAttrMustYn().getFloat1() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "float1", bcaDto.getContentAttrLogicalAttr().getFloat1(), bcaDto.getContentAttrType().getFloat1(), bcaDto.getContentAttrMustYn().getFloat1(), bcaDto.getContentAttrOrder().getFloat1(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
+        if (bcaDto.getContentAttrLogicalAttr().getFloat2() != null && bcaDto.getContentAttrType().getFloat2() != null && bcaDto.getContentAttrMustYn().getFloat2() != null){
+            ContentAttrDto contentAttrDto = getContentAttrDtoByBoardAndContentAttrDto(bcaDto.getBoardId(), "float2", bcaDto.getContentAttrLogicalAttr().getFloat2(), bcaDto.getContentAttrType().getFloat2(), bcaDto.getContentAttrMustYn().getFloat2(), bcaDto.getContentAttrOrder().getFloat2(), loginUserId);
+            contentAttrMapper.insertContentAttr(contentAttrDto);
+        }
 
         return bcaDto.getBoardNm() + " 게시판이 개설되었습니다.";
     }
