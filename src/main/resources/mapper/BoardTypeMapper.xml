@@ -1,0 +1,22 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.LimeRMS.mapper.BoardTypeMapper">
+  <insert id="insertBoardType">
+    INSERT INTO BoardType(boardTypeNm, boardTypeDesc, contentViewType, boardViewType, regUserId, modfUserId)
+    VALUES(#{boardTypeNm}, #{boardTypeDesc}, #{contentViewType}, #{boardViewType}, #{regUserId}, #{modfUserId})
+  </insert>
+
+  <delete id ="deleteBoardType">
+    DELETE FROM BoardType
+    WHERE boardTypeId = #{boardTypeId}
+  </delete>
+
+  <select id="getBoardType">
+    SELECT *
+    FROM BoardType
+    WHERE boardTypeId = #{boardTypeId}
+  </select>
+
+  <select id="getBoardTypeList">
+    SELECT * FROM BoardType
+  </select>
+</mapper>
