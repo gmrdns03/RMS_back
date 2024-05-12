@@ -25,4 +25,9 @@ public class ContentAttrService {
         contentAttrMapper.updateContentAttr(contentAttrId, logicalAttr, physicalAttr, attrOrder, loginUserId);
         return contentAttrId + " 컨텐츠 속성이 수정되었습니다.";
     }
+
+    public String updateContentAttrOrder(String loginUserId, String contentAttrId, String attrOrder) {
+        contentAttrMapper.updateContentAttrOrder(contentAttrId, attrOrder, loginUserId);
+        return contentAttrId + " 컨텐츠 속성이 수정되었습니다.";
+    }
 }

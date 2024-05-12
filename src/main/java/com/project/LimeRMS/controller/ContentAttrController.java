@@ -56,7 +56,7 @@ public class ContentAttrController {
             summary = "컨텐츠 속성 수정",
             requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
                     content = @io.swagger.v3.oas.annotations.media.Content(
-                            examples = @ExampleObject(value = "{\"contentAttrId\":\"100\", \"logicalAttr\":\"강의 이름\", \"physicalAttr\":\"text2\", \"attrOrder\":\"2\"}")
+                            examples = @ExampleObject(value = "{\"contentAttrId\":\"100\", \"attrOrder\":\"2\"}")
                     )
             )
     )
@@ -71,7 +71,7 @@ public class ContentAttrController {
             String logicalAttr = contentAttrInfo.get("logicalAttr");
             String physicalAttr = contentAttrInfo.get("physicalAttr");
             String attrOrder = contentAttrInfo.get("attrOrder");
-            String message = contentAttrService.updateContentAttr(loginUserId, contentAttrId, logicalAttr, physicalAttr, attrOrder);
+            String message = contentAttrService.updateContentAttrOrder(loginUserId, contentAttrId, attrOrder);
             resMap = commonService.makeReturnData(true, 200, message, true);
         } catch(Exception e){
             resMap = commonService.makeReturnData(false, 500, e.getMessage(), false);

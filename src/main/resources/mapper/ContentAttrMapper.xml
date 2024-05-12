@@ -11,6 +11,12 @@
     WHERE contentAttrId = #{contentAttrId}
   </update>
 
+  <update id="updateContentAttrOrder">
+    UPDATE ContentAttr
+    SET attrOrder = #{attrOrder}
+    WHERE contentAttrId = #{contentAttrId}
+  </update>
+
   <delete id="deleteContentAttr">
     DELETE FROM ContentAttr
     WHERE contentAttrId = #{contentAttrId}
