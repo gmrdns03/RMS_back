@@ -12,8 +12,8 @@ public class CommentService {
 
     private final CommentMapper commentMapper;
 
-    public void saveComment(String userId, Integer contentId, String comment, Integer score){
-        commentMapper.saveComment(userId, contentId, comment, score);
+    public void saveComment(String userId, Integer contentId, Integer parentCommentId, String comment, Integer score){
+        commentMapper.saveComment(userId, contentId, parentCommentId, comment, score);
     }
 
     public void modifyComment(String userId, Integer commentId, String comment, Integer score) {

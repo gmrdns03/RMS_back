@@ -61,15 +61,16 @@ public class CommentController {
         description = "사용자는 댓글을 달 수 있다",
         requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
             content = @io.swagger.v3.oas.annotations.media.Content(
-                examples = @ExampleObject(value = "{\"contentId\":\"10\", \"comment\":\"I love this book\", \"score\":\"10\"}"))))
+                examples = @ExampleObject(value = "{\"contentId\":\"10\", \"parentCommentId\":\"10\", \"comment\":\"I love this book\", \"score\":\"10\"}"))))
     public ResponseEntity<?> getCommentInformation(@Parameter(hidden = true) @RequestHeader("AccessToken") String token, @RequestBody Map<String, String> commentInfo){
         Map<String, Object> resMap;
         try {
             String userId = jwtProvider.getUserPk(token);
             Integer contentId = Integer.valueOf(commentInfo.get("contentId"));
+            Integer parentCommentId = commentInfo.get("parentCommentId") != null ? Integer.valueOf(commentInfo.get("parentCommentId")) : null;
             String comment = commentInfo.get("comment");
             Integer score = Integer.valueOf(commentInfo.get("score"));
-            commentService.saveComment(userId, contentId, comment, score);
+            commentService.saveComment(userId, contentId, parentCommentId, comment, score);
             String msg = "Posted new comment successfully";
             resMap = commonService.makeReturnData(true, 201, msg, true);
             return ResponseEntity.ok().body(resMap);
