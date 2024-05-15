@@ -31,6 +31,8 @@ spring:
       hibernate:
         format_sql: true #To beautify or pretty print the SQL
 #        show_sql: true #show sql
+  resources:
+    static-locations: file:${FILE_PATH}
 
 springdoc:
   packages-to-scan: com.project.LimeRMS.controller
@@ -42,6 +44,7 @@ springdoc:
     path: /swagger-ui.html
 
 filesPath:
+  root: ${FILE_PATH}
   profile: ${FILE_PATH}profile
   board: ${FILE_PATH}board
   content: ${FILE_PATH}content
